@@ -1,0 +1,464 @@
+<html>
+  <style>
+    .top_header{
+      height:60px;
+      background-color:#37176A;
+    }
+    .logo{
+      padding-left: 140px;
+      color:white;
+    }
+    p{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    a{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .avatar{
+      font-family: 'Noto Sans TC', sans-serif;
+      padding:2px;
+      padding-left:4px;
+      padding-right:4px;
+      border-radius:4px;
+      background-color: blue;
+      color:white;
+      font-size:18px;
+    }
+    .dashboard_username{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:18px;
+    }
+    .tab_pannel{
+      height:110px;
+      background-color: #37176A;
+    }
+    .nav_tab{
+      color:white;
+      font-size:16px;
+    }
+    #full_selected{
+      height:3px;
+      width:auto;
+      background-color: red;
+      margin-top:-10px;
+
+    }
+
+    .create_event{
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background-color: #FABC09;
+      border:none;
+      -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+    }
+    .create_event:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+    }
+    .create_event:focus{
+      outline:none;
+    }
+    .datetime_display{
+      height:55px;
+      background-color: #21DCAC;
+      width:68%;
+      border-bottom-right-radius: 80px;
+    }
+    .datetime_info{
+      margin-left:20px;
+      color:white;
+    }
+    .datetime_text{
+      color:white;
+      margin-top:10px;
+      font-size:19px;
+      margin-left:50px;
+    }
+    #all_messages{
+      height:500px;
+      border-left:solid;
+      border-left-width:1px;
+      border-left-color:#C6C6C6;
+    }
+    .feed_type{
+      font-size:20px;
+    }
+    .quantity_display{
+      padding-top:2px;
+      padding-bottom:2px;
+      padding-left:8px;
+      padding-right:8px;
+      background-color: #FABC09;
+      border-radius:50%;
+
+    }
+    .actions{
+      padding-right: 150px;
+    }
+    .upcomming_event{
+      -webkit-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      font-family: 'Noto Sans TC', sans-serif;
+
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    .event_occurs{
+      color:white;
+      font-size:25px;
+    }
+    .event_time_display{
+      background-color: #21DCAC;
+      /*for pressing events: #FF354D */
+    }
+    ._time_data{
+      color:white;
+
+    }
+    .event_name{
+      font-size:24px;
+    }
+    .event_description{
+      font-size:18px;
+    }
+    .event_upcomming_warning{
+      color:white;
+      font-size:19px;
+      margin-top:10px;
+      padding-left:150px;
+    }
+
+    .month_nav{
+      width:60px;
+      height:60px;
+      border-radius:50%;
+      background-color: white;
+      border:none;
+      text-align: center;
+      background: none;
+
+
+    }
+
+    .month_heading{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:30px;
+
+
+    }
+    .range_heading{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:20px;
+
+
+    }
+    .calendar_header{
+      margin:0 auto;
+      padding:10px;
+      background-color: white;
+      border-radius:12px;
+      width:1180px;
+
+      -webkit-box-shadow: 1px 1px 15px -4px rgba(0,0,0,0.75);
+-moz-box-shadow: 1px 1px 15px -4px rgba(0,0,0,0.75);
+box-shadow: 1px 1px 15px -4px rgba(0,0,0,0.75);
+
+    }
+    .main_calendar{
+      background-color:white;
+
+      -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+
+      height:300px;
+    }
+    .day_display{
+      text-align: center;
+      height:120px;
+      width:auto;
+      background-color: white;
+      border-bottom:solid;
+      border-bottom-width:1px;
+      border-bottom-color:#BABABA;
+    }
+    .main_col{
+      border:solid;
+      padding:0px;
+      border-width:1px;
+      border-color:#BABABA;
+      border-top:none;
+      border-bottom:none;
+
+    }
+    .is_today{
+      background-color: #21DCAC;
+
+    }
+    .today_col{
+      border-width:3px;
+      border-width:3px;
+    }
+    .day_abbrev{
+      color:#21DCAC;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:35px;
+    }
+    .calendar_date{
+      color:#21DCAC;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:30px;
+      margin-top:20px;
+    }
+    .timeslot_time{
+      color:black;
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+  </style>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+
+  </head>
+  <body style='background-color: #E4E4E4;'>
+    <nav class="navbar top_header">
+      <p class="navbar-brand logo" style='font-size:30px;'>Chronos</p>
+      <div class='actions'>
+        <table>
+          <tr>
+            <td>
+            <div class='user_avatar'>
+              <div class='avatar'>JP</div>
+
+            </div>
+          </td>
+            <td><a href='/user/1' class='dashboard_username' style='color:white'>JamesPetullo</a></td>
+          </tr>
+        </table>
+
+      </div>
+    </nav>
+    <div class='tab_pannel'>
+      <div style='height:65px;'></div>
+      <div class='container'>
+        <div class='row no-gutters'>
+          <div class='col'>
+            <a href='/dashboard' style='color:white;text-decoration:none' class='nav_tab'>Dashboard</a>
+          </div>
+
+          <div class='col'>
+            <p class='nav_tab'>Calendar</p>
+            <div id='full_selected' style='width:70px;'></div>
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Groups</p>
+
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Past events</p>
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Profile</p>
+
+          </div>
+
+          <div class='col'>
+            <button class='create_event'>
+              <i class="fas fa-plus" style='font-size:2em;color:white;'></i>
+            </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='datetime_display'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'>
+            <p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>
+          </div>
+
+          <div class='col'><p class='datetime_text'><strong><span class='hour_min'></span> on <span class='day_of_week'></span>, <span class='month'></span> <span class='day'></span>, <span class='year'></span></strong></p></div>
+
+        </div>
+      </div>
+      <!--
+      <p class='datetime_info'>Saturday, November 17, 2018</p>
+      <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
+    -->
+    </div>
+    <div style='height:50px'></div>
+    <div class='calendar_display'>
+      <div class='calendar_header'>
+      <table style="width: 100%;margin:0 auto;">
+          <colgroup>
+             <col span="1" style="width: 35%;">
+             <col span="1" style="width: 30%;">
+             <col span="1" style="width: 35%;">
+          </colgroup>
+
+
+
+          <!-- Put <thead>, <tbody>, and <tr>'s here! -->
+          <tbody>
+              <tr>
+                  <td><button class='month_nav' id='backward'><i class="fas fa-angle-left" style='font-size:4em;margin-top:5px;color: #FABC09;'></i></button></td>
+                  <td style='text-align:center;'>
+                    <p class='month_heading'><strong><span class='calendar_month'>November</span> <span class='calendar_year'>2018</span></strong></p>
+                    <p class='range_heading'>Monday 11th - Thursday 15th</p>
+                  </td>
+                  <td><button class='month_nav' id='forward' style='float:right;'><i class="fas fa-angle-right" style='font-size:4em;margin-top:5px;color: #FABC09;'></i></button></td>
+              </tr>
+          </tbody>
+      </table>
+    </div>
+    <div style='height:30px'></div>
+    <div class='calendar_body'>
+      <table style="width: 100%;margin:0 auto;padding:0px;">
+          <colgroup>
+             <col span="1" style="width: 9%;">
+             <col span="1" style="width: 82%;">
+             <col span="1" style="width: 9%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <td style='background:none;' class='timeslots'>
+
+              </td>
+              <td class = 'main_calendar' valgin='top' style='padding:0px;'>
+                <table style="width: 100%;" style='margin-top:-500px;'>
+                  <colgroup>
+                     <col span="1" style="width:14.28%">
+                     <col span="1" style="width:14.28%">
+                     <col span="1" style="width:14.28%">
+                     <col span="1" style="width:14.28%">
+                     <col span="1" style="width:14.28%">
+                     <col span="1" style="width:14.28%">
+                     <col span="1" style="width:14.28%">
+                  </colgroup>
+                  <tbody>
+                    <tr style='height:900px;'>
+                      <td valign='top' class='start_col main_col' style='border-left:none'>
+                        <div class='day_display'>
+                          <p class='day_abbrev'><strong>Mon</strong></p>
+                          <p class='calendar_date'>3</p>
+                        </div>
+
+                      </td>
+                      <td valign='top' class='main_col'>
+                        <div class='day_display'>
+                          <p class='day_abbrev'><strong>Tue</strong></p>
+                          <p class='calendar_date'>4</p>
+                        </div>
+                      </td>
+                      <td valign='top' class='main_col'>
+                        <div class='day_display'>
+                          <p class='day_abbrev'><strong>Wed</strong></p>
+                          <p class='calendar_date'>5</p>
+                        </div>
+                      </td>
+                      <td valign='top' class='main_col'>
+                        <div class='day_display'>
+                          <p class='day_abbrev'><strong>Thr</strong></p>
+                          <p class='calendar_date'>6</p>
+                        </div>
+                      </td>
+                      <td valign='top' class='main_col'>
+                        <div class='day_display is_today'>
+                          <p class='day_abbrev' style='color:white'><strong>Fri</strong></p>
+                          <p class='calendar_date' style='color:white'>7</p>
+                        </div>
+                      </td>
+                      <td valign='top' class='main_col'>
+                        <div class='day_display'>
+                          <p class='day_abbrev'><strong>Sat</strong></p>
+                          <p class='calendar_date'>8</p>
+                        </div>
+                      </td>
+
+                      </td>
+                      <td valign='top' class='main_col' style='border-right:none'>
+                        <div class='day_display'>
+                          <p class='day_abbrev'><strong>Sun</strong></p>
+                          <p class='calendar_date'>9</p>
+                        </div>
+                      </td>
+
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+              <td style='background:none'></td>
+            </tr>
+          </tbody>
+      </table>
+    </div>
+    </div>
+    <div style='height:200px;'></div>
+  </body>
+  <script>
+    $(document).ready(function(){
+      function display_warning(count){
+        $('.event_upcomming_warning').fadeOut(500);
+	       $('.event_upcomming_warning').fadeIn(500);
+         if (count < 10){
+           setTimeout(function(){display_warning(count+1)}, 1000);
+         }
+      }
+      //display_warning(0);
+      function hours_min(_hours, _minutes){
+        _meridian = 'AM';
+        if (_hours > 12){
+          _hours = (_hours%12).toString()
+          _meridian = 'PM';
+        }
+        else{
+          _hours = _hours.toString();
+        }
+        if (_minutes < 10){
+          _minutes = '0'+_minutes.toString();
+        }
+        else{
+          _minutes = _minutes.toString();
+        }
+        return _hours+':'+_minutes+' '+_meridian;
+      }
+      function update_datetime(){
+
+        var _date = new Date();
+        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        $('.hour_min').text(hours_min(_date.getHours(), _date.getMinutes()));
+        $('.day_of_week').text(days[_date.getDay()]);
+        $('.day').text(_date.getDate());
+        $('.month').text(months[_date.getMonth()]);
+        $('.year').text(_date.getFullYear());
+        setTimeout(function(){ update_datetime(); }, 1000);
+      }
+      update_datetime();
+      for (var i = 1; i < 25; i++){
+        var formatted = i.toString()+':00 AM';
+        if (i > 12){
+          formatted = (i%12).toString()+':00 PM';
+        }
+        var the_html = `
+          <p class='timeslot_time'>${formatted}</p>
+        `;
+        $('.timeslots').append(the_html);
+      }
+    });
+  </script>
+</html>

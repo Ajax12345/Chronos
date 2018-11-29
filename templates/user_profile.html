@@ -1,0 +1,151 @@
+<html>
+
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel='stylesheet' href='/static/styles/user_profile_style.css'>
+    <script src='/static/styles/user_profle_js.js'></script>
+
+  </head>
+  <body style='background-color: #E4E4E4;'>
+    <nav class="navbar top_header">
+      <p class="navbar-brand logo" style='font-size:30px;'>Chronos</p>
+      <div class='actions'>
+        <table>
+          <tr>
+            <td>
+            <div class='user_avatar'>
+              <div class='avatar' style='background-color: {{owner.avatar_color}}'>{{owner.initials}}</div>
+
+            </div>
+          </td>
+            <td><a href='/profile' class='dashboard_username' style='color:white'>{{owner.condensed_name}}</a></td>
+          </tr>
+        </table>
+
+      </div>
+    </nav>
+    <div class='tab_pannel'>
+      <div style='height:65px;'></div>
+      <div class='container'>
+        <div class='row no-gutters'>
+          <div class='col'>
+            <a class='nav_tab dashboard_link' href='/dashboard' color='white'>Dashboard</a>
+
+          </div>
+
+          <div class='col'>
+            <p class='nav_tab'>Calendar</p>
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Groups</p>
+
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Past events</p>
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Profile</p>
+            <div id='full_selected' style='width:50px;'></div>
+          </div>
+
+          <div class='col'>
+            <button class='create_event'>
+              <i class="fas fa-plus" style='font-size:2em;color:white;'></i>
+            </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='datetime_display'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'>
+            <p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>
+          </div>
+
+          <div class='col'><p class='datetime_text'><strong><span class='hour_min'></span> on <span class='day_of_week'></span>, <span class='month'></span> <span class='day'></span>, <span class='year'></span></strong></p></div>
+
+        </div>
+      </div>
+      <!--
+      <p class='datetime_info'>Saturday, November 17, 2018</p>
+      <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
+    -->
+    </div>
+    <div style='height:100px;'></div>
+    {%if visitor.id == owner.id%}
+    <div class='container_wrapper'>
+    <div class='container'>
+      <div class='row'>
+        <div class='col-md-auto' style='text-align:center'>
+          <div class='avatar_profile' style='background-color:{{owner.avatar_color}}'>
+            <p class='avatar_text'>{{owner.initials}}</p>
+          </div>
+          <div style='height:10px;'></div>
+          <button class='change_profile'>Change Profile</button>
+        </div>
+        <div class='col-md-auto personal_info'>
+          <input type='text' class='detail_input' id='event_name' value='{{owner.name}}' placeholder="name...">
+          <p class='warning_text' id='for_update_name' style='color:red'></p>
+          <div style='height:20px;'></div>
+          <input type='text' class='detail_input' id='event_email' value='{{owner.email}}' placeholder="email...">
+          <p class='warning_text' id='for_update_email' style='color:red'></p>
+          <div style='height:10px;'></div>
+          <div class='update_message_display' style='display:none'>
+            You profile has been updated!
+          </div>
+        </div>
+        <div class='col button_pannel'>
+          <div style='height:10px;'></div>
+          <div class='for_profile_update' style='display:none'>
+            <button class='update_profile' style='margin-left:40px;'>Update profile</button>
+            <div style='height:30px;'></div>
+          </div>
+          <button class='delete_account' id='logout' style='margin-left:40px;'>Signout</button>
+          <div style='height:30px;'></div>
+          <button class='delete_account' id='delete_account' style='margin-left:40px;'>Delete account</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {%else%}
+    <div class='user_profile_card'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-auto'>
+            <div style='height:40px;'></div>
+            <div class='avatar_profile' style='background-color:{{visitor.avatar_color}}'>
+              <p class='avatar_text'>{{visitor.initials}}</p>
+            </div>
+          </div>
+          <div class='col-md-auto'>
+              <div style='height:40px;'></div>
+            <p class='user_banner_text_display'><strong>{{visitor.name}}</strong></p>
+            <table>
+              <tr>
+                <td><i class="fas fa-envelope" style='font-size:1.5em'></i></td>
+                <td><a href='mailto:{{visitor.email}}' class='email_banner_display' style='color:black'>{{visitor.email}}</a></td>
+              </tr>
+
+            </table>
+    
+
+          </div>
+        </div>
+      </div>
+    </div>
+  {%endif%}
+  </body>
+
+</html>

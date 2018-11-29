@@ -1,0 +1,151 @@
+<html>
+
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel='stylesheet' href='/static/styles/dashboard_style.css'>
+    <script src='/static/styles/dashboard_js.js'></script>
+
+  </head>
+  <body style='background-color: #E4E4E4;'>
+    <nav class="navbar top_header">
+      <p class="navbar-brand logo" style='font-size:30px;'>Chronos</p>
+      <div class='actions'>
+        <table>
+          <tr>
+            <td>
+            <div class='user_avatar'>
+              <div class='avatar' style='background-color: {{user.avatar_color}}'>{{user.initials}}</div>
+
+            </div>
+          </td>
+            <td><a href='/profile' class='dashboard_username' style='color:white'>{{user.condensed_name}}</a></td>
+          </tr>
+        </table>
+
+      </div>
+    </nav>
+    <div class='tab_pannel'>
+      <div style='height:65px;'></div>
+      <div class='container'>
+        <div class='row no-gutters'>
+          <div class='col'>
+            <p class='nav_tab'>Dashboard</p>
+            <div id='full_selected' style='width:80px;'></div>
+          </div>
+
+          <div class='col'>
+            <p class='nav_tab'>Calendar</p>
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Groups</p>
+
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Past events</p>
+
+          </div>
+          <div class='col'>
+            <a href='/profile' class='nav_tab profile_link'>Profile</a>
+
+          </div>
+
+          <div class='col'>
+            <button class='create_event'>
+              <i class="fas fa-plus" style='font-size:2em;color:white;'></i>
+            </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='datetime_display'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'>
+            <p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>
+          </div>
+
+          <div class='col'><p class='datetime_text'><strong><span class='hour_min'></span> on <span class='day_of_week'></span>, <span class='month'></span> <span class='day'></span>, <span class='year'></span></strong></p></div>
+
+        </div>
+      </div>
+      <!--
+      <p class='datetime_info'>Saturday, November 17, 2018</p>
+      <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
+    -->
+    </div>
+    <div style='height:20px'></div>
+    <div class='container'>
+      <div class='row'>
+        <div class='col' id='upcomming_events'>
+          <table>
+            <tr>
+              <td>
+                <p class='feed_type'><strong>Upcomming events</strong></p>
+              </td>
+              <td>
+                <p><span class='quantity_display'><strong>0</strong></span></p>
+              </td>
+            </tr>
+          </table>
+          <div style='height:20px'></div>
+          <div class='upcomming_event' id='event_1'>
+            <div class='container'>
+              <div class='row'>
+
+                  <div class="col-md-auto event_time_display">
+                    <div style='height:5px;'></div>
+                    <div><span class='event_occurs _time_data'>Today</span></div>
+                    <div style='height:5px;'></div>
+                    <div><span class='event_start _time_data'>9:00 AM -</span></div>
+                    <div style='height:5px;'></div>
+                    <!--<div><span class='_to _time_data'>to</span></div>-->
+                    <div><span class='event_ends _time_data'>10:00 AM</span></div>
+                    <div style='height:5px;'></div>
+                  </div>
+
+                  <div class="col" style='background-color:white'>
+                      <div style='height:5px;'></div>
+                      <div class='event_name'><span>TestEvent</span></div>
+                      <div style='height:5px;'></div>
+                      <div class='event_description'><span><small><i>This is a test</i></small></span></div>
+                      <div style='height:5px;'></div>
+                      <div class='participants'><span style='font-size:14px;color:#BDBDBD;'>With <u>JamesP</u></span></div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='col' id='all_messages'>
+          <table>
+            <tr>
+              <td>
+                <p class='feed_type'><strong>Messages</strong></p>
+              </td>
+              <td>
+                <p><span class='quantity_display'><strong>0</strong></span></p>
+              </td>
+            </tr>
+          </table>
+          <div style='height:20px'></div>
+          <div class='message' id='message_1'>
+
+            <p class='message-text'><strong><u>JamesP</u></strong> added you to group <strong><u>KnightsOfTheAltar</u></strong></p>
+
+
+          </div>
+          <div class='_message_feature'></div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>

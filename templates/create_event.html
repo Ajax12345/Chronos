@@ -1,0 +1,129 @@
+<html>
+
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel='stylesheet' = href='/static/styles/create_event_style.css'>
+    <script src='/static/styles/create_event_js.js'></script>
+  </head>
+  <body style='background-color: #E4E4E4;'>
+    <nav class="navbar top_header">
+      <p class="navbar-brand logo" style='font-size:30px;'>Chronos</p>
+      <div class='actions'>
+        <table>
+          <tr>
+            <td>
+            <div class='user_avatar'>
+                <div class='avatar' style='background-color: {{user.avatar_color}}'>{{user.initials}}</div>
+
+            </div>
+          </td>
+            <td><a href='/profile' class='dashboard_username' style='color:white'>{{user.condensed_name}}</a></td>
+          </tr>
+        </table>
+
+      </div>
+    </nav>
+    <div class='tab_pannel'>
+      <div style='height:65px;'></div>
+      <div class='container'>
+        <div class='row no-gutters'>
+          <div class='col'>
+            <p class='nav_tab'>Dashboard</p>
+            <div id='full_selected' style='width:80px;'></div>
+          </div>
+
+          <div class='col'>
+            <p class='nav_tab'>Calendar</p>
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Groups</p>
+
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Past events</p>
+
+          </div>
+          <div class='col'>
+          <a href='/profile' class='nav_tab profile_link'>Profile</a>
+
+          </div>
+
+          <div class='col'>
+            <button class='create_event'>
+              <i class="fas fa-plus" style='font-size:2em;color:white'></i>
+            </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='datetime_display'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'>
+            <p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>
+          </div>
+
+          <div class='col'><p class='datetime_text'><strong><span class='hour_min'></span> on <span class='day_of_week'></span>, <span class='month'></span> <span class='day'></span>, <span class='year'></span></strong></p></div>
+
+        </div>
+      </div>
+      <!--
+      <p class='datetime_info'>Saturday, November 17, 2018</p>
+      <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
+    -->
+    </div>
+    <div style='height:100px'></div>
+    <div class='create_event_pannel'>
+        <p class='create-event-header' style='font-size:25px;text-align:center;'><strong>New event</strong></p>
+        <div class='input_container'>
+        <div style='height:20px'></div>
+        <div class='container' style='margin-left:20px;'>
+          <div class='row'>
+            <div class='col-md-auto'><span class='event_name_text'>Event name:</span></div>
+            <div class='col-md-auto'>
+              <input type='text' class='detail_input' id='event_name'>
+              <p class='warning_text' id='for_name'></p>
+            </div>
+          </div>
+        </div>
+
+        <div style='height:30px'></div>
+        <div class='container' style='margin-left:20px;'>
+          <div class='row'>
+            <div class='col-md-auto'><span class='event_name_text'>Description:</span></div>
+            <div class='col-md-auto'>
+              <input type='text' class='detail_input' id='event_description' placeholder='(optional)'>
+              <p class='warning_text' id='for_description'></p>
+            </div>
+          </div>
+        </div>
+        <div style='height:30px'></div>
+        <div class='container' style='margin-left:20px;'>
+          <div class='row'>
+            <div class='col-md-auto'><i class="fas fa-map-marker-alt" style='font-size:1.7em'></i></div>
+            <div class='col-md-auto' style='margin-left:-15px;'><span class='event_name_text'>Location:</span></div>
+            <div class='col-md-auto'>
+              <input type='text' class='detail_input' style='margin-left:-6px;' id='event_location' placeholder='(optional)'>
+              <p class='warning_text' id='for_location'></p>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div style='height:40px'></div>
+        <button class='next_pannel' style='margin-right:15px;'><i class="fas fa-angle-right" style='font-size:2.4em;color:white;'></i></button>
+        <div style='height:40px'></div>
+    </div>
+    <div style='height:300px'></div>
+  </body>
+
+
+</html>

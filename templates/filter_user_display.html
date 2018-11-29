@@ -1,0 +1,19 @@
+{%if not filtered%}
+  <i class='no_users_found'>No users found</i>
+{%else%}
+  <div style='height:10px;'></div>
+  <div class='container'>
+  {%for user in filtered%}
+    <div class='row filtered_server_results' id='user_filter_row_{{user.id}}'>
+      <div class='col-md-auto'>
+        <div class="user_avatar">
+            <div class="avatar" id='user_styling_{{user.id}}' style='background-color:{{user.avatar_color}};'><p style='line-height:30px;'>{{user.initials}}</p></div>
+
+        </div>
+      </div>
+      <div class='col-md-auto'><p class='dashboard_username filter_username' id='user_{{user.id}}' style='color:black;margin-left:-20px;'>{{user.condensed_name}}</p></div>
+
+    </div>
+  {%endfor%}
+  </div>
+{%endif%}

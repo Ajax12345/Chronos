@@ -1,0 +1,51 @@
+<p class='create-event-header' style='font-size:25px;text-align:center;'><strong>Select event dates</strong></p>
+<div class='input_container'>
+
+  <div style='height:10px'></div>
+  <table style='margin:0 auto;font-family: "Noto Sans TC", sans-serif;'>
+    <tr class='row'>
+      {%if not calendar%}
+        <td class='col'><button class='month_nav' id='backward' disabled><i class="fas fa-angle-left" style='font-size:2em;margin-top:5px;color: #FABC09;'></i></button></td>
+      {%else%}
+        <td class='col'><button class='month_nav' id='backward'><i class="fas fa-angle-left" style='font-size:2em;margin-top:5px;color: #FABC09;'></i></button></td>
+      {%endif%}
+      <td class='col-md-auto'><p class='calendar_header'><span class='calendar_month'>{{calendar.text_month}}</span> <span class='calendar_year' style='padding-left:10px;'>{{calendar.year}}</span></p></td>
+      <td class='col'><button class='month_nav' id='forward'><i class="fas fa-angle-right" style='font-size:2em;margin-top:5px;color: #FABC09;'></i></button></td>
+    </tr>
+  </table>
+
+  <div class='event_calendar'>
+  <table style='margin:0 auto;'>
+    <tr class='row'>
+      <th class='col'>Mon</th>
+      <th class='col'>Tue</th>
+      <th class='col'>Wed</th>
+      <th class='col'>Thu</th>
+      <th class='col'>Fri</th>
+      <th class='col'>Sat</th>
+      <th class='col'>Sun</th>
+    </tr>
+    {%for week in calendar%}
+      <tr class='row' style='padding-top:15px;text-align:center'>
+        {%for day in week%}
+          <td class='col'><div class='{{day.attr_class}}' id='{{day}}'>{{day.day_num}}</div></td>
+        {%endfor%}
+      </tr>
+    {%endfor%}
+  </table>
+</div>
+</div>
+<p class='warning_text missing_dates'></p>
+<div style='height:40px'></div>
+
+<div class='container' style='margin-left:20px;'>
+  <div class='row'>
+    <div class='col'>
+      <button class='previous_pannel'><i class="fas fa-angle-left" style='font-size:2.4em;color:white'></i></button>
+    </div>
+    <div class='col'></div>
+    <div class='col'>
+      <button class='next_pannel' style='float:right'><i class="fas fa-angle-right" style='font-size:2.4em;color:white'></i></button>
+    </div>
+  </div>
+</div>
