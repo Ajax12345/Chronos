@@ -161,7 +161,7 @@
       padding:10px;
       background-color: white;
       border-radius:12px;
-      width:1180px;
+      width:1090px;
 
       -webkit-box-shadow: 1px 1px 15px -4px rgba(0,0,0,0.75);
 -moz-box-shadow: 1px 1px 15px -4px rgba(0,0,0,0.75);
@@ -217,6 +217,19 @@ box-shadow: 1px 1px 15px -4px rgba(0,0,0,0.75);
     .timeslot_time{
       color:black;
       font-family: 'Noto Sans TC', sans-serif;
+      padding-top:5px;
+
+    }
+    .timeslots{
+      text-align: center;
+      position: absolute;
+      margin-top:-490px;
+
+      padding:10px;
+      border-radius:10px;
+      background-color: #FABC09;
+
+
     }
   </style>
   <head>
@@ -326,30 +339,31 @@ box-shadow: 1px 1px 15px -4px rgba(0,0,0,0.75);
     </div>
     <div style='height:30px'></div>
     <div class='calendar_body'>
-      <table style="width: 100%;margin:0 auto;padding:0px;">
+      <table style="width: 90%;margin:0 auto;padding:0px;">
           <colgroup>
-             <col span="1" style="width: 9%;">
-             <col span="1" style="width: 82%;">
-             <col span="1" style="width: 9%;">
+             <col span="1" style="width: 7.5%;">
+             <col span="1" style="width: 75%;">
+             <col span="1" style="width: 7.5%;">
           </colgroup>
           <tbody>
             <tr>
-              <td style='background:none;' class='timeslots'>
-
+              <td style='background:none'>
+                <div class='timeslots'>
+                </div>
               </td>
               <td class = 'main_calendar' valgin='top' style='padding:0px;'>
                 <table style="width: 100%;" style='margin-top:-500px;'>
                   <colgroup>
-                     <col span="1" style="width:14.28%">
-                     <col span="1" style="width:14.28%">
-                     <col span="1" style="width:14.28%">
-                     <col span="1" style="width:14.28%">
-                     <col span="1" style="width:14.28%">
-                     <col span="1" style="width:14.28%">
-                     <col span="1" style="width:14.28%">
+                     <col span="1" style="width:12.58%">
+                     <col span="1" style="width:12.58%">
+                     <col span="1" style="width:12.58%">
+                     <col span="1" style="width:12.58%">
+                     <col span="1" style="width:12.58%">
+                     <col span="1" style="width:12.58%">
+                     <col span="1" style="width:12.58%">
                   </colgroup>
                   <tbody>
-                    <tr style='height:900px;'>
+                    <tr style='height:1200px;max-height:600px;overflow:scroll'>
                       <td valign='top' class='start_col main_col' style='border-left:none'>
                         <div class='day_display'>
                           <p class='day_abbrev'><strong>Mon</strong></p>
@@ -452,10 +466,16 @@ box-shadow: 1px 1px 15px -4px rgba(0,0,0,0.75);
       for (var i = 1; i < 25; i++){
         var formatted = i.toString()+':00 AM';
         if (i > 12){
-          formatted = (i%12).toString()+':00 PM';
+          if (i === 24){
+            formatted = '12:00 PM';
+          }
+          else{
+            formatted = (i%12).toString()+':00 PM';
+          }
+
         }
         var the_html = `
-          <p class='timeslot_time'>${formatted}</p>
+          <p class='timeslot_time'><strong>${formatted}</strong></p>
         `;
         $('.timeslots').append(the_html);
       }
