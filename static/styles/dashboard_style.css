@@ -1,0 +1,165 @@
+.top_header{
+    height:60px;
+    background-color:#37176A;
+  }
+  .logo{
+    padding-left: 140px;
+    color:white;
+  }
+  p{
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  a{
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .avatar{
+    font-family: 'Noto Sans TC', sans-serif;
+    padding:2px;
+    padding-left:9px;
+    padding-right:9px;
+    border-radius:4px;
+    background-color: blue;
+    color:white;
+    font-size:18px;
+  }
+  .dashboard_username{
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:18px;
+  }
+  .tab_pannel{
+    height:110px;
+    background-color: #37176A;
+  }
+  .nav_tab{
+    color:white;
+    font-size:16px;
+  }
+  #full_selected{
+    height:3px;
+    width:auto;
+    background-color: red;
+    margin-top:-10px;
+
+  }
+
+  .create_event{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background-color: #FABC09;
+    border:none;
+    -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+    box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  }
+  .create_event:hover{
+    -webkit-transition:0.2s;
+    background-color: #E7AF0F;
+  }
+  .create_event:focus{
+    outline:none;
+  }
+  .datetime_display{
+    height:55px;
+    background-color: #21DCAC;
+    width:68%;
+    border-bottom-right-radius: 80px;
+  }
+  .datetime_info{
+    margin-left:20px;
+    color:white;
+  }
+  .datetime_text{
+    color:white;
+    margin-top:10px;
+    font-size:19px;
+    margin-left:50px;
+  }
+  #all_messages{
+    height:500px;
+    border-left:solid;
+    border-left-width:1px;
+    border-left-color:#C6C6C6;
+  }
+  .feed_type{
+    font-size:20px;
+  }
+  .quantity_display{
+    padding-top:2px;
+    padding-bottom:2px;
+    padding-left:8px;
+    padding-right:8px;
+    background-color: #FABC09;
+    border-radius:50%;
+
+  }
+  .actions{
+    padding-right: 150px;
+  }
+  .upcomming_event{
+    -webkit-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+    box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+    font-family: 'Noto Sans TC', sans-serif;
+
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .event_occurs{
+    color:white;
+    font-size:25px;
+  }
+  .event_time_display{
+    background-color: #21DCAC;
+    /*for pressing events: #FF354D */
+  }
+  ._time_data{
+    color:white;
+
+  }
+  .event_name{
+    font-size:24px;
+  }
+  .event_description{
+    font-size:18px;
+  }
+  .event_upcomming_warning{
+    color:white;
+    font-size:19px;
+    margin-top:10px;
+    padding-left:150px;
+  }
+  .message{
+    -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+-moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #21DCAC;
+    padding:10px;
+    border-radius:15px;
+    color:white;
+    text-align: center;
+
+  }
+  .message-text{
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:18px;
+    padding-top:10px;
+
+  }
+  ._message_feature{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 50px 50px 0 0;
+    margin-top:-15px;
+    margin-left:13px;
+    border-color: #21DCAC transparent transparent transparent;
+  }
+  .profile_link{
+      color:white;
+  }
+  .profile_link:hover{
+      text-decoration: none;
+      color:white;
+  }

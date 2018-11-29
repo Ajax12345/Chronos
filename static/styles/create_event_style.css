@@ -1,0 +1,431 @@
+.top_header{
+  height:60px;
+  background-color:#37176A;
+}
+.logo{
+  padding-left: 140px;
+  color:white;
+}
+p{
+  font-family: 'Noto Sans TC', sans-serif;
+}
+a{
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.avatar{
+  font-family: 'Noto Sans TC', sans-serif;
+  width:30px;
+  height:30px;
+  text-align: center;
+  border-radius:4px;
+  background-color: blue;
+  color:white;
+  font-size:18px;
+}
+.dashboard_username{
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size:18px;
+}
+.tab_pannel{
+  height:110px;
+  background-color: #37176A;
+}
+.nav_tab{
+  color:white;
+  font-size:16px;
+}
+#full_selected{
+  height:3px;
+  width:auto;
+  background-color: red;
+  margin-top:-10px;
+
+}
+
+.create_event{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background-color: #FABC09;
+  border:none;
+  -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+}
+.create_event:hover{
+  -webkit-transition:0.2s;
+  background-color: #E7AF0F;
+}
+.create_event:focus{
+  outline:none;
+}
+.datetime_display{
+  height:55px;
+  background-color: #21DCAC;
+  width:68%;
+  border-bottom-right-radius: 80px;
+}
+.datetime_info{
+  margin-left:20px;
+  color:white;
+}
+.datetime_text{
+  color:white;
+  margin-top:10px;
+  font-size:19px;
+  margin-left:50px;
+}
+#all_messages{
+  height:500px;
+  border-left:solid;
+  border-left-width:1px;
+  border-left-color:#C6C6C6;
+}
+.feed_type{
+  font-size:20px;
+}
+.quantity_display{
+  padding-top:2px;
+  padding-bottom:2px;
+  padding-left:8px;
+  padding-right:8px;
+  background-color: #FABC09;
+  border-radius:50%;
+
+}
+.actions{
+  padding-right: 150px;
+}
+.upcomming_event{
+  -webkit-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+  box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+  font-family: 'Noto Sans TC', sans-serif;
+
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.event_occurs{
+  color:white;
+  font-size:25px;
+}
+.event_time_display{
+  background-color: #21DCAC;
+  /*for pressing events: #FF354D */
+}
+._time_data{
+  color:white;
+
+}
+.event_name{
+  font-size:24px;
+}
+.event_description{
+  font-size:18px;
+}
+.event_upcomming_warning{
+  color:white;
+  font-size:19px;
+  margin-top:10px;
+  padding-left:150px;
+}
+.message{
+  -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+-moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+  font-family: 'Noto Sans TC', sans-serif;
+  background-color: #21DCAC;
+  padding:10px;
+  border-radius:15px;
+  color:white;
+  text-align: center;
+
+}
+.message-text{
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size:18px;
+  padding-top:10px;
+
+}
+._message_feature{
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 50px 50px 0 0;
+  margin-top:-15px;
+  margin-left:13px;
+  border-color: #21DCAC transparent transparent transparent;
+}
+.create_event_pannel{
+  margin:0 auto;
+  width:600px;
+  padding-left:20px;
+  padding-right:20px;
+  padding-top:50px;
+  padding-bottom:50px;
+  background-color: white;
+}
+.create-event-header{
+  color: #21DCAC;
+
+}
+.create_event_pannel{
+  border-radius:15px;
+  -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+  -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+  box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+}
+.event_name_text{
+
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size:22px;
+}
+.detail_input{
+  width:350px;
+  height:40px;
+  font-size:20px;
+  border:none;
+  border-bottom:solid;
+  border-bottom-color: #21DCAC;
+}
+.detail_input:focus{
+  outline:none;
+  border-bottom-color: #FABC09;
+}
+.warning_text{
+  color:red;
+  font-size:13px;
+
+
+}
+.next_pannel{
+  float:right;
+  text-align: center;
+  background-color: #FABC09;
+  border-radius:50%;
+  border:none;
+  width:45px;
+  height:45px;
+  padding-right:12px;
+  padding-left:12px;
+  margin-right:55px;
+  -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+
+}
+.next_pannel:hover{
+  background-color: #FACC43;
+  -webkit-transition: 0.2s;
+}
+.previous_pannel{
+  text-align: center;
+  background-color: #FABC09;
+  border-radius:50%;
+  border:none;
+  width:45px;
+  height:45px;
+  padding-right:12px;
+  padding-left:12px;
+  margin-right:55px;
+  -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+
+}
+.previous_pannel:hover{
+  background-color: #FACC43;
+  -webkit-transition: 0.2s;
+}
+.calendar_header{
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size:27px;
+  text-align: center;
+}
+.month_nav{
+  background: none;
+  border:none;
+
+}
+
+.today{
+  background-color: #21DCAC;
+  color:white;
+  width:30px;
+  height:30px;
+  padding:5px;
+  border-radius:50%;
+}
+.today_day{
+  width:30px;
+  height:30px;
+  padding:5px;
+  border-radius:50%;
+
+}
+.previous_day{
+  width:30px;
+  height:30px;
+  padding:5px;
+  border-radius:50%;
+}
+/*
+.today_day:hover{
+  background-color: #EF6F7E;
+  color:white;
+
+}
+*/
+.ignore_date{
+    width:30px;
+    height:30px;
+    padding:5px;
+    color:gray;
+
+}
+.privacy_setting_banner{
+  font-size:28px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.privacy_setting{
+  color:white;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size:22px;
+  background-color: #FABC09;
+
+  border:none;
+  border-radius:5px;
+  padding-top:5px;
+  padding-bottom:5px;
+  padding-right:15px;
+  padding-left:15px;
+
+}
+.privacy_setting:hover{
+  background-color: #E7AF0F;
+  -webkit-transition:0.2s;
+}
+.missing_dates{
+  padding-top:5px;
+  text-align: center;
+  font-size:16px;
+}
+.green_check{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  margin:0 auto;
+  background-color:  #21DCAC;
+  color:white;
+  text-align: center;
+
+}
+.group_listing_text{
+  font-family: 'Noto Sans TC', sans-serif;
+  padding-left:70px;
+  margin-top:20px;
+
+}
+.add_participant{
+  background-color:  #21DCAC;
+  height:70px;
+  width:70px;
+  border-radius:50%;
+  color:white;
+  text-align: center;
+}
+.create_private_finish{
+  float:right;
+  border:none;
+  color:white;
+  background-color: #FABC09;
+  border-radius:4px;
+  font-size:23px;
+  padding-top:5px;
+  padding-bottom:5px;
+  padding-right:10px;
+  padding-left:10px;
+  margin-right:55px;
+  font-family: 'Noto Sans TC', sans-serif;
+  display:none;
+}
+.create_private_finish:hover{
+  -webkit-transition:0.2s;
+  background-color: #E7AF0F;
+}
+.addition_description{
+  color:  #21DCAC;
+  font-size:18px;
+  font-family: 'Noto Sans TC', sans-serif;
+
+}
+.user_select_pannel{
+  font-size:18px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+#underscore_users{
+  height:4px;
+  width:50px;
+  margin-left:55px;
+  margin-top:-10px;
+  background-color: #FABC09;
+}
+#underscore_groups{
+  display:none;
+  height:4px;
+  width:60px;
+  margin-right:45px;
+  float:right;
+  margin-top:-10px;
+  background-color: #FABC09;
+}
+.add_people{
+  width:450px;
+  height:40px;
+  margin-left:55px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size:18px;
+  border:none;
+  border-bottom:solid;
+  border-color:  #21DCAC;
+  border-width:2px;
+
+}
+.add_people:focus{
+  outline:none;
+  border-color:#FABC09;
+}
+.found_user_results{
+  width:350px;
+  padding-top:10px;
+  padding-bottom:10px;
+  margin-left:55px;
+  position: absolute;
+  border-radius:4px;
+  background-color: white;
+  -webkit-box-shadow: 1px 2px 9px -1px rgba(0,0,0,0.75);
+-moz-box-shadow: 1px 2px 9px -1px rgba(0,0,0,0.75);
+box-shadow: 1px 2px 9px -1px rgba(0,0,0,0.75);
+
+}
+.no_users_found{
+  font-family: 'Noto Sans TC', sans-serif;
+  padding-left:10px;
+}
+.filter_username:hover{
+  text-decoration: underline;
+}
+.filtered_user_result{
+  margin-top:10px;
+  padding-left:70px;
+}
+.filter_display_username:hover{
+  text-decoration: underline;
+}
+.profile_link{
+    color:white;
+}
+.profile_link:hover{
+    text-decoration: none;
+    color:white;
+}

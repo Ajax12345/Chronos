@@ -1,0 +1,299 @@
+.top_header{
+  height:60px;
+  background-color:#37176A;
+}
+.logo{
+  padding-left: 140px;
+  color:white;
+}
+p{
+  font-family: 'Noto Sans TC', sans-serif;
+}
+a{
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.avatar{
+  font-family: 'Noto Sans TC', sans-serif;
+  padding:2px;
+  padding-left:9px;
+  padding-right:9px;
+  border-radius:4px;
+  background-color: blue;
+  color:white;
+  font-size:18px;
+}
+.dashboard_username{
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size:18px;
+}
+.tab_pannel{
+  height:110px;
+  background-color: #37176A;
+}
+.nav_tab{
+  color:white;
+  font-size:16px;
+}
+#full_selected{
+  height:3px;
+  width:auto;
+  background-color: red;
+  margin-top:-10px;
+
+}
+
+.create_event{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background-color: #FABC09;
+  border:none;
+  -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+}
+.create_event:hover{
+  -webkit-transition:0.2s;
+  background-color: #E7AF0F;
+}
+.create_event:focus{
+  outline:none;
+}
+.datetime_display{
+  height:55px;
+  background-color: #21DCAC;
+  width:68%;
+  border-bottom-right-radius: 80px;
+}
+.datetime_info{
+  margin-left:20px;
+  color:white;
+}
+.datetime_text{
+  color:white;
+  margin-top:10px;
+  font-size:19px;
+  margin-left:50px;
+}
+#all_messages{
+  height:500px;
+  border-left:solid;
+  border-left-width:1px;
+  border-left-color:#C6C6C6;
+}
+.feed_type{
+  font-size:20px;
+}
+.quantity_display{
+  padding-top:2px;
+  padding-bottom:2px;
+  padding-left:8px;
+  padding-right:8px;
+  background-color: #FABC09;
+  border-radius:50%;
+
+}
+.actions{
+  padding-right: 150px;
+}
+.upcomming_event{
+  -webkit-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+  box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+  font-family: 'Noto Sans TC', sans-serif;
+
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.event_occurs{
+  color:white;
+  font-size:25px;
+}
+.event_time_display{
+  background-color: #21DCAC;
+  /*for pressing events: #FF354D */
+}
+._time_data{
+  color:white;
+
+}
+.event_name{
+  font-size:24px;
+}
+.event_description{
+  font-size:18px;
+}
+.event_upcomming_warning{
+  color:white;
+  font-size:19px;
+  margin-top:10px;
+  padding-left:150px;
+}
+
+
+.avatar_profile{
+  background-color: blue;
+  width:200px;
+  height:200px;
+  margin:0 auto;
+  border-radius:10px;
+  text-align: center;
+}
+.avatar_text{
+  font-family: 'Noto Sans TC', sans-serif;
+  color:white;
+  font-size:45px;
+  vertical-align:middle;
+  line-height: 200px;
+
+}
+.user_name_display{
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size:30px;
+  color:#21DCAC;
+}
+.display_settings{
+  font-family: 'Noto Sans TC', sans-serif;
+  border:none;
+  border-radius:5px;
+  color:white;
+  font-size:23px;
+  padding-left:12px;
+  padding-bottom:6px;
+  padding-top:6px;
+  padding-right:12px;
+  background-color: #FABC09;
+}
+.display_settings:hover{
+  background-color: #E7AF0F;
+  -webkit-transition:0.2s
+}
+.hide_email{
+  color:white;
+  background: none;
+  font-family: 'Noto Sans TC', sans-serif;
+  border-radius:5px;
+  font-size:20px;
+  border:solid;
+  border-width:1.5px;
+  padding-top:5px;
+  padding-left:10px;
+  padding-right:10px;
+  padding-bottom:5px;
+  border-color: #FABC09;
+  color:black;
+
+}
+.hide_email:hover{
+  -webkit-transition:0.2s;
+  background-color: #FABC09;
+  color:white;
+}
+.hide_info{
+  width:200px;
+  height:70px;
+  color:white;
+  font-family: 'Noto Sans TC', sans-serif;
+  border-radius:5px;
+  background-color: #FFE659;
+  padding:5px;
+  border:solid;
+  border-width:1px;
+  border-color:#FFE345;
+}
+.delete_account{
+  color:white;
+  font-family: 'Noto Sans TC', sans-serif;
+  border-radius:5px;
+  font-size:20px;
+  border:none;
+  padding-top:5px;
+  padding-left:10px;
+  padding-right:10px;
+  padding-bottom:5px;
+  background-color: #FF354D;
+}
+.update_profile{
+  background-color: #FABC09;
+  border:solid;
+  border-width:1.5px;
+  border-color:#FABC09;
+  font-family: 'Noto Sans TC', sans-serif;
+  border-radius:5px;
+  font-size:20px;
+  padding-top:5px;
+  padding-left:10px;
+  padding-right:10px;
+  padding-bottom:5px;
+  color:white;
+}
+
+.change_profile{
+  border:none;
+  color:white;
+  font-family: 'Noto Sans TC', sans-serif;
+  border-radius:5px;
+  font-size:20px;
+  padding-top:5px;
+  padding-left:10px;
+  padding-right:10px;
+  padding-bottom:5px;
+  background-color: #21DCAC;
+}
+.detail_input{
+  font-family: 'Noto Sans TC', sans-serif;
+  width:400px;
+  height:40px;
+  font-size:22px;
+  border:none;
+  border-bottom:solid;
+  border-bottom-color: #21DCAC;
+  background: none;
+}
+.detail_input:focus{
+  outline:none;
+  border-bottom-color: #FABC09;
+}
+.update_message_display{
+  font-family: 'Noto Sans TC', sans-serif;
+  border:none;
+  border-radius:8px;
+  background-color: #21DCAC;
+  padding:17px;
+  color:white;
+}
+.container_wrapper{
+  height:800px;
+  width:1000px;
+  margin: 0 auto;
+}
+.user_profile_card{
+  margin:0 auto;
+  width:700px;
+  height:290px;
+  background-color:white;
+  border-radius:10px;
+  -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+  box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+
+
+}
+.user_banner_text_display{
+  font-size:35px;
+  font-family: 'Noto Sans TC', sans-serif;
+  color: #21DCAC;
+}
+.email_banner_display{
+  font-family: 'Noto Sans TC', sans-serif;
+  color:black;
+  margin-left:10px;
+}
+.dashboard_link{
+  color:white;
+}
+
+.dashboard_link:hover{
+  color:white;
+  text-decoration: none;
+}
