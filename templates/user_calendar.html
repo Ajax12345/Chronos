@@ -122,9 +122,7 @@
     .event_name{
       font-size:24px;
     }
-    .event_description{
-      font-size:18px;
-    }
+
     .event_upcomming_warning{
       color:white;
       font-size:19px;
@@ -247,7 +245,6 @@
     }
     .event_test_block{
       width:auto;
-      text-align: center;
       height:50px;
       background-color: #FF354D;
       border-radius:10px;
@@ -286,11 +283,15 @@
       color:white;
       font-family: 'Noto Sans TC', sans-serif;
       font-size:16px;
+
+    }
+    .create_event_wrapper{
       position: absolute;
-      padding-left:50px;
-      margin-bottom:5px;
+
+      margin-bottom:-12px;
       bottom: 0;
     }
+
     .create_event_text:hover{
       text-decoration: underline;
     }
@@ -337,6 +338,20 @@
       color:white;
       font-family: 'Noto Sans TC', sans-serif;
       font-size:12px;
+      float:left;
+      margin-left:5px;
+      margin-top:-15px;
+    }
+    .event_title{
+      color:white;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:18px;
+
+    }
+    .event_description{
+      color:white;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:12px;
     }
     .timeslot{
       width:75px;
@@ -349,6 +364,10 @@
     .timeslot:focus{
       outline:none;
       border-color:#FABC09;
+    }
+    .event_title_display{
+      color:white;
+      margin-left:5px;
     }
   </style>
   <head>
@@ -370,11 +389,11 @@
           <tr>
             <td>
             <div class='user_avatar'>
-              <div class='avatar'>JP</div>
+              <div class='avatar' style='background-color:{{user.avatar_color}}'>{{user.initials}}</div>
 
             </div>
           </td>
-            <td><a href='/user/1' class='dashboard_username' style='color:white'>JamesPetullo</a></td>
+            <td><a href='/profile' class='dashboard_username' style='color:white'>{{user.condensed_name}}</a></td>
           </tr>
         </table>
 
@@ -637,24 +656,7 @@
           </div>
         </div>
         <div style='height:60px;'></div>
-        <div class='container'>
-          <div class='row'>
-            <div class='col-md-auto'>
-              <p class='create_event_modal_header'><strong>From:</strong></p>
-            </div>
-            <div class='col-md-auto'>
-              <input type='text' id='from-time' class='timeslot'>
-            </div>
-            <div class='col-md-auto'>-</div>
-            <div class='col-md-auto'>
-              <p class='create_event_modal_header'><strong>To:</strong></p>
-            </div>
-            <div class='col-md-auto'>
-              <input type='text' id='to-time' class='timeslot'>
 
-            </div>
-          </div>
-        </div>
       </div>
       <div class="modal-footer">
 
@@ -807,8 +809,18 @@
           var new_html =`
             <div class="event_test_block" id='event_${event_count}' data-day = '${day_id}'>
               <button id='remove_event_${event_count}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+              <p class='event_title_display' id='event_title_display_for_${event_count}'></p>
               <p class='event_timestamp' id='timestamp_for_${event_count}'></p>
-              <p class='create_event_text' data-day = '${day_id}' id='create_event_${event_count}'><u>Create</u></p>
+
+              <div class='container create_event_wrapper'>
+                <div class='row'>
+                  <div class='col-md-auto'></div>
+                  <div class='col-md-auto'><p class='create_event_text' data-day = '${day_id}' id='create_event_${event_count}'><u>Create</u></p></div>
+                  <div class='col-md-auto'></div>
+                </div>
+              </div>
+
+
             </div>
           `
           $(this).append(new_html);
@@ -835,11 +847,76 @@
 
       });
       $('.calendar_body').on('click', '.remove_event', function(ev){
-        ev.stopPropagation();
-        var the_id = $(this).prop('id').match('\\d+');
-        $('#event_'+the_id).remove();
-        update_total_height();
-        in_creation = false;
+        if (in_creation){
+          ev.stopPropagation();
+          var the_id = $(this).prop('id').match('\\d+');
+          $('#event_'+the_id).remove();
+          update_total_height();
+          in_creation = false;
+        }
+        else{
+
+          var day_col = $('#event_'+this.id.match('\\d+')).data('day');
+          var creation_value = $(this).prop('id').match('\\d+');
+          //var y =  $('#event_'+creation_value).offset().top - $('#'+day_col).offset().top;
+
+          $('#event_'+this.id.match('\\d+')).remove();
+
+          //$('#event_description_for_'+creation_value).text(_description);
+          var ofset_vals = [];
+          var parallel_storage = [];
+          $('.event_test_block').each(function(){
+            if ($(this).data('day') === day_col){
+
+              var _from_top = $(this).offset().top - $('#'+day_col).offset().top;
+              var _ending = parseInt($(this).css('height').match('\\d+'));
+              ofset_vals.push([_from_top, _ending+_from_top]);
+              parallel_storage.push([$(this).data('day'), this.id.match('\\d+'), $('#timestamp_for_'+this.id.match('\\d+')).text(), $('#event_title_display_for_'+this.id.match('\\d+')).text()]);
+              $(this).remove();
+            }
+          });
+
+          $("div[id^='"+day_col+"_']").each(function(){
+            $(this).remove();
+          });
+          var start_val = 0;
+          var _counter = 1;
+          for (var i = 0; i < ofset_vals.length; i++){
+            var the_html = `
+            <div id='${day_col}_${_counter}' class='event_listing_wrapper'></div>
+            `;
+            $('#'+day_col).append(the_html);
+            $('#'+day_col+'_'+_counter.toString()).css('height', (ofset_vals[i][0]-start_val).toString()+'px');
+            var creation_id_here = parallel_storage[i][1].toString();
+            var current_name = parallel_storage[i][3];
+            if (current_name.length > 8){
+              current_name = current_name.substring(0, 8)+'...';
+            }
+            var new_html =`
+              <div class="event_test_block" id='event_${creation_id_here}' data-day = '${day_col}'>
+                <button id='remove_event_${parallel_storage[i][1]}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+                <p class='event_title_display' id='event_title_display_for_${parallel_storage[i][1]}'>${current_name}</p>
+
+                <p class='event_timestamp' id='timestamp_for_${parallel_storage[i][1]}'>${parallel_storage[i][2]}</p>
+
+              </div>
+            `
+            $('#'+day_col).append(new_html);
+            $('#event_'+creation_id_here).css('height', (ofset_vals[i][1]-ofset_vals[i][0]).toString());
+            start_val = ofset_vals[i][1];
+            _counter += 1;
+          }
+          var the_html = `
+          <div id='${day_col}_${_counter}' class='event_listing_wrapper'></div>
+          `;
+
+          $('#'+day_col).append(the_html);
+          $('#'+day_col+'_'+_counter.toString()).css('height', (1200-start_val).toString()+'px');
+          //alert(JSON.stringify(ofset_vals));
+          in_creation = false;
+          update_total_height();
+        }
+
       });
       $('.calendar_body').on('click', '.create_event_text', function(ev){
 
@@ -864,6 +941,9 @@
           var day_col = $('#event_'+this.id.match('\\d+')).data('day');
           var creation_value = $(this).prop('id').match('\\d+');
           //var y =  $('#event_'+creation_value).offset().top - $('#'+day_col).offset().top;
+
+          $('#event_title_display_for_'+creation_value).text(_name);
+          //$('#event_description_for_'+creation_value).text(_description);
           var ofset_vals = [];
           var parallel_storage = [];
           $('.event_test_block').each(function(){
@@ -872,7 +952,7 @@
               var _from_top = $(this).offset().top - $('#'+day_col).offset().top;
               var _ending = parseInt($(this).css('height').match('\\d+'));
               ofset_vals.push([_from_top, _ending+_from_top]);
-              parallel_storage.push([$(this).data('day'), this.id.match('\\d+')]);
+              parallel_storage.push([$(this).data('day'), this.id.match('\\d+'), $('#timestamp_for_'+this.id.match('\\d+')).text(), $('#event_title_display_for_'+this.id.match('\\d+')).text()]);
               $(this).remove();
             }
           });
@@ -889,9 +969,16 @@
             $('#'+day_col).append(the_html);
             $('#'+day_col+'_'+_counter.toString()).css('height', (ofset_vals[i][0]-start_val).toString()+'px');
             var creation_id_here = parallel_storage[i][1].toString();
+            var current_name = parallel_storage[i][3];
+            if (current_name.length > 8){
+              current_name = current_name.substring(0, 8)+'...';
+            }
             var new_html =`
               <div class="event_test_block" id='event_${creation_id_here}' data-day = '${day_col}'>
                 <button id='remove_event_${parallel_storage[i][1]}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+                <p class='event_title_display' id='event_title_display_for_${parallel_storage[i][1]}'>${current_name}</p>
+
+                <p class='event_timestamp' id='timestamp_for_${parallel_storage[i][1]}'>${parallel_storage[i][2]}</p>
 
               </div>
             `
