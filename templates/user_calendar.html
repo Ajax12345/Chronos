@@ -179,6 +179,7 @@
       box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
 
       height:300px;
+      border-radius:10px;
     }
     .day_display{
       text-align: center;
@@ -246,6 +247,7 @@
     }
     .event_test_block{
       width:auto;
+      text-align: center;
       height:50px;
       background-color: #FF354D;
       border-radius:10px;
@@ -274,11 +276,69 @@
       font-size:18px;
       font-family: 'Noto Sans TC', sans-serif;
     }
+    .remove_event{
+      float:right;
+      background: none;
+      border:none;
+
+    }
+    .create_event_text{
+      color:white;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:16px;
+      position: absolute;
+      padding-left:50px;
+      margin-bottom:5px;
+      bottom: 0;
+    }
+    .create_event_text:hover{
+      text-decoration: underline;
+    }
+    .create_event_modal_header{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .detail_input{
+      width:300px;
+      height:40px;
+      font-size:16px;
+      border:none;
+      border-bottom:solid;
+      border-bottom-color: #21DCAC;
+      margin-top:-6px;
+    }
+    .detail_input:focus{
+      outline:none;
+      border-bottom-color: #FABC09;
+    }
+    .warning_text{
+      color:red;
+      font-size:13px;
+
+
+    }
+    .create_calendar_event_confirm{
+      font-family: 'Noto Sans TC', sans-serif;
+      color:white;
+      background-color: #FABC09;
+      border-radius:4px;
+      font-size:20px;
+      border:none;
+      padding-left:10px;
+      padding-right:10px;
+      padding-top:5px;
+      padding-bottom:5px;
+
+    }
+    .create_calendar_event_confirm:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+    }
   </style>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
@@ -356,7 +416,7 @@
       <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
     -->
     </div>
-    <div style='height:30px'></div>
+    <div style='height:20px'></div>
     <div class='calendar_display'>
       <!--
       <div class='calendar_header'>
@@ -403,7 +463,7 @@
       </div>
     </div>
   </div>
-  <div style='height:30px;'></div>
+  <div style='height:60px;'></div>
   <div class='calendar_header'>
 
     <div class='container'>
@@ -420,7 +480,7 @@
   </div>
     <div style='height:10px'></div>
     <div class='calendar_body'>
-      <table style="width: 90%;margin:0 auto;padding:0px;">
+      <table style="width: 90%;margin:0 auto;padding:0px;border-radius:12px;">
           <colgroup>
              <col span="1" style="width: 7.5%;">
              <col span="1" style="width: 75%;">
@@ -433,7 +493,7 @@
                 </div>
               </td>
               <td class = 'main_calendar' valgin='top' style='padding:0px;'>
-                <table style="width: 100%;" style='margin-top:-500px;'>
+                <table style="width: 100%;" style='margin-top:-500px;border-radius:10px;'>
                   <colgroup>
                      <col span="1" style="width:12.58%">
                      <col span="1" style="width:12.58%">
@@ -446,7 +506,7 @@
                   <tbody>
                     <tr style='height:1200px;max-height:600px;overflow:scroll'>
                       <td valign='top' class='start_col main_col' style='border-left:none'>
-                        <div class='day_display'>
+                        <div class='day_display' style='border-top-left-radius:10px;'>
                           <p class='day_abbrev'><strong>Mon</strong></p>
                           <p class='calendar_date'>3</p>
                         </div>
@@ -505,12 +565,12 @@
 
                       </td>
                       <td valign='top' class='main_col' style='border-right:none'>
-                        <div class='day_display'>
+                        <div class='day_display' style='border-top-right-radius:10px;'>
                           <p class='day_abbrev'><strong>Sun</strong></p>
                           <p class='calendar_date'>9</p>
                         </div>
                         <div class='day_event_listing' id='day_7'>
-                          <div id='day_1_7' class='event_listing_wrapper'></div>
+                          <div id='day_7_1' class='event_listing_wrapper'></div>
                         </div>
                       </td>
 
@@ -523,15 +583,69 @@
             </tr>
           </tbody>
       </table>
+      <!---->
+
+
+<div class="modal" id="create_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title create_event_modal_header" id="exampleModalLabel">Create personal event</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style='height:10px;'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <p class='create_event_modal_header'><strong>Event name:</strong></p>
+            </div>
+            <div class='col-md-auto'>
+              <input type='text' class='detail_input' id='event_name'>
+              <p class='warning_text' id='for_name'></p>
+            </div>
+          </div>
+        </div>
+        <div style='height:20px;'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <p class='create_event_modal_header'><strong>Description:</strong></p>
+            </div>
+            <div class='col-md-auto'>
+              <input type='text' class='detail_input' placeholder="(optional)" id='event_description'>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="create_calendar_event_confirm">Create</button>
+      </div>
     </div>
+  </div>
+</div>
+      <!---->
+    </div>
+
+
     </div>
     <div style='height:200px;'></div>
+
+
+
+
+
   </body>
   <script>
     $(document).ready(function(){
       var event_count = 0;
       var last_total_height = undefined;
       var total_height = 0;
+      var in_creation = false;
       function display_warning(count){
         $('.event_upcomming_warning').fadeOut(500);
 	       $('.event_upcomming_warning').fadeIn(500);
@@ -604,15 +718,21 @@
       $('.calendar_body').on('click', '.event_listing_wrapper', function(ev){
 
 
-        if (can_add_event()){
+        if (can_add_event() && !in_creation){
+          in_creation = true;
+          var day_id = $(this).prop('id').match('day_\\d+');
           var new_html =`
-            <div class="event_test_block" id='event_${event_count}'></div>
+            <div class="event_test_block" id='event_${event_count}' data-day = '${day_id}'>
+              <button id='remove_event_${event_count}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+              <p class='create_event_text' data-day = '${day_id}' id='create_event_${event_count}'>Create</p>
+            </div>
           `
           $(this).append(new_html);
-          var day_id = $(this).prop('id').match('day_\\d+');
+
 
           var parent_id = $(this).prop('id').match('\\d+$');
           var y = ev.pageY - this.offsetLeft - $('#'+day_id+'_'+parent_id).offset().top;
+          alert(y);
           $('#event_'+event_count.toString()).css('top', y.toString()+'px');
           $( "#event_"+event_count.toString()).resizable({containment: "#"+day_id+'_'+parent_id, handles:"s"});
           event_count += 1;
@@ -628,6 +748,82 @@
 
         */
 
+      });
+      $('.calendar_body').on('click', '.remove_event', function(ev){
+        ev.stopPropagation();
+        var the_id = $(this).prop('id').match('\\d+');
+        $('#event_'+the_id).remove();
+        update_total_height();
+        in_creation = false;
+      });
+      $('.calendar_body').on('click', '.create_event_text', function(ev){
+
+          $('#event_name').val('');
+          ev.stopPropagation();
+          var creation_id = $(this).prop('id').match('\\d+');
+          $('.create_calendar_event_confirm').attr('id', 'confirm_creation_'+creation_id);
+          $('#create_event_modal').modal('toggle');
+
+      });
+      $('.calendar_body').on('click', '.create_calendar_event_confirm', function(){
+        var _name = $('#event_name').val();
+        var _description = $('#event_description').val();
+        if (_name === ''){
+          $('#for_name').text('cannot be left blank');
+        }
+        else{
+          $('#create_event_modal').modal("toggle");
+          var day_col = $('#event_'+this.id.match('\\d+')).data('day');
+          var creation_value = $(this).prop('id').match('\\d+');
+          //var y =  $('#event_'+creation_value).offset().top - $('#'+day_col).offset().top;
+          var ofset_vals = [];
+          var parallel_storage = [];
+          $('.event_test_block').each(function(){
+            if ($(this).data('day') === day_col){
+
+              var _from_top = $(this).offset().top - $('#'+day_col).offset().top;
+              var _ending = parseInt($(this).css('height').match('\\d+'));
+              ofset_vals.push([_from_top, _ending+_from_top]);
+              parallel_storage.push([$(this).data('day'), this.id.match('\\d+')]);
+              $(this).remove();
+            }
+          });
+
+          $("div[id^='"+day_col+"_']").each(function(){
+            $(this).remove();
+          });
+          var start_val = 0;
+          var _counter = 1;
+          for (var i = 0; i < ofset_vals.length; i++){
+            var the_html = `
+            <div id='${day_col}_${_counter}' class='event_listing_wrapper'></div>
+            `;
+            $('#'+day_col).append(the_html);
+            $('#'+day_col+'_'+_counter.toString()).css('height', (ofset_vals[i][0]-start_val).toString()+'px');
+            var creation_id_here = parallel_storage[i][1].toString();
+            var new_html =`
+              <div class="event_test_block" id='event_${creation_id_here}' data-day = '${day_col}'>
+                <button id='remove_event_${parallel_storage[i][1]}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+
+              </div>
+            `
+            $('#'+day_col).append(new_html);
+            $('#event_'+creation_id_here).css('height', (ofset_vals[i][1]-ofset_vals[i][0]).toString());
+            start_val = ofset_vals[i][1];
+            _counter += 1;
+          }
+          var the_html = `
+          <div id='${day_col}_${_counter}' class='event_listing_wrapper'></div>
+          `;
+
+          $('#'+day_col).append(the_html);
+          $('#'+day_col+'_'+_counter.toString()).css('height', (1200-start_val).toString()+'px');
+          //alert(JSON.stringify(ofset_vals));
+          in_creation = false;
+        }
+      });
+      $('.calendar_body').on('input', '#event_name', function(){
+        $('#for_name').text('');
       });
     });
   </script>
