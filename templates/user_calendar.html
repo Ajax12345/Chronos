@@ -500,6 +500,7 @@
     </div>
   </div>
   <div style='height:60px;'></div>
+  <div class='full_calendar'>
   <div class='calendar_header'>
 
     <div class='container'>
@@ -665,6 +666,7 @@
     </div>
   </div>
 </div>
+</div>
       <!---->
     </div>
 
@@ -800,7 +802,7 @@
       function generate_timestamp(a, b){
         return convert_timestamp(a)+' - '+convert_timestamp(b);
       }
-      $('.calendar_body').on('click', '.event_listing_wrapper', function(ev){
+      $('.full_calendar').on('click', '.event_listing_wrapper', function(ev){
 
 
         if (can_add_event() && !in_creation){
@@ -846,7 +848,7 @@
         */
 
       });
-      $('.calendar_body').on('click', '.remove_event', function(ev){
+      $('.full_calendar').on('click', '.remove_event', function(ev){
         if (in_creation){
           ev.stopPropagation();
           var the_id = $(this).prop('id').match('\\d+');
@@ -918,7 +920,7 @@
         }
 
       });
-      $('.calendar_body').on('click', '.create_event_text', function(ev){
+      $('.full_calendar').on('click', '.create_event_text', function(ev){
 
           $('#event_name').val('');
           ev.stopPropagation();
@@ -930,7 +932,7 @@
           $('#create_event_modal').modal('toggle');
 
       });
-      $('.calendar_body').on('click', '.create_calendar_event_confirm', function(){
+      $('.full_calendar').on('click', '.create_calendar_event_confirm', function(){
         var _name = $('#event_name').val();
         var _description = $('#event_description').val();
         if (_name === ''){
@@ -997,7 +999,7 @@
           in_creation = false;
         }
       });
-      $('.calendar_body').on('input', '#event_name', function(){
+      $('.full_calendar').on('input', '#event_name', function(){
         $('#for_name').text('');
       });
     });
