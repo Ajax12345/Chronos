@@ -333,6 +333,11 @@
       -webkit-transition:0.2s;
       background-color: #E7AF0F;
     }
+    .event_timestamp{
+      color:white;
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:12px;
+    }
   </style>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -715,6 +720,54 @@
         `;
         $('.timeslots').append(the_html);
       }
+      var hashed_times = {};
+      var all_times = []
+      function update_timestamps(){
+        $('.event_test_block').each(function(){
+          var _from_top = $(this).offset().top-$('#day_1').offset().top
+          var _height = _from_top + parseInt($(this).css('height').match('\\d+'));
+          $('#timestamp_for_'+this.id.match('\\d+')).text(generate_timestamp(_from_top, _height));
+        });
+        setTimeout(function(){
+          update_timestamps();
+
+        }, 40);
+      }
+      update_timestamps();
+      $('.timeslot_time').each(function(){
+
+        hashed_times[$(this).text()] = $(this).offset().top-$('#day_1').offset().top + 7
+        all_times.push($(this).text());
+      });
+
+      function convert_timestamp(a){
+        var _lower_option = undefined;
+
+        for (var i = 0; i < all_times.length; i++){
+          if (hashed_times[all_times[i]] <= a && a <= hashed_times[all_times[i]]+44){
+            _lower_option = all_times[i];
+            break;
+          }
+        }
+
+        if (a%45 != 0){
+          var _top = a%45;
+          var mins = Math.floor((_top*60)/45);
+          if (mins < 10){
+            mins = '0'+mins.toString();
+          }
+          else{
+            mins = mins.toString();
+          }
+          var _start = _lower_option.match('^\\d+');
+          var meridian = _lower_option.match('[A-Z]+$');
+          var _lower_option = _start+':'+mins+' '+meridian;
+        }
+        return _lower_option;
+      }
+      function generate_timestamp(a, b){
+        return convert_timestamp(a)+' - '+convert_timestamp(b);
+      }
       $('.calendar_body').on('click', '.event_listing_wrapper', function(ev){
 
 
@@ -724,6 +777,7 @@
           var new_html =`
             <div class="event_test_block" id='event_${event_count}' data-day = '${day_id}'>
               <button id='remove_event_${event_count}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+              <p class='event_timestamp' id='timestamp_for_${event_count}'></p>
               <p class='create_event_text' data-day = '${day_id}' id='create_event_${event_count}'>Create</p>
             </div>
           `
@@ -732,9 +786,10 @@
 
           var parent_id = $(this).prop('id').match('\\d+$');
           var y = ev.pageY - this.offsetLeft - $('#'+day_id+'_'+parent_id).offset().top;
-          alert(y);
+          var event_height = parseInt($('#event_'+event_count.toString()).css('height').match('\\d+'));
           $('#event_'+event_count.toString()).css('top', y.toString()+'px');
-          $( "#event_"+event_count.toString()).resizable({containment: "#"+day_id+'_'+parent_id, handles:"s"});
+          $( "#event_"+event_count.toString()).resizable({containment: "#"+day_id+'_'+parent_id, handles:"s,n"});
+          $('#timestamp_for_'+event_count.toString()).text(generate_timestamp(y, y+event_height));
           event_count += 1;
           update_total_height();
         }
