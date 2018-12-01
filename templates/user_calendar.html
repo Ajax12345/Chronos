@@ -338,6 +338,18 @@
       font-family: 'Noto Sans TC', sans-serif;
       font-size:12px;
     }
+    .timeslot{
+      width:75px;
+      border-radius:4px;
+      font-family: 'Noto Sans TC', sans-serif;
+      border:solid;
+      border-color:#21DCAC;
+      border-width:2px;
+    }
+    .timeslot:focus{
+      outline:none;
+      border-color:#FABC09;
+    }
   </style>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -613,7 +625,7 @@
             </div>
           </div>
         </div>
-        <div style='height:20px;'></div>
+        <div style='height:40px;'></div>
         <div class='container'>
           <div class='row'>
             <div class='col-md-auto'>
@@ -624,7 +636,25 @@
             </div>
           </div>
         </div>
+        <div style='height:60px;'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <p class='create_event_modal_header'><strong>From:</strong></p>
+            </div>
+            <div class='col-md-auto'>
+              <input type='text' id='from-time' class='timeslot'>
+            </div>
+            <div class='col-md-auto'>-</div>
+            <div class='col-md-auto'>
+              <p class='create_event_modal_header'><strong>To:</strong></p>
+            </div>
+            <div class='col-md-auto'>
+              <input type='text' id='to-time' class='timeslot'>
 
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
 
@@ -816,6 +846,9 @@
           $('#event_name').val('');
           ev.stopPropagation();
           var creation_id = $(this).prop('id').match('\\d+');
+          var timestamp = $('#timestamp_for_'+creation_id).text().split(' - ');
+          $('#from-time').val(timestamp[0]);
+          $('#to-time').val(timestamp[1]);
           $('.create_calendar_event_confirm').attr('id', 'confirm_creation_'+creation_id);
           $('#create_event_modal').modal('toggle');
 
