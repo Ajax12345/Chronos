@@ -369,6 +369,153 @@
       color:white;
       margin-left:5px;
     }
+    .calendar_settings_events_color{
+      height:300px;
+      max-height:300px;
+      overflow: scroll;
+      width:400px;
+      margin:0 auto;
+    }
+    .info_banner{
+      border-radius:16px;
+      background-color: #21DCAC;
+      font-family: 'Noto Sans TC', sans-serif;
+      color:white;
+      padding:10px;
+    }
+    .add_event_category{
+      color:white;
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #FABC09;
+      border:none;
+      border-radius: 50%;
+      float:right;
+      width:60px;
+      height:60px;
+      text-align: center;
+
+    }
+    .add_event_category:focus{
+      outline:none;
+    }
+    .add_event_category:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+    }
+    .pallete_sample{
+      width:40px;
+      height:40px;
+      border-radius:4px;
+      border-width:3px;
+
+    }
+    .category_text{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:18px;
+      margin-top:5px;
+    }
+    .create_event_modal_header{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .create_new_event_category{
+      font-family: 'Noto Sans TC', sans-serif;
+      color:white;
+      background-color: #FABC09;
+      border-radius:4px;
+      font-size:20px;
+      border:none;
+      padding-left:10px;
+      padding-right:10px;
+      padding-top:5px;
+      padding-bottom:5px;
+
+    }
+    .create_new_event_category:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+    }
+    .calendar_settings_pane{
+      width:500px;
+      height:590px;
+      padding:40px;
+      background-color: white;
+      margin:0 auto;
+      border-radius:15px;
+      -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      text-align: center;
+    }
+    .calendar_settings_text{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:28px;
+      color:#21DCAC;
+    }
+    .calendar_settings_events_color{
+      height:300px;
+      max-height:300px;
+      overflow: scroll;
+      width:400px;
+      margin:0 auto;
+    }
+    .info_banner{
+      border-radius:16px;
+      background-color: #21DCAC;
+      font-family: 'Noto Sans TC', sans-serif;
+      color:white;
+      padding:10px;
+    }
+    .add_event_category{
+      color:white;
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #FABC09;
+      border:none;
+      border-radius: 50%;
+      float:right;
+      width:60px;
+      height:60px;
+      text-align: center;
+
+    }
+    .add_event_category:focus{
+      outline:none;
+    }
+    .add_event_category:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+    }
+    .pallete_sample{
+      width:40px;
+      height:40px;
+      border-radius:4px;
+      border-width:3px;
+
+    }
+    .category_text{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:18px;
+      margin-top:5px;
+    }
+    .create_event_modal_header{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .create_new_event_category{
+      font-family: 'Noto Sans TC', sans-serif;
+      color:white;
+      background-color: #FABC09;
+      border-radius:4px;
+      font-size:20px;
+      border:none;
+      padding-left:10px;
+      padding-right:10px;
+      padding-top:5px;
+      padding-bottom:5px;
+
+    }
+    .create_new_event_category:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+    }
   </style>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -494,7 +641,7 @@
       </div>
       <div class='row'>
         <div class='col calendar_underline' id='by_weekly_underline'></div>
-        <div class='col calendar_underline' id='by_weekly_underline' style='background-color:#21DCAC'></div>
+        <div class='col calendar_underline' id='by_monthly_underline' style='background-color:#21DCAC'></div>
         <div class='col calendar_underline' id='settings_underline' style='background-color:#21DCAC'></div>
       </div>
     </div>
@@ -1001,6 +1148,88 @@
       });
       $('.full_calendar').on('input', '#event_name', function(){
         $('#for_name').text('');
+      });
+      $('.calendar_options').on('click', '#calendar_settings', function(){
+        $('#settings_underline').css('background-color', '#FABC09');
+        $('#by_weekly_underline').css('background-color', '#21DCAC');
+        $('#by_monthly_underline').css('background-color', '#21DCAC');
+        $.ajax({
+          url: "/calendar_settings",
+          type: "get",
+          data: {val: ''},
+          success: function(response) {
+            if (response.success === 'True'){
+              $('.full_calendar').html(response.html);
+            }
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      });
+      $('.full_calendar').on('click', '.color_sample', function(){
+        if (parseFloat($(this).css('opacity')) >= 1){
+          var current_id = this.id;
+          $(this).css('opacity', '0.3');
+          $('.color_sample').each(function(){
+            if ($(this).prop('id') != current_id){
+              $(this).css('opacity', '1');
+            }
+          });
+        }
+        else{
+          $(this).css('opacity', '1');
+        }
+      });
+      $('.full_calendar').on('click', '.create_new_event_category', function(){
+        var _name = $('#category_name').val();
+        if (_name === ''){
+          $('#for_color_input').text('cannot be left empty');
+        }
+        else{
+          var color = undefined;
+          var border_color = undefined;
+          $('.color_sample').each(function(){
+            if (parseFloat($(this).css('opacity')) < 1){
+              color = $(this).css('background-color');
+              border_color = $(this).css('border-color');
+            }
+          });
+
+          $('#create_category_modal').modal('toggle');
+          var the_html = `
+          <div class='row'>
+              <div class='col-md-auto'>
+                <div class='pallete_sample' style='background-color:${color};border-color:${border_color};'></div>
+              </div>
+              <div class='col-md-auto'><p class='category_text'><strong>${_name}</strong></p></div>
+
+            </div>
+          `;
+          $('.full_category_listing').append(the_html);
+          var banner_html = `
+          <div class='info_banner'>
+            Category "${_name}" created!
+          </div>
+          `;
+
+          $('.info_banner_wrapper').html(banner_html);
+          setTimeout(function(){
+            $(".info_banner").fadeOut(600);
+
+          }, 2000);
+          setTimeout(function(){
+            $(".info_banner").remove();
+
+          }, 8000);
+
+        }
+      });
+      $('.full_calendar').on('input', '#category_name', function(){
+        $('#for_color_input').text('');
+      });
+      $('.full_calendar').on('click', '.remove_info_banner', function(){
+        $('.info_banner').remove();
       });
     });
   </script>
