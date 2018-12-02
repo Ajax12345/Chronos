@@ -940,6 +940,7 @@
           else{
             mins = mins.toString();
           }
+
           var _start = _lower_option.match('^\\d+');
           var meridian = _lower_option.match('[A-Z]+$');
           var _lower_option = _start+':'+mins+' '+meridian;
@@ -1020,6 +1021,7 @@
               var _from_top = $(this).offset().top - $('#'+day_col).offset().top;
               var _ending = parseInt($(this).css('height').match('\\d+'));
               ofset_vals.push([_from_top, _ending+_from_top]);
+              //alert(JSON.stringify(ofset_vals));
               parallel_storage.push([$(this).data('day'), this.id.match('\\d+'), $('#timestamp_for_'+this.id.match('\\d+')).text(), $('#event_title_display_for_'+this.id.match('\\d+')).text()]);
               $(this).remove();
             }
@@ -1095,20 +1097,31 @@
           //$('#event_description_for_'+creation_value).text(_description);
           var ofset_vals = [];
           var parallel_storage = [];
+          var _loop_counter = 0;
           $('.event_test_block').each(function(){
             if ($(this).data('day') === day_col){
+              //alert(JSON.stringify($(this).offset().top - $('#'+day_col).offset().top))
+              console.log(_loop_counter);
+              console.log($('#'+day_col).offset().top);
+              console.log($(this).offset().top);
+
 
               var _from_top = $(this).offset().top - $('#'+day_col).offset().top;
               var _ending = parseInt($(this).css('height').match('\\d+'));
+              _loop_counter += 1;
               ofset_vals.push([_from_top, _ending+_from_top]);
               parallel_storage.push([$(this).data('day'), this.id.match('\\d+'), $('#timestamp_for_'+this.id.match('\\d+')).text(), $('#event_title_display_for_'+this.id.match('\\d+')).text()]);
               $(this).remove();
+              
+              console.log('--------');
             }
+            console.log('++++++++++++');
           });
-
           $("div[id^='"+day_col+"_']").each(function(){
             $(this).remove();
           });
+
+
           var start_val = 0;
           var _counter = 1;
           for (var i = 0; i < ofset_vals.length; i++){
@@ -1133,7 +1146,7 @@
             `
             $('#'+day_col).append(new_html);
             $('#event_'+creation_id_here).css('height', (ofset_vals[i][1]-ofset_vals[i][0]).toString());
-            start_val = ofset_vals[i][1];
+            start_val = ofset_vals[i][0];
             _counter += 1;
           }
           var the_html = `
@@ -1142,7 +1155,6 @@
 
           $('#'+day_col).append(the_html);
           $('#'+day_col+'_'+_counter.toString()).css('height', (1200-start_val).toString()+'px');
-          //alert(JSON.stringify(ofset_vals));
           in_creation = false;
         }
       });
