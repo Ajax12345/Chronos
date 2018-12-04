@@ -1024,6 +1024,7 @@
               //alert(JSON.stringify(ofset_vals));
               parallel_storage.push([$(this).data('day'), this.id.match('\\d+'), $('#timestamp_for_'+this.id.match('\\d+')).text(), $('#event_title_display_for_'+this.id.match('\\d+')).text()]);
               $(this).remove();
+
             }
           });
 
@@ -1081,6 +1082,20 @@
           $('#create_event_modal').modal('toggle');
 
       });
+      function revert_time(a){
+
+        var hour = parseInt(a.match('^\\d+'))-1;
+        var minutes = parseInt(a.match(':\\d+')[0].substring(1));
+        var meridian = a.match('[A-Z]+$');
+
+        if (meridian[0] === 'PM'){
+          hour += 12;
+        }
+        hour = hour*45;
+        minutes = parseInt(60*(minutes/45));
+
+        return hour + minutes;
+      }
       $('.full_calendar').on('click', '.create_calendar_event_confirm', function(){
         var _name = $('#event_name').val();
         var _description = $('#event_description').val();
@@ -1101,18 +1116,20 @@
           $('.event_test_block').each(function(){
             if ($(this).data('day') === day_col){
               //alert(JSON.stringify($(this).offset().top - $('#'+day_col).offset().top))
-              console.log(_loop_counter);
-              console.log($('#'+day_col).offset().top);
-              console.log($(this).offset().top);
 
+
+              console.log($(this).offset().top);
+              console.log($('#'+day_col).offset().top);
 
               var _from_top = $(this).offset().top - $('#'+day_col).offset().top;
+              console.log(_from_top);
               var _ending = parseInt($(this).css('height').match('\\d+'));
+              console.log(_ending+_from_top);
               _loop_counter += 1;
               ofset_vals.push([_from_top, _ending+_from_top]);
               parallel_storage.push([$(this).data('day'), this.id.match('\\d+'), $('#timestamp_for_'+this.id.match('\\d+')).text(), $('#event_title_display_for_'+this.id.match('\\d+')).text()]);
               $(this).remove();
-              
+
               console.log('--------');
             }
             console.log('++++++++++++');
@@ -1120,7 +1137,7 @@
           $("div[id^='"+day_col+"_']").each(function(){
             $(this).remove();
           });
-
+          alert(JSON.stringify(ofset_vals));
 
           var start_val = 0;
           var _counter = 1;
