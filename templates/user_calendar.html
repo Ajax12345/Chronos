@@ -225,7 +225,7 @@
     .timeslots{
       text-align: center;
       position: absolute;
-      margin-top:-497px;
+      margin-top:-510px;
 
       padding:10px;
       border-radius:10px;
@@ -245,10 +245,10 @@
     }
     .event_test_block{
       width:auto;
-      height:50px;
+      height:45px;
       background-color: #FF354D;
       border-radius:10px;
-      margin-top:1px;
+
       border:solid;
       border-width:3px;
       border-color:red;
@@ -368,6 +368,7 @@
     .event_title_display{
       color:white;
       margin-left:5px;
+      font-size:15px;
     }
     .calendar_settings_events_color{
       height:300px;
@@ -515,6 +516,13 @@
     .create_new_event_category:hover{
       -webkit-transition:0.2s;
       background-color: #E7AF0F;
+    }
+    .hour_block{
+      border-top:solid;
+      border-top-color:#B6B6B6;
+      border-width:1px;
+
+
     }
   </style>
   <head>
@@ -695,7 +703,7 @@
                           <p class='calendar_date'>3</p>
                         </div>
                         <div class='day_event_listing' id='day_1'>
-                          <div id='day_1_1' class='event_listing_wrapper'></div>
+
                         </div>
 
                       </td>
@@ -706,7 +714,7 @@
 
                         </div>
                         <div class='day_event_listing' id='day_2'>
-                          <div id='day_2_1' class='event_listing_wrapper'></div>
+
                         </div>
                       </td>
                       <td valign='top' class='main_col'>
@@ -716,7 +724,7 @@
 
                         </div>
                         <div class='day_event_listing' id='day_3'>
-                          <div id='day_3_1' class='event_listing_wrapper'></div>
+
                         </div>
                       </td>
                       <td valign='top' class='main_col'>
@@ -725,7 +733,7 @@
                           <p class='calendar_date'>6</p>
                         </div>
                         <div class='day_event_listing' id='day_4'>
-                          <div id='day_4_1' class='event_listing_wrapper'></div>
+
                         </div>
                       </td>
                       <td valign='top' class='main_col'>
@@ -734,7 +742,7 @@
                           <p class='calendar_date' style='color:white'>7</p>
                         </div>
                         <div class='day_event_listing' id='day_5'>
-                          <div id='day_5_1' class='event_listing_wrapper'></div>
+
                         </div>
                       </td>
                       <td valign='top' class='main_col'>
@@ -743,7 +751,7 @@
                           <p class='calendar_date'>8</p>
                         </div>
                         <div class='day_event_listing' id='day_6'>
-                          <div id='day_6_1' class='event_listing_wrapper'></div>
+
                         </div>
                       </td>
 
@@ -754,7 +762,7 @@
                           <p class='calendar_date'>9</p>
                         </div>
                         <div class='day_event_listing' id='day_7'>
-                          <div id='day_7_1' class='event_listing_wrapper'></div>
+
                         </div>
                       </td>
 
@@ -826,12 +834,86 @@
 
 
   </body>
+  <!--
+  <div class="event_test_block" id='event_${event_count}' data-day = '${day_id}'>
+    <button id='remove_event_${event_count}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+    <p class='event_title_display' id='event_title_display_for_${event_count}'></p>
+    <p class='event_timestamp' id='timestamp_for_${event_count}'></p>
+
+    <div class='container create_event_wrapper'>
+      <div class='row'>
+        <div class='col-md-auto'></div>
+        <div class='col-md-auto'><p class='create_event_text' data-day = '${day_id}' id='create_event_${event_count}'><u>Create</u></p></div>
+        <div class='col-md-auto'></div>
+      </div>
+    </div>
+  -->
   <script>
     $(document).ready(function(){
-      var event_count = 0;
-      var last_total_height = undefined;
-      var total_height = 0;
-      var in_creation = false;
+      for (var i = 1; i < 8; i++){
+        var av_height = Math.floor(parseInt($('#day_'+i.toString()).css('height').match('\\d+'))/24);
+        var halved = av_height/2;
+        for (var b = 1; b < 25; b++){
+          var new_html = `
+            <div class='hour_block' id='day_${i}_hour_${b}' style='height:${av_height}px'>
+              <div style='height:${halved};border-bottom-style:dotted;border-bottom-width:1px;border-bottom-color:#B6B6B6'></div>
+            </div>
+          `;
+          $('#day_'+i.toString()).append(new_html);
+        }
+      }
+      function update_timestamps(){
+        $('.event_test_block').each(function(){
+          var factor_calc = parseInt($('#'+$(this).prop('id').substring(6)).css('height').match('\\d+'));
+          var from_top = parseInt($(this).css('top').match('\\d+'));
+          var height = parseInt($(this).css('height').match('\\d+'));
+          var hour = this.id.match('hour_\\d+')[0].substring(5);
+          var minutes1 = Math.floor(((from_top/factor_calc)*60));
+          var minutes2 = height+from_top;
+          var hour2 = parseInt(hour);
+          if (minutes2 === factor_calc || minutes2+1 >= factor_calc){
+            hour2 += 1;
+            minutes2 = 0;
+          }
+          minutes2 = Math.floor(((minutes2/factor_calc)*60));
+          var meridian1 = 'AM';
+          if (parseInt(hour) > 12){
+            meridian1 = 'PM';
+            if (parseInt(hour) === 24){
+              hour = 12;
+            }
+            else{
+              hour = parseInt(hour)%12;
+            }
+
+          }
+          var meridian2 = 'AM';
+          if (hour2 > 12){
+            meridian2 = 'PM';
+            if (hour2 === 24){
+              hour2 = 12;
+            }
+            else{
+              hour2 = hour2%12;
+            }
+
+          }
+          var padding1 = '';
+          if (minutes1 < 10){
+            padding1 = '0';
+          }
+          var padding2 = '';
+          if (minutes2 < 10){
+            padding2 = '0';
+          }
+          var generated = hour+':'+padding1+minutes1.toString()+' '+meridian1+' - '+hour2.toString()+":"+padding2+minutes2.toString()+' '+meridian2;
+          $('#timestamp_for_'+this.id.match('day_\\d+_hour_\\d+')).text(generated);
+        });
+        setTimeout(function(){
+          update_timestamps();
+        }, 40);
+      }
+      update_timestamps();
       function display_warning(count){
         $('.event_upcomming_warning').fadeOut(500);
 	       $('.event_upcomming_warning').fadeIn(500);
@@ -840,21 +922,7 @@
          }
       }
       //display_warning(0);
-      function update_total_height(){
-        var _running_total = 0;
-        $('.event_test_block').each(function(){
-          _running_total += parseInt($(this).css('height').match('\\d+'));
-        });
-        last_total_height = total_height;
-        total_height = _running_total;
-      }
-      function can_add_event(){
-        if (last_total_height === undefined){
-          return true;
-        }
-        update_total_height();
-        return total_height - last_total_height === 0;
-      }
+
       function hours_min(_hours, _minutes){
         _meridian = 'AM';
         if (_hours > 12){
@@ -903,23 +971,15 @@
       }
       var hashed_times = {};
       var all_times = []
-      function update_timestamps(){
+      function event_exists(_id){
+        var flag = false;
         $('.event_test_block').each(function(){
-          var _from_top = $(this).offset().top-$('#day_1').offset().top
-          var _height = _from_top + parseInt($(this).css('height').match('\\d+'));
-          $('#timestamp_for_'+this.id.match('\\d+')).text(generate_timestamp(_from_top, _height));
+          if (this.id.match('day_\\d+_hour_\\d+') == _id){
+            flag = true;
+          }
         });
-        setTimeout(function(){
-          update_timestamps();
-
-        }, 40);
+        return flag;
       }
-      update_timestamps();
-      $('.timeslot_time').each(function(){
-
-        hashed_times[$(this).text()] = $(this).offset().top-$('#day_1').offset().top + 7
-        all_times.push($(this).text());
-      });
 
       function convert_timestamp(a){
         var _lower_option = undefined;
@@ -950,138 +1010,7 @@
       function generate_timestamp(a, b){
         return convert_timestamp(a)+' - '+convert_timestamp(b);
       }
-      $('.full_calendar').on('click', '.event_listing_wrapper', function(ev){
 
-
-        if (can_add_event() && !in_creation){
-          in_creation = true;
-          var day_id = $(this).prop('id').match('day_\\d+');
-          var new_html =`
-            <div class="event_test_block" id='event_${event_count}' data-day = '${day_id}'>
-              <button id='remove_event_${event_count}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
-              <p class='event_title_display' id='event_title_display_for_${event_count}'></p>
-              <p class='event_timestamp' id='timestamp_for_${event_count}'></p>
-
-              <div class='container create_event_wrapper'>
-                <div class='row'>
-                  <div class='col-md-auto'></div>
-                  <div class='col-md-auto'><p class='create_event_text' data-day = '${day_id}' id='create_event_${event_count}'><u>Create</u></p></div>
-                  <div class='col-md-auto'></div>
-                </div>
-              </div>
-
-
-            </div>
-          `
-          $(this).append(new_html);
-
-
-          var parent_id = $(this).prop('id').match('\\d+$');
-          var y = ev.pageY - this.offsetLeft - $('#'+day_id+'_'+parent_id).offset().top;
-          var event_height = parseInt($('#event_'+event_count.toString()).css('height').match('\\d+'));
-          $('#event_'+event_count.toString()).css('top', y.toString()+'px');
-          $( "#event_"+event_count.toString()).resizable({containment: "#"+day_id+'_'+parent_id, handles:"s,n"});
-          $('#timestamp_for_'+event_count.toString()).text(generate_timestamp(y, y+event_height));
-          event_count += 1;
-          update_total_height();
-        }
-
-
-
-        /*
-        var day_id = $(this).prop('id').match('day_\\d+');
-        var wrapper_id = $(this).prop('id').match('\\d+$');
-        var day_id = $(this).prop('id').match('\\d+');
-
-        */
-
-      });
-      $('.full_calendar').on('click', '.remove_event', function(ev){
-        if (in_creation){
-          ev.stopPropagation();
-          var the_id = $(this).prop('id').match('\\d+');
-          $('#event_'+the_id).remove();
-          update_total_height();
-          in_creation = false;
-        }
-        else{
-
-          var day_col = $('#event_'+this.id.match('\\d+')).data('day');
-          var creation_value = $(this).prop('id').match('\\d+');
-          //var y =  $('#event_'+creation_value).offset().top - $('#'+day_col).offset().top;
-
-          $('#event_'+this.id.match('\\d+')).remove();
-
-          //$('#event_description_for_'+creation_value).text(_description);
-          var ofset_vals = [];
-          var parallel_storage = [];
-          $('.event_test_block').each(function(){
-            if ($(this).data('day') === day_col){
-
-              var _from_top = $(this).offset().top - $('#'+day_col).offset().top;
-              var _ending = parseInt($(this).css('height').match('\\d+'));
-              ofset_vals.push([_from_top, _ending+_from_top]);
-              //alert(JSON.stringify(ofset_vals));
-              parallel_storage.push([$(this).data('day'), this.id.match('\\d+'), $('#timestamp_for_'+this.id.match('\\d+')).text(), $('#event_title_display_for_'+this.id.match('\\d+')).text()]);
-              $(this).remove();
-
-            }
-          });
-
-          $("div[id^='"+day_col+"_']").each(function(){
-            $(this).remove();
-          });
-          var start_val = 0;
-          var _counter = 1;
-          for (var i = 0; i < ofset_vals.length; i++){
-            var the_html = `
-            <div id='${day_col}_${_counter}' class='event_listing_wrapper'></div>
-            `;
-            $('#'+day_col).append(the_html);
-            $('#'+day_col+'_'+_counter.toString()).css('height', (ofset_vals[i][0]-start_val).toString()+'px');
-            var creation_id_here = parallel_storage[i][1].toString();
-            var current_name = parallel_storage[i][3];
-            if (current_name.length > 8){
-              current_name = current_name.substring(0, 8)+'...';
-            }
-            var new_html =`
-              <div class="event_test_block" id='event_${creation_id_here}' data-day = '${day_col}'>
-                <button id='remove_event_${parallel_storage[i][1]}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
-                <p class='event_title_display' id='event_title_display_for_${parallel_storage[i][1]}'>${current_name}</p>
-
-                <p class='event_timestamp' id='timestamp_for_${parallel_storage[i][1]}'>${parallel_storage[i][2]}</p>
-
-              </div>
-            `
-            $('#'+day_col).append(new_html);
-            $('#event_'+creation_id_here).css('height', (ofset_vals[i][1]-ofset_vals[i][0]).toString());
-            start_val = ofset_vals[i][1];
-            _counter += 1;
-          }
-          var the_html = `
-          <div id='${day_col}_${_counter}' class='event_listing_wrapper'></div>
-          `;
-
-          $('#'+day_col).append(the_html);
-          $('#'+day_col+'_'+_counter.toString()).css('height', (1200-start_val).toString()+'px');
-          //alert(JSON.stringify(ofset_vals));
-          in_creation = false;
-          update_total_height();
-        }
-
-      });
-      $('.full_calendar').on('click', '.create_event_text', function(ev){
-
-          $('#event_name').val('');
-          ev.stopPropagation();
-          var creation_id = $(this).prop('id').match('\\d+');
-          var timestamp = $('#timestamp_for_'+creation_id).text().split(' - ');
-          $('#from-time').val(timestamp[0]);
-          $('#to-time').val(timestamp[1]);
-          $('.create_calendar_event_confirm').attr('id', 'confirm_creation_'+creation_id);
-          $('#create_event_modal').modal('toggle');
-
-      });
       function revert_time(a){
 
         var hour = parseInt(a.match('^\\d+'))-1;
@@ -1096,85 +1025,7 @@
 
         return hour + minutes;
       }
-      $('.full_calendar').on('click', '.create_calendar_event_confirm', function(){
-        var _name = $('#event_name').val();
-        var _description = $('#event_description').val();
-        if (_name === ''){
-          $('#for_name').text('cannot be left blank');
-        }
-        else{
-          $('#create_event_modal').modal("toggle");
-          var day_col = $('#event_'+this.id.match('\\d+')).data('day');
-          var creation_value = $(this).prop('id').match('\\d+');
-          //var y =  $('#event_'+creation_value).offset().top - $('#'+day_col).offset().top;
 
-          $('#event_title_display_for_'+creation_value).text(_name);
-          //$('#event_description_for_'+creation_value).text(_description);
-          var ofset_vals = [];
-          var parallel_storage = [];
-          var _loop_counter = 0;
-          $('.event_test_block').each(function(){
-            if ($(this).data('day') === day_col){
-              //alert(JSON.stringify($(this).offset().top - $('#'+day_col).offset().top))
-
-
-              console.log($(this).offset().top);
-              console.log($('#'+day_col).offset().top);
-
-              var _from_top = $(this).offset().top - $('#'+day_col).offset().top;
-              console.log(_from_top);
-              var _ending = parseInt($(this).css('height').match('\\d+'));
-              console.log(_ending+_from_top);
-              _loop_counter += 1;
-              ofset_vals.push([_from_top, _ending+_from_top]);
-              parallel_storage.push([$(this).data('day'), this.id.match('\\d+'), $('#timestamp_for_'+this.id.match('\\d+')).text(), $('#event_title_display_for_'+this.id.match('\\d+')).text()]);
-              $(this).remove();
-
-              console.log('--------');
-            }
-            console.log('++++++++++++');
-          });
-          $("div[id^='"+day_col+"_']").each(function(){
-            $(this).remove();
-          });
-          alert(JSON.stringify(ofset_vals));
-
-          var start_val = 0;
-          var _counter = 1;
-          for (var i = 0; i < ofset_vals.length; i++){
-            var the_html = `
-            <div id='${day_col}_${_counter}' class='event_listing_wrapper'></div>
-            `;
-            $('#'+day_col).append(the_html);
-            $('#'+day_col+'_'+_counter.toString()).css('height', (ofset_vals[i][0]-start_val).toString()+'px');
-            var creation_id_here = parallel_storage[i][1].toString();
-            var current_name = parallel_storage[i][3];
-            if (current_name.length > 8){
-              current_name = current_name.substring(0, 8)+'...';
-            }
-            var new_html =`
-              <div class="event_test_block" id='event_${creation_id_here}' data-day = '${day_col}'>
-                <button id='remove_event_${parallel_storage[i][1]}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
-                <p class='event_title_display' id='event_title_display_for_${parallel_storage[i][1]}'>${current_name}</p>
-
-                <p class='event_timestamp' id='timestamp_for_${parallel_storage[i][1]}'>${parallel_storage[i][2]}</p>
-
-              </div>
-            `
-            $('#'+day_col).append(new_html);
-            $('#event_'+creation_id_here).css('height', (ofset_vals[i][1]-ofset_vals[i][0]).toString());
-            start_val = ofset_vals[i][0];
-            _counter += 1;
-          }
-          var the_html = `
-          <div id='${day_col}_${_counter}' class='event_listing_wrapper'></div>
-          `;
-
-          $('#'+day_col).append(the_html);
-          $('#'+day_col+'_'+_counter.toString()).css('height', (1200-start_val).toString()+'px');
-          in_creation = false;
-        }
-      });
       $('.full_calendar').on('input', '#event_name', function(){
         $('#for_name').text('');
       });
@@ -1259,6 +1110,94 @@
       });
       $('.full_calendar').on('click', '.remove_info_banner', function(){
         $('.info_banner').remove();
+      });
+      function new_event_collection(_id){
+
+        var day_id = _id.match('day_\\d+');
+        var hour_num = parseInt(_id.match('hour_\\d+')[0].substring(5));
+        var _last = [];
+        var flag = true;
+        $('div[id^="event_'+day_id+'"]').each(function(){
+
+          var current_hour = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5));
+
+          if (current_hour < hour_num){
+            if ($(this).data('created') === 'False'){
+              if (_last.length === 0){
+                _last.push($(this).prop('id'));
+              }
+              else{
+                var last_hour = parseInt(_last[_last.length-1].match('hour_\\d+')[0].substring(5));
+                if (current_hour - last_hour === 1){
+                  _last.push(this.id);
+                }
+                else{
+                  _last = [this.id];
+
+                }
+              }
+            }
+            else{
+              _last = [];
+            }
+
+
+          }
+        });
+        return _last;
+      }
+      $('.full_calendar').on('click', '.hour_block', function(){
+        if (!event_exists(this.id)){
+
+          var new_html = `
+          <div class="event_test_block" id='event_${this.id}' data-created="False">
+            <button id='remove_event_${this.id}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+            <p class='event_title_display' id='title_display_${this.id}'></p>
+            <p class='event_timestamp' id='timestamp_for_${this.id}'></p>
+
+
+          </div>
+          `;
+          $(this).html(new_html);
+          $('#event_'+this.id).resizable({handles:"s,n", minHeight:0, maxHeight:44});
+        }
+
+      });
+      $('.full_calendar').on('click', '.remove_event', function(ev){
+        ev.stopPropagation();
+        var parent_id = this.id.match('day_\\d+_hour_\\d+');
+        $('#event_'+parent_id).remove();
+        $('#'+parent_id).html("<div style='height:22.5px;border-bottom-style:dotted;border-bottom-width:1px;border-bottom-color:#B6B6B6'></div>");
+
+      });
+      $('.full_calendar').on('click', '.event_test_block', function(ev){
+        ev.stopPropagation();
+        if ($(this).data('created') === 'False'){
+          var parent_id = this.id.match('day_\\d+_hour_\\d+');
+          $("#create_event_modal").modal('toggle');
+          $('.create_calendar_event_confirm').attr('id', 'modal_for_'+parent_id);
+
+        }
+      });
+      $('.full_calendar').on('click', '.create_calendar_event_confirm', function(){
+        var parent_id = this.id.match('day_\\d+_hour_\\d+');
+        var title = $('#event_name').val();
+        var description = $('#event_description').val();
+        if (title === ''){
+          $('#for_name').text('cannot be left blank');
+        }
+        else{
+          $('#event_name').val('');
+          $('#event_description').val('');
+          $("#create_event_modal").modal('toggle');
+
+          if (title.length > 8){
+            title = title.substring(8)+'...';
+          }
+          $('#title_display_'+parent_id).text(title);
+          $('#event_'+parent_id).data('created', 'True');
+          //$('#event_'+parent_id).removeClass('ui-resizable');
+        }
       });
     });
   </script>
