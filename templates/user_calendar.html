@@ -862,51 +862,76 @@
           $('#day_'+i.toString()).append(new_html);
         }
       }
+      function previous_spacing(day, id){
+
+        var totals = 0;
+        $('div[id^="'+day+'_"]').each(function(){
+
+          if (parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5)) < parseInt(id)){
+            totals += parseInt($(this).css('height').match('\\d+'));
+          }
+        });
+        return totals;
+      }
+      function close_to(val, _divisor, _range){
+        var flag = false;
+        for (var i = 0; i <= _range; i++){
+          if ((val+i)%_divisor === 0){
+            flag = true;
+          }
+        }
+        return flag;
+      }
       function update_timestamps(){
         $('.event_test_block').each(function(){
-          var factor_calc = parseInt($('#'+$(this).prop('id').substring(6)).css('height').match('\\d+'));
+          var parent_height = parseInt($('#'+$(this).prop('id').substring(6)).css('height').match('\\d+'));
           var from_top = parseInt($(this).css('top').match('\\d+'));
           var height = parseInt($(this).css('height').match('\\d+'));
-          var hour = this.id.match('hour_\\d+')[0].substring(5);
-          var minutes1 = Math.floor(((from_top/factor_calc)*60));
-          var minutes2 = height+from_top;
-          var hour2 = parseInt(hour);
-          if (minutes2 === factor_calc || minutes2+1 >= factor_calc){
+          var anchor_id = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5));
+          var previous_time = previous_spacing($(this).prop('id').match('day_\\d+'), parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5)));
+
+          var hour1 = Math.floor(previous_time/45)+1
+          var meridian1 = 'AM';
+          if (hour1 > 12){
+            hour1 = hour1%12;
+            meridian1 = 'PM';
+          }
+
+          var new_height = ((hour1*45)+parent_height)
+          var hour2 = Math.floor(new_height/45);
+          var minutes1 = Math.floor((from_top/new_height)*(hour2*60));
+          var padding = '';
+          if (minutes1 < 10){
+            padding='0';
+          }
+          var minutes2 = Math.floor(((from_top+height)/new_height)*(hour2*60));
+          var hour2 = Math.floor(minutes2/60)+hour1;
+          var minutes2 = minutes2%60;
+          if (minutes2 + 2 >= 60){
             hour2 += 1;
             minutes2 = 0;
           }
-          minutes2 = Math.floor(((minutes2/factor_calc)*60));
-          var meridian1 = 'AM';
-          if (parseInt(hour) > 12){
-            meridian1 = 'PM';
-            if (parseInt(hour) === 24){
-              hour = 12;
-            }
-            else{
-              hour = parseInt(hour)%12;
-            }
-
-          }
           var meridian2 = 'AM';
           if (hour2 > 12){
-            meridian2 = 'PM';
             if (hour2 === 24){
               hour2 = 12;
+
             }
             else{
               hour2 = hour2%12;
             }
-
-          }
-          var padding1 = '';
-          if (minutes1 < 10){
-            padding1 = '0';
+            meridian2 = 'PM';
           }
           var padding2 = '';
+
           if (minutes2 < 10){
             padding2 = '0';
+
           }
-          var generated = hour+':'+padding1+minutes1.toString()+' '+meridian1+' - '+hour2.toString()+":"+padding2+minutes2.toString()+' '+meridian2;
+
+          var generated = hour1.toString()+':'+padding+minutes1.toString()+ ' '+meridian1 + ' - ' + hour2.toString()+':'+padding2+minutes2.toString()+ ' '+meridian2
+
+
           $('#timestamp_for_'+this.id.match('day_\\d+_hour_\\d+')).text(generated);
         });
         setTimeout(function(){
@@ -1141,7 +1166,7 @@
             }
 
 
-          
+
         });
         return _last;
       }
@@ -1163,7 +1188,7 @@
           var start_id = parseInt(grouping[0].match('hour_\\d+')[0].substring(5));
           var last_id = parseInt(grouping[grouping.length-1].match('hour_\\d+')[0].substring(5));
           for (var i = 0; i < grouping.length; i++){
-            new_height += parseInt($('#'+grouping[i]).css('height').match('\\d+'));
+            new_height += parseInt($('#'+grouping[i].substring(6)).css('height').match('\\d+'));
 
             $('#'+grouping[i]).remove();
             $('#'+grouping[i].match('day_\\d+_hour_\\d+')[0]).remove();
