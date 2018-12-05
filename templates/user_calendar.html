@@ -1146,6 +1146,59 @@
         });
         return _last;
       }
+      function update_day_col(day_id, event_id){
+        var grouping = new_event_collection(event_id);
+
+        if (grouping.length > 0){
+          var last_id = parseInt(grouping[grouping.length-1].match('hour_\\d+')[0].substring(5));
+          console.log(last_id);
+          var current_hour = parseInt(event_id.match('hour_\\d+')[0].substring(5));
+          console.log(current_hour);
+          if (current_hour-last_id === 1){
+            console.log('in here');
+            grouping.push(event_id);
+          }
+
+
+          var new_height = 0;
+          var start_id = parseInt(grouping[0].match('hour_\\d+')[0].substring(5));
+          var last_id = parseInt(grouping[grouping.length-1].match('hour_\\d+')[0].substring(5));
+          for (var i = 0; i < grouping.length; i++){
+            new_height += parseInt($('#'+grouping[i]).css('height').match('\\d+'));
+
+            $('#'+grouping[i]).remove();
+            $('#'+grouping[i].match('day_\\d+_hour_\\d+')[0]).remove();
+          }
+          //alert(new_height);
+
+          var new_event_id = day_id+'_hour_'+start_id.toString();
+          var new_html = `
+            <div class='hour_block' id='${new_event_id}' style='height:${new_height}px'>
+            <div class="event_test_block" id='event_${new_event_id}' data-created="False" style='height:${new_height}px'>
+              <button id='remove_event_${new_event_id}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+              <p class='event_title_display' id='title_display_${new_event_id}'></p>
+              <p class='event_timestamp' id='timestamp_for_${new_event_id}'></p>
+
+
+            </div>
+            </div>
+          `;
+          console.log(new_html);
+          if (start_id === 1){
+    
+            console.log('inserting: '+"#"+day_id+'_hour_'+(last_id+1).toString());
+            $(new_html).insertBefore("#"+day_id+'_hour_'+(last_id+1).toString());
+          }
+          else{
+            console.log('inserting: '+"#"+day_id+'_hour_'+(start_id-1).toString());
+            $(new_html).insertAfter("#"+day_id+'_hour_'+(start_id-1).toString());
+          }
+          $('#event_'+new_event_id).resizable({handles:"s,n", minHeight:0, maxHeight:new_height-1});
+          for (var i = last_id+1; i < 25; i++){
+            $('#'+day_id+'_hour_'+i.toString()).attr('id', day_id+'_hour_'+(i-grouping.length+1).toString());
+          }
+        }
+      }
       $('.full_calendar').on('click', '.hour_block', function(){
         if (!event_exists(this.id)){
 
@@ -1159,7 +1212,10 @@
           </div>
           `;
           $(this).html(new_html);
+          update_day_col(this.id.match('day_\\d+'), 'event_'+this.id);
           $('#event_'+this.id).resizable({handles:"s,n", minHeight:0, maxHeight:44});
+
+
         }
 
       });
