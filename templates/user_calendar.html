@@ -882,6 +882,18 @@
         }
         return flag;
       }
+      function condense_events(){
+        $('.event_test_block').each(function(){
+          var parent_height = parseInt($('#'+$(this).prop('id').substring(6)).css('height').match('\\d+'));
+          var from_top = parseInt($(this).css('top').match('\\d+'));
+          var height = parseInt($(this).css('height').match('\\d+'));
+          var anchor_id = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5));
+          var previous_time = previous_spacing($(this).prop('id').match('day_\\d+'), parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5)));
+          if (from_top >= 45){
+            var full_id = this.id.match('day_\\d+_hour_\\d+');
+          }
+        });
+      }
       function update_timestamps(){
         $('.event_test_block').each(function(){
           var parent_height = parseInt($('#'+$(this).prop('id').substring(6)).css('height').match('\\d+'));
