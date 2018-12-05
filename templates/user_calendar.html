@@ -1111,17 +1111,16 @@
       $('.full_calendar').on('click', '.remove_info_banner', function(){
         $('.info_banner').remove();
       });
-      function new_event_collection(_id){
+      function new_event_collection(day_id){
 
-        var day_id = _id.match('day_\\d+');
-        var hour_num = parseInt(_id.match('hour_\\d+')[0].substring(5));
+
         var _last = [];
         var flag = true;
         $('div[id^="event_'+day_id+'"]').each(function(){
 
           var current_hour = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5));
 
-          if (current_hour < hour_num){
+
             if ($(this).data('created') === 'False'){
               if (_last.length === 0){
                 _last.push($(this).prop('id'));
@@ -1142,12 +1141,12 @@
             }
 
 
-          }
+          
         });
         return _last;
       }
       function update_day_col(day_id, event_id){
-        var grouping = new_event_collection(event_id);
+        var grouping = new_event_collection(day_id);
 
         if (grouping.length > 0){
           var last_id = parseInt(grouping[grouping.length-1].match('hour_\\d+')[0].substring(5));
@@ -1185,7 +1184,7 @@
           `;
           console.log(new_html);
           if (start_id === 1){
-    
+
             console.log('inserting: '+"#"+day_id+'_hour_'+(last_id+1).toString());
             $(new_html).insertBefore("#"+day_id+'_hour_'+(last_id+1).toString());
           }
