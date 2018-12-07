@@ -855,9 +855,7 @@
         var halved = av_height/2;
         for (var b = 1; b < 25; b++){
           var new_html = `
-            <div class='hour_block' id='day_${i}_hour_${b}' style='height:${av_height}px'>
-              <div style='height:${halved};border-bottom-style:dotted;border-bottom-width:1px;border-bottom-color:#B6B6B6'></div>
-            </div>
+            <div class='hour_block' id='day_${i}_hour_${b}' style='height:${av_height}px'></div>
           `;
           $('#day_'+i.toString()).append(new_html);
         }
@@ -868,7 +866,9 @@
         $('div[id^="'+day+'_"]').each(function(){
 
           if (parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5)) < parseInt(id)){
-            totals += parseInt($(this).css('height').match('\\d+'));
+            var current_total = parseInt($(this).css('height').match('\\d+'));
+            //console.log('running_height = '+current_total.toString());
+            totals += Math.floor(current_total/45);
           }
         });
         return totals;
@@ -891,27 +891,65 @@
           var previous_time = previous_spacing($(this).prop('id').match('day_\\d+'), parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5)));
           if (from_top >= 45){
             var full_id = this.id.match('day_\\d+_hour_\\d+');
+
+            var day_id = full_id[0].match('day_\\d+');
+            var current_id = parseInt(full_id[0].match('hour_\\d+')[0].substring(5))
+            $(this).css('top', (from_top-45).toString()+'px');
+            $(this).css('height', (parseInt($(this).css('height').match('\\d+'))-45).toString()+'px');
+            $('div[id^="'+day_id+'+"]').each(function(){
+              var original_id = $(this).prop('id')
+              var incremented_id = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5))+1;
+              var new_id_here = day_id+"_hour_"+incremented_id.toString()
+              $(this).prop('id', new_id_here);
+              if ($(this).next().html() != ""){
+                /*
+                <div class="event_test_block" id='event_${this.id}' data-created="False">
+                  <button id='remove_event_${this.id}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+                  <p class='event_title_display' id='title_display_${this.id}'></p>
+                  <p class='event_timestamp' id='timestamp_for_${this.id}'></p>
+
+
+                </div>
+                */
+                $('#event_'+original_id).prop('id', 'event_'+new_id_here);
+                $('#remove_event_'+original_id).prop('id', 'remove_event_'+new_id_here);
+                $('#timestamp_for_'+original_id).prop('id', 'timestamp_for_'+new_id_here);
+              }
+            });
+            var new_html = `
+            <div class='hour_block' id='${full_id}' style='height:45px'>
+              <div style='height:22.5px;border-bottom-style:dotted;border-bottom-width:1px;border-bottom-color:#B6B6B6'></div>
+            </div>
+            `
+            var last_id = parseInt(full_id[0].match('hour_\\d+')[0].substring(5))- 1;
+            var last_day = full_id[0].match('day_\\d+');
+            $(new_html).insertAfter('#'+last_day+'_'+last_id.toString());
           }
         });
+
       }
+
       function update_timestamps(){
         $('.event_test_block').each(function(){
+
           var parent_height = parseInt($('#'+$(this).prop('id').substring(6)).css('height').match('\\d+'));
           var from_top = parseInt($(this).css('top').match('\\d+'));
           var height = parseInt($(this).css('height').match('\\d+'));
           var anchor_id = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5));
           var previous_time = previous_spacing($(this).prop('id').match('day_\\d+'), parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5)));
+          //console.log(previous_time);
+          var hour1 = previous_time+1
 
-          var hour1 = Math.floor(previous_time/45)+1
+          var new_height = ((hour1*45)+parent_height)
+          var hour2 = Math.floor(new_height/45);
+          var minutes1 = Math.floor((from_top/new_height)*(hour2*60));
+          hour1 += Math.floor(minutes1/60);
+          var minutes1 = minutes1%60;
           var meridian1 = 'AM';
           if (hour1 > 12){
             hour1 = hour1%12;
             meridian1 = 'PM';
           }
-
-          var new_height = ((hour1*45)+parent_height)
-          var hour2 = Math.floor(new_height/45);
-          var minutes1 = Math.floor((from_top/new_height)*(hour2*60));
           var padding = '';
           if (minutes1 < 10){
             padding='0';
@@ -1150,13 +1188,13 @@
       });
       function new_event_collection(day_id){
 
-
+        var collections = [];
         var _last = [];
         var flag = true;
         $('div[id^="event_'+day_id+'"]').each(function(){
 
           var current_hour = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5));
-
+          //console.log(_last);
 
             if ($(this).data('created') === 'False'){
               if (_last.length === 0){
@@ -1168,30 +1206,40 @@
                   _last.push(this.id);
                 }
                 else{
+                  collections.push(_last);
                   _last = [this.id];
 
                 }
               }
             }
             else{
+              collections.push(_last);
               _last = [];
             }
 
 
 
         });
-        return _last;
+        collections.push(_last);
+        var final_result = [];
+        for (var i = 0; i < collections.length; i++){
+          if (collections[i].length > final_result.length){
+            final_result = collections[i];
+          }
+        }
+        return final_result;
       }
       function update_day_col(day_id, event_id){
         var grouping = new_event_collection(day_id);
-
+        //console.log('grouping');
+        //console.log(grouping);
         if (grouping.length > 0){
           var last_id = parseInt(grouping[grouping.length-1].match('hour_\\d+')[0].substring(5));
-          console.log(last_id);
+          //console.log(last_id);
           var current_hour = parseInt(event_id.match('hour_\\d+')[0].substring(5));
-          console.log(current_hour);
+          //console.log(current_hour);
           if (current_hour-last_id === 1){
-            console.log('in here');
+            //console.log('in here');
             grouping.push(event_id);
           }
 
@@ -1219,19 +1267,30 @@
             </div>
             </div>
           `;
-          console.log(new_html);
+          //console.log(new_html);
           if (start_id === 1){
 
-            console.log('inserting: '+"#"+day_id+'_hour_'+(last_id+1).toString());
+            //console.log('inserting: '+"#"+day_id+'_hour_'+(last_id+1).toString());
             $(new_html).insertBefore("#"+day_id+'_hour_'+(last_id+1).toString());
           }
           else{
-            console.log('inserting: '+"#"+day_id+'_hour_'+(start_id-1).toString());
+            //console.log('inserting: '+"#"+day_id+'_hour_'+(start_id-1).toString());
             $(new_html).insertAfter("#"+day_id+'_hour_'+(start_id-1).toString());
           }
           $('#event_'+new_event_id).resizable({handles:"s,n", minHeight:0, maxHeight:new_height-1});
           for (var i = last_id+1; i < 25; i++){
-            $('#'+day_id+'_hour_'+i.toString()).attr('id', day_id+'_hour_'+(i-grouping.length+1).toString());
+            var new_id1 = '#'+day_id+'_hour_'+i.toString();
+            var new_id2 = day_id+'_hour_'+(i-grouping.length+1).toString();
+            $(new_id1).attr('id', new_id2);
+            /*
+            <button id='remove_event_${this.id}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+            <p class='event_title_display' id='title_display_${this.id}'></p>
+            <p class='event_timestamp' id='timestamp_for_${this.id}'></p>
+            */
+            $('#event_'+new_id1.substring(1)).attr('id', 'event_'+new_id2);
+            $('#title_display_'+new_id1.substring(1)).attr('id', 'title_display_'+new_id2);
+            $('#remove_event_'+new_id1.substring(1)).attr('id', 'remove_event_'+new_id2);
+            $('#timestamp_for_'+new_id1.substring(1)).attr('id', 'timestamp_for_'+new_id2);
           }
         }
       }
@@ -1255,11 +1314,95 @@
         }
 
       });
+      function max_day_val(day_id){
+        var _max = 0;
+        $('div[id^="'+day_id+'_"]').each(function(){
+          if (!$(this).prop('id').includes('dummy')){
+            var result = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5));
+            if (result > _max){
+              _max = result;
+            }
+
+          }
+
+        });
+
+        return _max;
+      }
       $('.full_calendar').on('click', '.remove_event', function(ev){
         ev.stopPropagation();
         var parent_id = this.id.match('day_\\d+_hour_\\d+');
+        var num_slots = parseInt($('#'+parent_id).css('height').match('\\d+'))/45;
         $('#event_'+parent_id).remove();
-        $('#'+parent_id).html("<div style='height:22.5px;border-bottom-style:dotted;border-bottom-width:1px;border-bottom-color:#B6B6B6'></div>");
+        $('#'+parent_id).remove();
+        var day_id = parent_id[0].match('day_\\d+');
+        var current_hour = parseInt(parent_id[0].match('hour_\\d+')[0].substring(5));
+        //console.log('testing here_ '+$('#'+parent_id).css('height'))
+
+        if (current_hour != 1){
+          var _start = current_hour;
+          var _end = max_day_val(day_id);
+
+          for (var i = _end; i >= _start; i--){
+
+            var gen_id1 = '#'+day_id+'_hour_'+(i).toString();
+
+
+            var gen_id2 = day_id+'_hour_'+(i-1+num_slots).toString();
+
+            $(gen_id1).attr('id', gen_id2);
+
+            $('#event_'+gen_id1.substring(1)).attr('id', 'event_'+gen_id2);
+            $('#remove_event_'+gen_id1.substring(1)).attr('id', 'remove_event_'+gen_id2);
+            $('#title_display_'+gen_id1.substring(1)).attr('id', 'title_display_'+gen_id2);
+            $('#timestamp_for_'+gen_id1.substring(1)).attr('id', 'timestamp_for_'+gen_id2);
+          }
+
+
+
+
+
+          var temp_count = 0;
+
+          for (var i = current_hour; i < current_hour+num_slots; i++){
+
+            var new_html = `
+              <div class='hour_block' id='${day_id}_hour_dummy${temp_count}' style='height:45px'></div>
+            `;
+            if (temp_count === 0){
+              $(new_html).insertAfter('#'+day_id+'_hour_'+(i-1).toString());
+            }
+            else{
+              $(new_html).insertAfter('#'+day_id+'_hour_dummy'+(temp_count-1).toString());
+            }
+            temp_count += 1;
+          }
+
+          var starting_counter = current_hour;
+          for (var i = 0; i < temp_count; i++){
+            $('#'+day_id+'_hour_dummy'+i.toString()).attr('id', day_id+'_hour_'+starting_counter.toString());
+            starting_counter += 1;
+          }
+
+        }
+        else{
+
+          var new_html = `
+            <div class='hour_block' id='${day_id}_hour_1' style='height:45px'></div>
+          `;
+          $(new_html).insertBefore('#'+day_id+"_hour_"+num_slots.toString());
+
+          for (var i = current_hour+1; i < current_hour+num_slots; i++){
+
+            var new_html = `
+              <div class='hour_block' id='${day_id}_hour_${i}' style='height:45px'></div>
+            `;
+            $(new_html).insertAfter('#'+day_id+'_hour_'+(i-1).toString());
+          }
+
+        }
+
+
 
       });
       $('.full_calendar').on('click', '.event_test_block', function(ev){
@@ -1286,11 +1429,17 @@
           if (title.length > 8){
             title = title.substring(8)+'...';
           }
+          //console.log('down here');
+
           $('#title_display_'+parent_id).text(title);
           $('#event_'+parent_id).data('created', 'True');
+
           //$('#event_'+parent_id).removeClass('ui-resizable');
+          //condense_events()
         }
+
       });
+
     });
   </script>
 </html>
