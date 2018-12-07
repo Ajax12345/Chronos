@@ -1386,19 +1386,52 @@
 
         }
         else{
+          var _start = current_hour;
+          var _end = max_day_val(day_id);
 
-          var new_html = `
-            <div class='hour_block' id='${day_id}_hour_1' style='height:45px'></div>
-          `;
-          $(new_html).insertBefore('#'+day_id+"_hour_"+num_slots.toString());
+          for (var i = _end; i >= _start; i--){
 
-          for (var i = current_hour+1; i < current_hour+num_slots; i++){
+            var gen_id1 = '#'+day_id+'_hour_'+(i).toString();
 
-            var new_html = `
-              <div class='hour_block' id='${day_id}_hour_${i}' style='height:45px'></div>
-            `;
-            $(new_html).insertAfter('#'+day_id+'_hour_'+(i-1).toString());
+
+            var gen_id2 = day_id+'_hour_'+(i-1+num_slots).toString();
+
+            $(gen_id1).attr('id', gen_id2);
+
+            $('#event_'+gen_id1.substring(1)).attr('id', 'event_'+gen_id2);
+            $('#remove_event_'+gen_id1.substring(1)).attr('id', 'remove_event_'+gen_id2);
+            $('#title_display_'+gen_id1.substring(1)).attr('id', 'title_display_'+gen_id2);
+            $('#timestamp_for_'+gen_id1.substring(1)).attr('id', 'timestamp_for_'+gen_id2);
           }
+
+
+
+          var new_start = current_hour+num_slots-1;
+          alert(new_start);
+          //alert(new_start);
+          var temp_count = 0;
+          var full_start = current_hour+num_slots-1;
+          for (var i = full_start; i >= current_hour; i--){
+          
+            var new_html = `
+              <div class='hour_block' id='${day_id}_hour_dummy${temp_count}' style='height:45px'></div>
+            `;
+            if (temp_count === 0){
+              $(new_html).insertBefore('#'+day_id+'_hour_'+(new_start+1).toString());
+            }
+            else{
+              $(new_html).insertBefore('#'+day_id+'_hour_dummy'+(temp_count-1).toString());
+            }
+            temp_count += 1;
+            new_start -= 1;
+          }
+
+          var starting_counter = current_hour+num_slots-1;
+          for (var i = 0; i < temp_count; i++){
+            $('#'+day_id+'_hour_dummy'+i.toString()).attr('id', day_id+'_hour_'+starting_counter.toString());
+            starting_counter -= 1;
+          }
+
 
         }
 
