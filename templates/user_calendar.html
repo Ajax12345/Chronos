@@ -437,7 +437,7 @@
     }
     .calendar_settings_pane{
       width:500px;
-      height:590px;
+
       padding:40px;
       background-color: white;
       margin:0 auto;
@@ -523,6 +523,11 @@
       border-width:1px;
 
 
+    }
+    .full_category_listing{
+      height:200px;
+      max-height:200px;
+      overflow:scroll;
     }
   </style>
   <head>
@@ -1151,32 +1156,50 @@
             }
           });
 
-          $('#create_category_modal').modal('toggle');
-          var the_html = `
-          <div class='row'>
-              <div class='col-md-auto'>
-                <div class='pallete_sample' style='background-color:${color};border-color:${border_color};'></div>
-              </div>
-              <div class='col-md-auto'><p class='category_text'><strong>${_name}</strong></p></div>
+          $('#category_name').val();
 
-            </div>
-          `;
-          $('.full_category_listing').append(the_html);
-          var banner_html = `
-          <div class='info_banner'>
-            Category "${_name}" created!
-          </div>
-          `;
+          $.ajax({
+            url: "/create_category",
+            type: "get",
+            data: {name: _name, color:color, border:border_color},
+            success: function(response) {
+              if (response.success === 'True'){
+                $('#create_category_modal').modal('toggle');
+                var the_html = `
+                <div class='row'>
+                    <div class='col-md-auto'>
+                      <div class='pallete_sample' style='background-color:${color};border-color:${border_color};'></div>
+                    </div>
+                    <div class='col-md-auto'><p class='category_text'><strong>${_name}</strong></p></div>
 
-          $('.info_banner_wrapper').html(banner_html);
-          setTimeout(function(){
-            $(".info_banner").fadeOut(600);
+                  </div>
+                `;
+                $('.full_category_listing').append(the_html);
+                var banner_html = `
+                <div class='info_banner'>
+                  Category "${_name}" created!
+                </div>
+                `;
 
-          }, 2000);
-          setTimeout(function(){
-            $(".info_banner").remove();
+                $('.info_banner_wrapper').html(banner_html);
+                setTimeout(function(){
+                  $(".info_banner").fadeOut(600);
 
-          }, 8000);
+                }, 2000);
+                setTimeout(function(){
+                  $(".info_banner").remove();
+
+                }, 8000);
+              }
+              else{
+                $('#for_color_input').text('category already exists');
+              }
+            },
+            error: function(xhr) {
+              //Do Something to handle error
+            }
+          });
+
 
         }
       });
@@ -1412,7 +1435,7 @@
           var temp_count = 0;
           var full_start = current_hour+num_slots-1;
           for (var i = full_start; i >= current_hour; i--){
-          
+
             var new_html = `
               <div class='hour_block' id='${day_id}_hour_dummy${temp_count}' style='height:45px'></div>
             `;
