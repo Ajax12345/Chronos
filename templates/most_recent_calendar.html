@@ -934,7 +934,7 @@
           var height = parseInt($(this).css('height').match('\\d+'));
           var anchor_id = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5));
           var previous_time = previous_spacing($(this).prop('id').match('day_\\d+'), parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5)));
-
+          console.log(previous_time);
           var hour1 = Math.floor(previous_time/45)+1
 
 
@@ -1186,13 +1186,13 @@
       });
       function new_event_collection(day_id){
 
-
+        var collections = [];
         var _last = [];
         var flag = true;
         $('div[id^="event_'+day_id+'"]').each(function(){
 
           var current_hour = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5));
-
+          console.log(_last);
 
             if ($(this).data('created') === 'False'){
               if (_last.length === 0){
@@ -1204,19 +1204,28 @@
                   _last.push(this.id);
                 }
                 else{
+                  collections.push(_last);
                   _last = [this.id];
 
                 }
               }
             }
             else{
+              collections.push(_last);
               _last = [];
             }
 
 
 
         });
-        return _last;
+        collections.push(_last);
+        var final_result = [];
+        for (var i = 0; i < collections.length; i++){
+          if (collections[i].length > final_result.length){
+            final_result = collections[i];
+          }
+        }
+        return final_result;
       }
       function update_day_col(day_id, event_id){
         var grouping = new_event_collection(day_id);
@@ -1327,18 +1336,13 @@
 
 
             var gen_id2 = day_id+'_hour_'+(i-1+num_slots).toString();
-            if ($(gen_id1).html() != ''){
-              /*
-              <button id='remove_event_${new_event_id}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
-              <p class='event_title_display' id='title_display_${new_event_id}'></p>
-              <p class='event_timestamp' id='timestamp_for_${new_event_id}'></p>
 
-              */
-              $('#remove_event_'+gen_id1).attr('id', 'remove_event_'+gen_id2);
-              $('#title_display_'+gen_id1).attr('id', 'title_display_'+gen_id2);
-              $('#timestamp_for_'+gen_id1).attr('id', 'timestamp_for_'+gen_id2);
-            }
             $(gen_id1).attr('id', gen_id2);
+
+            $('#event_'+gen_id1.substring(1)).attr('id', 'event_'+gen_id2);
+            $('#remove_event_'+gen_id1.substring(1)).attr('id', 'remove_event_'+gen_id2);
+            $('#title_display_'+gen_id1.substring(1)).attr('id', 'title_display_'+gen_id2);
+            $('#timestamp_for_'+gen_id1.substring(1)).attr('id', 'timestamp_for_'+gen_id2);
           }
 
 
