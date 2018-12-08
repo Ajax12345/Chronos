@@ -371,8 +371,8 @@
       font-size:15px;
     }
     .calendar_settings_events_color{
-      height:300px;
-      max-height:300px;
+      height:400px;
+      max-height:400px;
       overflow: scroll;
       width:400px;
       margin:0 auto;
@@ -404,8 +404,8 @@
       background-color: #E7AF0F;
     }
     .pallete_sample{
-      width:40px;
-      height:40px;
+      width:30px;
+      height:30px;
       border-radius:4px;
       border-width:3px;
 
@@ -452,6 +452,14 @@
       font-size:28px;
       color:#21DCAC;
     }
+    .category_options{
+      height:150px;
+      max-height:150px;
+      overflow:scroll;
+      width:auto;
+      text-align: center;
+      margin-left:160px;
+    }
     .calendar_settings_events_color{
       height:300px;
       max-height:300px;
@@ -485,13 +493,7 @@
       -webkit-transition:0.2s;
       background-color: #E7AF0F;
     }
-    .pallete_sample{
-      width:40px;
-      height:40px;
-      border-radius:4px;
-      border-width:3px;
 
-    }
     .category_text{
       font-family: 'Noto Sans TC', sans-serif;
       font-size:18px;
@@ -528,6 +530,12 @@
       height:200px;
       max-height:200px;
       overflow:scroll;
+    }
+    .on_hover_style{
+
+    }
+    .on_hover_style:hover{
+      text-decoration: underline;
     }
   </style>
   <head>
@@ -667,8 +675,8 @@
       <div class='row'>
         <div class='col'><button class='month_nav' id='backward'><i class="fas fa-angle-left" style='font-size:3em;color: white;line-height:60px;'></i></button></div>
         <div class='col-md-auto' style='text-align:center'>
-          <p class='month_heading'><strong><span class='calendar_month'>November</span> <span class='calendar_year'>2018</span></strong></p>
-          <p class='range_heading'>Monday 11th - Thursday 15th</p>
+          <p class='month_heading'><strong><span class='calendar_month'>December</span> <span class='calendar_year'>2018</span></strong></p>
+          <p class='range_heading'>Monday 3th - Sunday 9th</p>
         </div>
         <div class='col'><button class='month_nav' id='forward' style='float:right;'><i class="fas fa-angle-right" style='font-size:3em;color: white;line-height:60px;'></i></button></div>
       </div>
@@ -816,8 +824,30 @@
             </div>
           </div>
         </div>
-        <div style='height:60px;'></div>
 
+        <div style='height:40px;'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <p class='create_event_modal_header'><strong>Event category:</strong></p>
+            </div>
+            <div class='col-md-auto'>
+              <div class='container'>
+                <div class='row'>
+                    <div class='col-md-auto'>
+                      <div class='pallete_sample' id='selected_square' style='background-color:#FF354D;border-color:red;'></div>
+                    </div>
+                    <div class='col-md-auto'><p class='category_text' id='selected_name' style='margin-top:-0.5px;'><strong style='color:gray'>default</strong></p></div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style='height:20px;'></div>
+        <div class='category_options'>
+
+        </div>
       </div>
       <div class="modal-footer">
 
@@ -1465,23 +1495,63 @@
         ev.stopPropagation();
         if ($(this).data('created') === 'False'){
           var parent_id = this.id.match('day_\\d+_hour_\\d+');
+          $.ajax({
+            url: "/render_categories",
+            type: "get",
+            data: {val: ''},
+            success: function(response) {
+              $('.category_options').html(response.html);
+            },
+            error: function(xhr) {
+              //Do Something to handle error
+            }
+          });
           $("#create_event_modal").modal('toggle');
+          $('#selected_name').html("<strong style='color:gray'>default</strong>");
           $('.create_calendar_event_confirm').attr('id', 'modal_for_'+parent_id);
 
+        }
+        else{
+          var parent_id = this.id.match('day_\\d+_hour_\\d+');
+          var current_month = $('.calendar_month').text();
+          var week_range = $('.range_heading').text();
+          var timerange = $('#timestamp_for_'+parent_id).text();
+          var year = $('.calendar_year').text();
+          var payload = {'parent_id':parent_id, 'month':current_month, 'year':year, 'week_range':week_range, 'timerange':timerange};
+          $.ajax({
+            url: "/event_quick_look",
+            type: "get",
+            data: {data: JSON.stringify(payload)},
+            success: function(response) {
+              //$("#place_for_suggestions").html(response);
+            },
+            error: function(xhr) {
+              //Do Something to handle error
+            }
+          });
         }
       });
       $('.full_calendar').on('click', '.create_calendar_event_confirm', function(){
         var parent_id = this.id.match('day_\\d+_hour_\\d+');
         var title = $('#event_name').val();
         var description = $('#event_description').val();
+        var category = $('#selected_name').text();
+        var category_color = $('#selected_square').css("background-color");
+        var category_border_color = $('#selected_square').css("border-color");
         if (title === ''){
           $('#for_name').text('cannot be left blank');
         }
         else{
           $('#event_name').val('');
           $('#event_description').val('');
-          $("#create_event_modal").modal('toggle');
+          $('#event_'+parent_id).css('background-color', category_color);
+          $('#event_'+parent_id).css('border-color', category_border_color);
 
+          $("#create_event_modal").modal('toggle');
+          $('#selected_name').html("<strong style='color:gray'>default</strong>");
+          $('#selected_square').css('background-color', 'red');
+          //background-color:red;border-color:#FF354D
+          $('#selected_square').css('border-color', '#FF354D');
           if (title.length > 8){
             title = title.substring(8)+'...';
           }
@@ -1489,13 +1559,44 @@
 
           $('#title_display_'+parent_id).text(title);
           $('#event_'+parent_id).data('created', 'True');
-
+          var current_month = $('.calendar_month').text();
+          var week_range = $('.range_heading').text();
+          var timerange = $('#timestamp_for_'+parent_id).text();
+          var year = $('.calendar_year').text();
+          var payload = {'title':title, 'description':description, 'category':category, 'background_color':category_color, 'border_color':category_border_color, 'month':current_month, 'week_range':week_range, 'timerange':timerange, 'year':year, 'parent_id':parent_id[0]}
+          $.ajax({
+            url: "/create_calendar_event",
+            type: "get",
+            data: {data: JSON.stringify(payload)},
+            success: function(response) {
+              //$("#place_for_suggestions").html(response);
+            },
+            error: function(xhr) {
+              //Do Something to handle error
+            }
+          });
           //$('#event_'+parent_id).removeClass('ui-resizable');
           //condense_events()
         }
 
       });
+      $('.full_calendar').on('click', '.on_hover_style', function(){
+        var main_id = this.id.match('\\d+');
+        var current_selected_name = $('#selected_name').html();
+        var current_color = $('#selected_square').css('background-color');
+        var current_border_color = $('#selected_square').css('border-color');
+        var this_selected_text = $(this).html();
+        var this_selected_color = $('#categorycolor'+main_id).css('background-color');
+        var this_selected_border_color = $('#categorycolor'+main_id).css('border-color');
 
+        $('#selected_square').css('background-color', this_selected_color);
+        $('#selected_square').css('border-color', this_selected_border_color);
+        $('#selected_name').html(this_selected_text);
+        $("#categorytext"+main_id).html(current_selected_name);
+        $('#categorycolor'+main_id).css('background-color', current_color);
+        $('#categorycolor'+main_id).css('border-color', current_border_color);
+
+      });
     });
   </script>
 </html>
