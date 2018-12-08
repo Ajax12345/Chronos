@@ -1,7 +1,7 @@
 import flask, random, json, string
 import chronos_users as _user, typing
 import functools, chronos_calendar
-
+import user_categories, user_calendar
 
 app = flask.Flask(__name__)
 
@@ -110,6 +110,33 @@ def filter_users():
     _current_users = json.loads(flask.request.args.get('users'))
     return flask.jsonify({'success':'True', 'html':flask.render_template('filter_user_display.html', filtered=_user._searchUsers.search_users(_keyword, avoid = [flask.session['id'], *map(int, _current_users)]))})
 
+
+@app.route('/calendar_settings')
+def get_calendar_settings():
+    return flask.jsonify({"success":"True", 'html':flask.render_template('calendar_settings.html', categories = user_categories.Categories.categories(flask.session['id']))})
+
+@app.route('/create_category')
+def create_category():
+    name = flask.request.args.get('name')
+    color = flask.request.args.get('color')
+    border = flask.request.args.get('border')
+    return flask.jsonify(user_categories.Categories.create_category(int(flask.session['id']), name, color, border))
+
+@app.route('/create_calendar_event')
+def create_calendar_event():
+    data = json.loads(flask.request.args.get('data'))
+    print('got data here ', data)
+    user_calendar.Calendar.create_calendar_event(flask.session['id'], data)
+    return flask.jsonify({"success":'True'})
+
+@app.route('/render_categories')
+def render_categories():
+    return flask.jsonify({"html":flask.render_template('simple_category_render.html', categories = user_categories.Categories.categories(flask.session['id']))})
+
+@app.route('/calendar')
+@isloggedin
+def display_calendar():
+    return flask.render_template('user_calendar.html', user = _user.Users.get_user(id=int(flask.session['id'])))
 
 @app.after_request
 def add_header(r):
