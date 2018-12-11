@@ -4,8 +4,8 @@
     <div class='row'>
       <div class='col'><button class='month_nav' id='backward'><i class="fas fa-angle-left" style='font-size:3em;color: white;line-height:60px;'></i></button></div>
       <div class='col-md-auto' style='text-align:center'>
-        <p class='month_heading'><strong><span class='calendar_month'>December</span> <span class='calendar_year'>2018</span></strong></p>
-        <p class='range_heading'>Monday 3th - Sunday 9th</p>
+        <p class='month_heading'><strong><span class='calendar_month'>{{calendar.month}}</span> <span class='calendar_year'>{{calendar.year}}</span></strong></p>
+        <p class='range_heading'>{{calendar.dayrange}}</p>
       </div>
       <div class='col'><button class='month_nav' id='forward' style='float:right;'><i class="fas fa-angle-right" style='font-size:3em;color: white;line-height:60px;'></i></button></div>
     </div>
@@ -39,76 +39,29 @@
                 </colgroup>
                 <tbody>
                   <tr style='height:1200px;max-height:600px;overflow:scroll'>
-                    <td valign='top' class='start_col main_col' style='border-left:none'>
-                      <div class='day_display' style='border-top-left-radius:10px;'>
-                        <p class='day_abbrev'><strong>Mon</strong></p>
-                        <p class='calendar_date'>3</p>
-                      </div>
-                      <div class='day_event_listing' id='day_1'>
+                    {%for day in calendar%}
+                      <td valign='top' class='{{day.header_class}}'>
+                        <div class='{{day.inner_div_class}}'>
+                          <p class='day_abbrev'><strong>{{day.header.day_abbrev}}</strong></p>
+                          <p class='calendar_date'>{{day.header.day_num}}</p>
+                        </div>
+                        <div class='day_event_listing' id='day_{{day.header.rounded_day}}'>
+                          {%for day_div in day%}
+                            <div class='hour_block' id='{{day_div.div_id}}' style='height:{{day_div.height}}px'>
+                              {%if day_div%}
+                                <div class="event_test_block" id='event_{{day_div.div_id}}' data-created="True" style='height:{{day_div.event.height}}px;top:{{day_div.event.from_top}}px;background-color:{{day_div.event.background_color}};border-color:{{day_div.event.border_color}}'>
+                                  <button id='remove_event_{{day_div.div_id}}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
+                                  <p class='event_title_display' id='title_display_{{day_div.div_id}}'>{{day_div.event.condensed_title}}</p>
+                                  <p class='event_timestamp' id='timestamp_for_{{day_div.div_id}}'>{{day_div.event.timerange}}</p>
+                                </div>
+                              {%endif%}
+                            </div>
+                          {%endfor%}
+                        </div>
 
-                      </div>
+                      </td>
+                    {%endfor%}
 
-                    </td>
-                    <td valign='top' class='main_col'>
-                      <div class='day_display'>
-                        <p class='day_abbrev'><strong>Tue</strong></p>
-                        <p class='calendar_date'>4</p>
-
-                      </div>
-                      <div class='day_event_listing' id='day_2'>
-
-                      </div>
-                    </td>
-                    <td valign='top' class='main_col'>
-                      <div class='day_display'>
-                        <p class='day_abbrev'><strong>Wed</strong></p>
-                        <p class='calendar_date'>5</p>
-
-                      </div>
-                      <div class='day_event_listing' id='day_3'>
-
-                      </div>
-                    </td>
-                    <td valign='top' class='main_col'>
-                      <div class='day_display'>
-                        <p class='day_abbrev'><strong>Thr</strong></p>
-                        <p class='calendar_date'>6</p>
-                      </div>
-                      <div class='day_event_listing' id='day_4'>
-
-                      </div>
-                    </td>
-                    <td valign='top' class='main_col'>
-                      <div class='day_display is_today'>
-                        <p class='day_abbrev' style='color:white'><strong>Fri</strong></p>
-                        <p class='calendar_date' style='color:white'>7</p>
-                      </div>
-                      <div class='day_event_listing' id='day_5'>
-
-                      </div>
-                    </td>
-                    <td valign='top' class='main_col'>
-                      <div class='day_display'>
-                        <p class='day_abbrev'><strong>Sat</strong></p>
-                        <p class='calendar_date'>8</p>
-                      </div>
-                      <div class='day_event_listing' id='day_6'>
-
-                      </div>
-                    </td>
-
-                    </td>
-                    <td valign='top' class='main_col' style='border-right:none'>
-                      <div class='day_display' style='border-top-right-radius:10px;'>
-                        <p class='day_abbrev'><strong>Sun</strong></p>
-                        <p class='calendar_date'>9</p>
-                      </div>
-                      <div class='day_event_listing' id='day_7'>
-
-                      </div>
-                    </td>
-
-                    </td>
                   </tr>
                 </tbody>
               </table>
