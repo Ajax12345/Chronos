@@ -1,0 +1,188 @@
+<div class='calendar_header'>
+
+  <div class='container'>
+    <div class='row'>
+      <div class='col'><button class='month_nav' id='backward'><i class="fas fa-angle-left" style='font-size:3em;color: white;line-height:60px;'></i></button></div>
+      <div class='col-md-auto' style='text-align:center'>
+        <p class='month_heading'><strong><span class='calendar_month'>December</span> <span class='calendar_year'>2018</span></strong></p>
+        <p class='range_heading'>Monday 3th - Sunday 9th</p>
+      </div>
+      <div class='col'><button class='month_nav' id='forward' style='float:right;'><i class="fas fa-angle-right" style='font-size:3em;color: white;line-height:60px;'></i></button></div>
+    </div>
+</div>
+
+</div>
+  <div style='height:10px'></div>
+  <div class='calendar_body'>
+    <table style="width: 90%;margin:0 auto;padding:0px;border-radius:12px;">
+        <colgroup>
+           <col span="1" style="width: 7.5%;">
+           <col span="1" style="width: 75%;">
+           <col span="1" style="width: 7.5%;">
+        </colgroup>
+        <tbody>
+          <tr>
+            <td style='background:none'>
+              <div class='timeslots'>
+              </div>
+            </td>
+            <td class = 'main_calendar' valgin='top' style='padding:0px;'>
+              <table style="width: 100%;" style='margin-top:-500px;border-radius:10px;'>
+                <colgroup>
+                   <col span="1" style="width:12.58%">
+                   <col span="1" style="width:12.58%">
+                   <col span="1" style="width:12.58%">
+                   <col span="1" style="width:12.58%">
+                   <col span="1" style="width:12.58%">
+                   <col span="1" style="width:12.58%">
+                   <col span="1" style="width:12.58%">
+                </colgroup>
+                <tbody>
+                  <tr style='height:1200px;max-height:600px;overflow:scroll'>
+                    <td valign='top' class='start_col main_col' style='border-left:none'>
+                      <div class='day_display' style='border-top-left-radius:10px;'>
+                        <p class='day_abbrev'><strong>Mon</strong></p>
+                        <p class='calendar_date'>3</p>
+                      </div>
+                      <div class='day_event_listing' id='day_1'>
+
+                      </div>
+
+                    </td>
+                    <td valign='top' class='main_col'>
+                      <div class='day_display'>
+                        <p class='day_abbrev'><strong>Tue</strong></p>
+                        <p class='calendar_date'>4</p>
+
+                      </div>
+                      <div class='day_event_listing' id='day_2'>
+
+                      </div>
+                    </td>
+                    <td valign='top' class='main_col'>
+                      <div class='day_display'>
+                        <p class='day_abbrev'><strong>Wed</strong></p>
+                        <p class='calendar_date'>5</p>
+
+                      </div>
+                      <div class='day_event_listing' id='day_3'>
+
+                      </div>
+                    </td>
+                    <td valign='top' class='main_col'>
+                      <div class='day_display'>
+                        <p class='day_abbrev'><strong>Thr</strong></p>
+                        <p class='calendar_date'>6</p>
+                      </div>
+                      <div class='day_event_listing' id='day_4'>
+
+                      </div>
+                    </td>
+                    <td valign='top' class='main_col'>
+                      <div class='day_display is_today'>
+                        <p class='day_abbrev' style='color:white'><strong>Fri</strong></p>
+                        <p class='calendar_date' style='color:white'>7</p>
+                      </div>
+                      <div class='day_event_listing' id='day_5'>
+
+                      </div>
+                    </td>
+                    <td valign='top' class='main_col'>
+                      <div class='day_display'>
+                        <p class='day_abbrev'><strong>Sat</strong></p>
+                        <p class='calendar_date'>8</p>
+                      </div>
+                      <div class='day_event_listing' id='day_6'>
+
+                      </div>
+                    </td>
+
+                    </td>
+                    <td valign='top' class='main_col' style='border-right:none'>
+                      <div class='day_display' style='border-top-right-radius:10px;'>
+                        <p class='day_abbrev'><strong>Sun</strong></p>
+                        <p class='calendar_date'>9</p>
+                      </div>
+                      <div class='day_event_listing' id='day_7'>
+
+                      </div>
+                    </td>
+
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td style='background:none'></td>
+          </tr>
+        </tbody>
+    </table>
+    <!---->
+
+
+<div class="modal" id="create_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title create_event_modal_header" id="exampleModalLabel">Create personal event</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div style='height:10px;'></div>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-auto'>
+            <p class='create_event_modal_header'><strong>Event name:</strong></p>
+          </div>
+          <div class='col-md-auto'>
+            <input type='text' class='detail_input' id='event_name'>
+            <p class='warning_text' id='for_name'></p>
+          </div>
+        </div>
+      </div>
+      <div style='height:40px;'></div>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-auto'>
+            <p class='create_event_modal_header'><strong>Description:</strong></p>
+          </div>
+          <div class='col-md-auto'>
+            <input type='text' class='detail_input' placeholder="(optional)" id='event_description'>
+          </div>
+        </div>
+      </div>
+
+      <div style='height:40px;'></div>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-auto'>
+            <p class='create_event_modal_header'><strong>Event category:</strong></p>
+          </div>
+          <div class='col-md-auto'>
+            <div class='container'>
+              <div class='row'>
+                  <div class='col-md-auto'>
+                    <div class='pallete_sample' id='selected_square' style='background-color:#FF354D;border-color:red;'></div>
+                  </div>
+                  <div class='col-md-auto'><p class='category_text' id='selected_name' style='margin-top:-0.5px;'><strong style='color:gray'>default</strong></p></div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style='height:20px;'></div>
+      <div class='category_options'>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+
+      <button type="button" class="create_calendar_event_confirm">Create</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
