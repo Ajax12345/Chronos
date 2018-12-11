@@ -1,5 +1,5 @@
 import typing, tigerSqlite, datetime
-import re, calendar
+import re, calendar, chronos_utilities
 
 class _event_datetime(typing.NamedTuple):
     day:datetime.datetime
@@ -9,6 +9,10 @@ class _event_datetime(typing.NamedTuple):
 class Event:
     def __init__(self, _row:dict) -> None:
         self.__dict__ = _row
+    @property
+    def has_description(self):
+        return bool(self.description)
+
     def __iter__(self):
         yield from [(a, b) for a, b in self.__dict__.items()]
     def __eq__(self, _event) -> bool:
@@ -22,6 +26,27 @@ class Calendar:
     tablename: calendars
     columns: id real, events text
     """
+    def __init__(self, _data:list, **kwargs:dict) -> None:
+        self.full_data = _data
+        self.__dict__.update({i:kwargs.get(i) for i in ['month', 'year', 'by_week']})
+        
+    @property
+    def dayrange(self):
+        if not self.by_week:
+            raise AttributeError('calendar instance by month, not week')
+        return 'Monday {} - Sunday {}'.format(*self.__class__.singletion_dates(self.full_data))
+    
+    
+
+    @staticmethod
+    def singletion_dates(_data:list) -> str:
+        _prefixes = {1:'st', 2:'nd', 3:'rd'}
+        _start, *_, _end = [a for a, _ in _data]
+        return [f"{_start.day}{_prefixes.get(_start.day, 'th')}", f"{_end.day}{_prefixes.get(_end.day, 'th')}"]
+
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__}(by_week={True if self.by_week else False}, month={self.month}, year={self.year}, dayrange={None if not self.by_week else self.dayrange})'
+    
     @classmethod
     def event_datetime(cls, _event:dict) -> datetime.datetime:
         day, _hour = map(int, re.findall('\d+', _event['parent_id']))
@@ -38,9 +63,16 @@ class Calendar:
         new_payload = {'timestamp':str(_timestamps.day), 'created_on':str(datetime.datetime.now()), **_payload}
         print('resulting payload', new_payload)
         current_events = [b for a, b in tigerSqlite.Sqlite('user_calendars.db').get_id_events('calendars') if a == _user][-1]
-        tigerSqlite.Sqlite('user_calendars.db').update('calendars', [['events', current_events+[new_payload]], [['id', _user]]])
+        tigerSqlite.Sqlite('user_calendars.db').update('calendars', [['events', current_events+[new_payload]]], [['id', _user]])
         
     @classmethod
     def quick_look(cls, _user:int, _payload:dict) -> typing.Callable:
         _user_events = list(map(Event, [b for a, b in tigerSqlite.Sqlite('user_calendars.db').get_id_events('calendars') if a == _user][-1]))
-        return [i for i in _user_events if i == Event(_payload)][0]
+        return [Event(i) for i in _user_events if i == Event(_payload)][0]
+
+    @classmethod
+    @chronos_utilities.rangeify
+    def by_week(cls, _user:int, _week:typing.List[datetime.date]) -> typing.Callable:
+        _all_events =[b for a, b in tigerSqlite.Sqlite('user_calendars.db').get_id_events('calendars') if int(a) == int(_user)][0]
+        _ranges = [[i, [a for a in _all_events if datetime.date(*map(int, re.findall('\d+', a['timestamp']))) == i]] for i in _week]
+        return cls(_ranges, by_week = True, year=_week[-1].year, month=_week[-1].year)
