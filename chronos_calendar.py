@@ -72,10 +72,12 @@ class _dayColumn:
         start = 0
         _counter = itertools.count(1)
         for event in self.events:
+            print('event here', event)
             hour1, minutes1, meridian1, hour2, minutes2, meridian2 = re.findall('\d+(?=:)|(?<=:)\d+|[AMP]+', event['timerange'])
             hour1, minutes1, hour2, minutes2 = int(hour1) if meridian1 == 'AM' else int(hour1) + 12, int(minutes1), int(hour2) if meridian2 == 'AM' else int(hour2)+12, int(minutes2)
-            for _ in range(start, hour1+start):
+            for _ in range(start, hour1+start-1):
                 yield _day_obj(self.header.rounded_day, next(_counter))
+                start += 1
             _e = Event(event)
             _e.height = 45*((hour2 if not minutes2 else hour2+1)-hour1)
             yield _day_obj(self.header.rounded_day, next(_counter), event = _e)
