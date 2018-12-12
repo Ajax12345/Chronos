@@ -673,27 +673,31 @@
         success: function(response) {
           if (response.success === 'True'){
             $('.full_calendar').html(response.html);
+            create_timestamp_strip();
           }
         },
         error: function(xhr) {
           //Do Something to handle error
         }
       });
-      for (var i = 1; i < 25; i++){
-        var formatted = i.toString()+':00 AM';
-        if (i > 12){
-          if (i === 24){
-            formatted = '12:00 PM';
+      function create_timestamp_strip(){
+        for (var i = 1; i < 25; i++){
+          var formatted = i.toString()+':00 AM';
+          if (i > 12){
+            if (i === 24){
+              formatted = '12:00 PM';
+            }
+            else{
+              formatted = (i%12).toString()+':00 PM';
+            }
           }
-          else{
-            formatted = (i%12).toString()+':00 PM';
-          }
+          var the_html = `
+            <p class='timeslot_time'><strong>${formatted}</strong></p>
+          `;
+          $('.timeslots').append(the_html);
         }
-        var the_html = `
-          <p class='timeslot_time'><strong>${formatted}</strong></p>
-        `;
-        $('.timeslots').append(the_html);
       }
+
       function previous_spacing(day, id){
         var totals = 0;
         $('div[id^="'+day+'_"]').each(function(){
@@ -908,6 +912,26 @@
           success: function(response) {
             if (response.success === 'True'){
               $('.full_calendar').html(response.html);
+            }
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      });
+      $('.calendar_options').on('click', '#calendar_by_week', function(){
+        $('#settings_underline').css('background-color', '#21DCAC');
+        $('#by_weekly_underline').css('background-color', '#FABC09');
+        $('#by_monthly_underline').css('background-color', '#21DCAC');
+
+        $.ajax({
+          url: "/dynamic_calendar_display",
+          type: "get",
+          data: {val: ''},
+          success: function(response) {
+            if (response.success === 'True'){
+              $('.full_calendar').html(response.html);
+              create_timestamp_strip();
             }
           },
           error: function(xhr) {
@@ -1285,6 +1309,26 @@
         $("#categorytext"+main_id).html(current_selected_name);
         $('#categorycolor'+main_id).css('background-color', current_color);
         $('#categorycolor'+main_id).css('border-color', current_border_color);
+      });
+      $('.full_calendar').on('click', '.month_nav', function(){
+        var month = $('.calendar_month').text();
+        var year = $('.calendar_year').text();
+        var dayrange = $('.range_heading').text();
+        $.ajax({
+          url: "/navigate_calendar_by_week",
+          type: "get",
+          data: {values: JSON.stringify({'month':month, 'year':year, 'dayrange':dayrange, 'direction':this.id})},
+          success: function(response) {
+            if (response.success === 'True'){
+              $('.full_calendar').html(response.html);
+              create_timestamp_strip();
+            }
+
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
       });
     });
   </script>
