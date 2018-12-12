@@ -1285,7 +1285,8 @@
             type: "get",
             data: {data: JSON.stringify(payload)},
             success: function(response) {
-              //$("#place_for_suggestions").html(response);
+              $(".full_calendar").html(response.html);
+              create_timestamp_strip();
             },
             error: function(xhr) {
               //Do Something to handle error
@@ -1311,13 +1312,13 @@
         $('#categorycolor'+main_id).css('border-color', current_border_color);
       });
       $('.full_calendar').on('click', '.month_nav', function(){
-        var month = $('.calendar_month').text();
-        var year = $('.calendar_year').text();
-        var dayrange = $('.range_heading').text();
+        var month = $(this).data('month');
+        var year = $(this).data('year');
+        var dayrange = $(this).data('dayrange');
         $.ajax({
           url: "/navigate_calendar_by_week",
           type: "get",
-          data: {values: JSON.stringify({'month':month, 'year':year, 'dayrange':dayrange, 'direction':this.id})},
+          data: {values: JSON.stringify({'month':month, 'year':year, 'dayrange':dayrange})},
           success: function(response) {
             if (response.success === 'True'){
               $('.full_calendar').html(response.html);
