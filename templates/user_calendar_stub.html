@@ -778,6 +778,7 @@
         $('.event_test_block').each(function(){
           var parent_height = parseInt($('#'+$(this).prop('id').substring(6)).css('height').match('\\d+'));
           var from_top = parseInt($(this).css('top').match('\\d+'));
+
           var height = parseInt($(this).css('height').match('\\d+'));
           var anchor_id = parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5));
           var previous_time = previous_spacing($(this).prop('id').match('day_\\d+'), parseInt($(this).prop('id').match('hour_\\d+')[0].substring(5)));
@@ -1295,6 +1296,12 @@
             //Do Something to handle error
           }
         });
+      });
+      $('.calendar_options').on('click', '#calendar_by_week', function(){
+        $('#settings_underline').css('background-color', '#21DCAC');
+        $('#by_weekly_underline').css('background-color', '#21DCAC');
+        $('#by_monthly_underline').css('background-color', '#FABC09');
+        
       });
     });
   </script>
