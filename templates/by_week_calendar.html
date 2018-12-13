@@ -2,12 +2,12 @@
 
   <div class='container'>
     <div class='row'>
-      <div class='col'><button class='month_nav' id='backward'><i class="fas fa-angle-left" style='font-size:3em;color: white;line-height:60px;'></i></button></div>
+      <div class='col'><button class='month_nav' id='backward' data-year ='{{calendar.previous_year}}' data-month ='{{calendar.previous_month}}' data-dayrange='{{calendar.previous_dayrange}}'><i class="fas fa-angle-left" style='font-size:3em;color: white;line-height:60px;'></i></button></div>
       <div class='col-md-auto' style='text-align:center'>
         <p class='month_heading'><strong><span class='calendar_month'>{{calendar.month}}</span> <span class='calendar_year'>{{calendar.year}}</span></strong></p>
         <p class='range_heading'>{{calendar.dayrange}}</p>
       </div>
-      <div class='col'><button class='month_nav' id='forward' style='float:right;'><i class="fas fa-angle-right" style='font-size:3em;color: white;line-height:60px;'></i></button></div>
+      <div class='col'><button class='month_nav' id='forward' data-year = '{{calendar.next_year}}' data-month='{{calendar.next_month}}' data-dayrange = "{{calendar.next_dayrange}}" style='float:right;'><i class="fas fa-angle-right" style='font-size:3em;color: white;line-height:60px;'></i></button></div>
     </div>
 </div>
 
@@ -49,7 +49,7 @@
                           {%for day_div in day%}
                             <div class='hour_block' id='{{day_div.div_id}}' style='height:{{day_div.height}}px'>
                               {%if day_div%}
-                                <div class="event_test_block" id='event_{{day_div.div_id}}' data-created="True" style='height:{{day_div.event.height}}px;top:{{day_div.event.from_top}}px;background-color:{{day_div.event.background_color}};border-color:{{day_div.event.border_color}}'>
+                                <div class="event_test_block" id='event_{{day_div.div_id}}' data-created="True" style='height:{{day_div.event.height}}px;top:{{day_div.event.from_top}}px;margin-top:{{day_div.event.from_top}};background-color:{{day_div.event.background_color}};border-color:{{day_div.event.border_color}}'>
                                   <button id='remove_event_{{day_div.div_id}}' class='remove_event'><i class="fas fa-times" style='color:white;font-size:1.3em'></i></button>
                                   <p class='event_title_display' id='title_display_{{day_div.div_id}}'>{{day_div.event.condensed_title}}</p>
                                   <p class='event_timestamp' id='timestamp_for_{{day_div.div_id}}'>{{day_div.event.timerange}}</p>
