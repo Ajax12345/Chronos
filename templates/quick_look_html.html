@@ -1,0 +1,77 @@
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title create_event_modal_header" id="exampleModalLabel">Quick look</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div style='height:10px;'></div>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-auto'>
+            <p class='create_event_modal_header'><strong>Event name:</strong></p>
+          </div>
+          <div class='col-md-auto'>
+            <p class='create_event_modal_header'><strong style='color:#21DCAC;'>{{event.title}}</strong></p>
+          </div>
+        </div>
+      </div>
+      {%if event.has_description%}
+      <div style='height:40px;'></div>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-auto'>
+            <p class='create_event_modal_header'><strong>Description:</strong></p>
+          </div>
+          <div class='col-md-auto'>
+            <div class='quick_look_description'>
+              {{event.description}}
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endif%}
+      <div style='height:40px;'></div>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-auto'>
+            <p class='create_event_modal_header'><strong>From:</strong></p>
+          </div>
+          <div class='col-md-auto'>
+            <p class='create_event_modal_header' style='margin-left:50px;'><strong>{{event.timerange}}</strong></p>
+          </div>
+        </div>
+      </div>
+      <div style='height:40px;'></div>
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-auto'>
+            <p class='create_event_modal_header'><strong>Event category:</strong></p>
+          </div>
+          <div class='col-md-auto'>
+            <div class='container'>
+              <div class='row'>
+                  <div class='col-md-auto'>
+                    <div class='pallete_sample' id='selected_square' style='background-color:{{event.background_color}};border-color:{{event.border_color}};'></div>
+                  </div>
+                  <div class='col-md-auto'><p class='category_text' id='selected_name' style='margin-top:-0.5px;'>
+                    {%if event.category == 'default'%}
+                      <strong style='color:gray'>default</strong>
+                    {%else%}
+                      <strong>{{event.category}}</strong>
+                    {%endif%}
+                  </p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+  </div>
+</div>
