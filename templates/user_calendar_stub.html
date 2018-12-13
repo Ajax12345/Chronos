@@ -478,8 +478,8 @@
       border-width:1px;
     }
     .full_category_listing{
-      height:200px;
-      max-height:200px;
+      height:400px;
+      max-height:400px;
       overflow:scroll;
     }
     .on_hover_style{
@@ -497,6 +497,18 @@
 
         border-top-right-radius:10px;
 
+    }
+    .quick_look_description{
+      width:300px;
+
+      max-height:300px;
+      overflow: scroll;
+      border:solid;
+      border-radius:10px;
+      border-width:1.5px;
+      padding:10px;
+      font-family: 'Noto Sans TC', sans-serif;
+      border-color:#21DCAC;
     }
   </style>
   <head>
@@ -634,7 +646,9 @@
     </div>
     <div style='height:200px;'></div>
 
+    <div class="modal" id="display_quick_look" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
+    </div>
 
 
 
@@ -791,6 +805,9 @@
             minutes2 = 0;
           }
           var meridian2 = 'AM';
+          if (meridian1 === 'PM'){
+            meridian2 = 'PM';
+          }
           if (hour2 > 12){
             if (hour2 === 24){
               hour2 = 12;
@@ -804,7 +821,7 @@
           if (minutes2 < 10){
             padding2 = '0';
           }
-          var generated = hour1.toString()+':'+padding+minutes1.toString()+ ' '+meridian1 + ' - ' + hour2.toString()+':'+padding2+minutes2.toString()+ ' '+meridian2
+          var generated = hour1.toString()+':'+padding+minutes1.toString()+ ' '+meridian1 + ' - ' + hour2.toString()+':'+padding2+minutes2.toString()+ ' '+meridian2;
           $('#timestamp_for_'+this.id.match('day_\\d+_hour_\\d+')).text(generated);
         });
         setTimeout(function(){
@@ -1173,7 +1190,8 @@
           $('.create_calendar_event_confirm').attr('id', 'modal_for_'+parent_id);
         }
         else{
-          var parent_id = this.id.match('day_\\d+_hour_\\d+');
+
+          var parent_id = this.id.match('day_\\d+_hour_\\d+')[0];
           var current_month = $('.calendar_month').text();
           var week_range = $('.range_heading').text();
           var timerange = $('#timestamp_for_'+parent_id).text();
@@ -1182,8 +1200,10 @@
           $.ajax({
             url: "/event_quick_look",
             type: "get",
-            data: {data: JSON.stringify(payload)},
+            data: {payload: JSON.stringify(payload)},
             success: function(response) {
+              $('#display_quick_look').html(response.html);
+              $('#display_quick_look').modal('toggle');
               //$("#place_for_suggestions").html(response);
             },
             error: function(xhr) {
@@ -1212,9 +1232,11 @@
           $('#selected_square').css('background-color', 'red');
           //background-color:red;border-color:#FF354D
           $('#selected_square').css('border-color', '#FF354D');
+          /*
           if (title.length > 8){
             title = title.substring(8)+'...';
           }
+          */
           //console.log('down here');
           $('#title_display_'+parent_id).text(title);
           $('#event_'+parent_id).data('created', 'True');
