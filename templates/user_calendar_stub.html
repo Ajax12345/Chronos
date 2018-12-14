@@ -510,6 +510,67 @@
       font-family: 'Noto Sans TC', sans-serif;
       border-color:#21DCAC;
     }
+    ._calendar_header{
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:27px;
+    text-align: center;
+    }
+    ._month_nav{
+    background: none;
+    border:none;
+
+    }
+
+    .today{
+    background-color: #21DCAC;
+    color:white;
+    width:40px;
+    height:40px;
+    padding:5px;
+    border-radius:50%;
+    line-height: 27px;
+    font-size:20px;
+    }
+
+    .today_day{
+    width:40px;
+    height:40px;
+    padding:5px;
+    border-radius:50%;
+    font-size:20px;
+
+    }
+    .previous_day{
+    width:40px;
+    height:40px;
+    padding:5px;
+    border-radius:50%;
+    font-size:20px;
+    }
+    /*
+    .today_day:hover{
+    background-color: #EF6F7E;
+    color:white;
+
+    }
+    */
+    .ignore_date{
+      width:40px;
+      height:40px;
+      padding:5px;
+      color:gray;
+      font-size:20px;
+    }
+    .by_month_calendar_display{
+
+      background-color: white;
+      border-radius:10px;
+      width:900px;
+      margin:0 auto;
+      -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    }
   </style>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -1297,12 +1358,44 @@
           }
         });
       });
-      $('.calendar_options').on('click', '#calendar_by_week', function(){
+      $('.calendar_options').on('click', '#calendar_by_month', function(){
         $('#settings_underline').css('background-color', '#21DCAC');
         $('#by_weekly_underline').css('background-color', '#21DCAC');
         $('#by_monthly_underline').css('background-color', '#FABC09');
-        
+        $.ajax({
+          url: "/by_month_calendar",
+          type: "get",
+          data: {val: ''},
+          success: function(response) {
+            $(".full_calendar").html(response.html);
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
       });
+
+      $('.full_calendar').on('click', '._month_nav', function(){
+        var direction = 0;
+        if (this.id === '_forward'){
+          direction = 1;
+        }
+        var month = $('._calendar_month').text();
+        var year = $('._calendar_year').text();
+        $.ajax({
+          url: "/update_by_month_calendar",
+          type: "get",
+          data: {vals: JSON.stringify({'month':month, 'nav':direction, 'year':year})},
+          success: function(response) {
+            $(".full_calendar").html(response.html);
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      });
+
+
     });
   </script>
 </html>
