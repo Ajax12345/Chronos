@@ -1,0 +1,45 @@
+
+<div class='by_month_calendar_display'>
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-auto'>
+      <div class='by_month_wrapper' style='padding:40px;'>
+        <div style='height:10px'></div>
+        <table style='margin:0 auto;font-family: "Noto Sans TC", sans-serif;'>
+          <tr class='row'>
+
+            <td class='col'><button class='_month_nav' id='_backward'><i class="fas fa-angle-left" style='font-size:2em;margin-top:7px;color: #FABC09;'></i></button></td>
+
+            <td class='col-md-auto'><p class='_calendar_header'><span class='_calendar_month' style='font-size:30px;'>{{calendar.text_month}}</span> <span class='_calendar_year' style='padding-left:10px;font-size:30px'>{{calendar.year}}</span></p></td>
+            <td class='col'><button class='_month_nav' id='_forward'><i class="fas fa-angle-right" style='font-size:2em;margin-top:7px;color: #FABC09;'></i></button></td>
+          </tr>
+        </table>
+        <div style='height:20px;'></div>
+        <div class='_event_calendar'>
+        <table style='margin:0 auto;'>
+          <tr class='row' style='font-size:20px;'>
+            <th class='col'>Mon</th>
+            <th class='col'>Tue</th>
+            <th class='col'>Wed</th>
+            <th class='col'>Thu</th>
+            <th class='col'>Fri</th>
+            <th class='col'>Sat</th>
+            <th class='col'>Sun</th>
+          </tr>
+          {%for week in calendar%}
+            <tr class='row' style='padding-top:15px;text-align:center'>
+              {%for day in week%}
+                <td class='col'><div class='{{day.attr_class}}' id='{{day}}'>{{day.day_num}}</div></td>
+              {%endfor%}
+            </tr>
+          {%endfor%}
+        </table>
+      </div>
+      </div>
+    </div>
+    <div class='col-md-auto' style='padding:0px;background-color:#21DCAC;width:330px;border-top-right-radius:10px;border-bottom-right-radius:10px;'>
+
+    </div>
+  </div>
+</div>
+</div>
