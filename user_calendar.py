@@ -78,7 +78,7 @@ class _day_obj:
 class _dayColumn:
     def __init__(self, _start:int, _day_info:_by_week_display, _events:list) -> None:
         self.header, self._is_starting = _day_info, _start
-        self.events = _events
+        self.events = sorted(_events, key=Calendar._event_sort_key)
     def __len__(self):
         return len(self.events)
     @property
@@ -223,9 +223,12 @@ class Calendar:
     
     @classmethod
     def _event_sort_key(cls, _event:dict) -> typing.Tuple[int, int]:
+        '''
         hour1, minutes1, meridian1, hour2, minutes2, meridian2 = re.findall('\d+(?=:)|(?<=:)\d+|[APM]+', _event['timerange'])
         return (int(hour1)+(0 if meridian1 == 'AM' else 12)+int(minutes1), int(hour2)+(0 if meridian2 == 'AM' else 12)+int(minutes2))
-
+        '''
+        hour1, minutes1, meridian1, hour2, minutes2, meridian2 = re.findall('\d+(?=:)|(?<=:)\d+|[APM]+', _event['timerange'])
+        return [(int(hour1)+(0 if meridian1 == 'AM' else 12), int(minutes1)), (int(hour2)+(0 if meridian2 == 'PM' else 12), int(minutes2))]
     @classmethod
     def create_calendar_event(cls, _user:int, _payload:dict) -> None:
         _timestamps = cls.event_datetime(_payload)
