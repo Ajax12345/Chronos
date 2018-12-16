@@ -7,6 +7,22 @@ class _event_datetime(typing.NamedTuple):
     timerange:str
     full_range:typing.List[datetime.datetime]
 
+class _rangified:
+    def __init__(self, _range:typing.List[datetime.datetime]) -> None:
+        self._range = _range
+    @classmethod
+    def rangeify(cls, _payload:dict):
+        return cls(Calendar.payload_to_range(_payload))
+    def __iter__(self):
+        yield from self._range
+
+    def __eq__(self, _range) -> bool:
+        if all(a == b for a, b in zip(self._range, _range)):
+            return True
+        if all(all(getattr(c, i) == getattr(d, i) for i in ['year', 'month', 'day', 'hour']) for c, d in zip(self._range, _range)) and all(abs(c.minutes - d.minutes) < 5 for c, d in zip(self._range, _range)): 
+            return True
+        return False
+
 class Event:
     def __init__(self, _row:dict) -> None:
         self.__dict__ = _row
@@ -20,6 +36,11 @@ class Event:
         return True
     def __iter__(self):
         yield from [(a, b) for a, b in self.__dict__.items()]
+    def __getitem__(self, _date:datetime.date) -> bool:
+        return Calendar.event_datetime(dict(self)).day == _date
+    @property
+    def starttime(self):
+        return re.findall('^\d+:\d+\s[APM]+', self.timerange)[0]
     def __eq__(self, _event) -> bool:
         _event1, _event2 = Calendar.event_datetime(dict(self)), Calendar.event_datetime(dict(_event)) 
         print('ranges')
@@ -30,6 +51,29 @@ class Event:
         if all(all(getattr(c, i) == getattr(d, i) for i in ['year', 'month', 'day', 'hour']) for c, d in zip(a, b)) and abs(a[-1].day - b[-1].day) < 5:
             return True
         return False
+        
+
+class _events_on_day:
+    def __init__(self, _day:datetime.date, _listing:typing.List[Event]) -> None:
+        self._day, self.events = _day, _listing
+    @property
+    def day_num(self):
+        return self._day.day
+    def __bool__(self):
+        return bool(self.events)
+    @property
+    def day(self):
+        _calendar = list(calendar.Calendar().monthdatescalendar(self._day.year, self._day.month))
+        [_week] = [i for i in _calendar if any(self._day == c for c in i)]
+        return Calendar.days[[i for i, a in enumerate(_week) if a.day == self.day_num][0]]
+    @property
+    def month(self):
+        return Calendar.months[self._day.month-1]
+    
+    def __iter__(self) -> typing.Generator:
+        for i, a in enumerate(self.events):
+            a.id_count = i
+            yield a
         
 
 class _by_week_display:
@@ -269,6 +313,25 @@ class Calendar:
         _new_week = [i for i in _calendar if i[0].day == _day1 and i[-1].day == _day2][0]
         return cls._by_week(_user, _new_week, int(payload['year']), payload['month'])
 
+
+    @classmethod
+    @chronos_utilities.to_datetime
+    def events_by_day(cls, _user:int, _day:datetime.date) -> _events_on_day:
+        [_event] = [b for a, b in tigerSqlite.Sqlite('user_calendars.db').get_id_events('calendars') if int(a) == int(_user)]
+        return _events_on_day(_day, [Event(i) for i in _event if Event(i)[_day]])
+
+
+    @classmethod
+    def payload_to_range(cls, _payload:dict) -> typing.List[datetime.datetime]:
+        hour1, minutes1, meridian1, hour2, minutes2, meridian2 = re.findall('^\d+(?=:)|(?<=:)\d+|[AMP]+(?=\s)|(?<=\s)\d+(?=:)|[AMP]+(?=$)', _payload['timerange'])
+        hour1, minutes1, hour2, minutes2 = int(hour1) + (0 if meridian1 == 'AM' else 12), int(minutes1), int(hour2)+(0 if meridian2 == 'AM' else 12), int(minutes2)
+        return [datetime.datetime(*map(int, _payload['timestamp'].split('-')), hour1, minutes1), datetime.datetime(*map(int, _payload['timestamp'].split('-')), hour2, minutes2)]
+    
+    @classmethod
+    @chronos_utilities.to_range
+    def from_pannel_view(cls, _user:int, _range:typing.List[datetime.date]) -> Event:
+        [_events] = [b for a, b in tigerSqlite.Sqlite('user_calendars.db').get_id_events('calendars') if int(a) == int(_user)]
+        return [Event(i) for i in _events if _rangified.rangeify(i) == _rangified(_range)][0]
 
     @classmethod
     def navigate_by_week(cls, _user:int, _payload:dict) -> typing.Callable:
