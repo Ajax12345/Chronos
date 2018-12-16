@@ -538,6 +538,7 @@
     padding:5px;
     border-radius:50%;
     font-size:20px;
+    line-height:27px;
 
     }
     .previous_day{
@@ -546,6 +547,7 @@
     padding:5px;
     border-radius:50%;
     font-size:20px;
+    line-height:27px;
     }
     /*
     .today_day:hover{
@@ -570,6 +572,19 @@
       -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
       -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
       box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    }
+    .days_events_text{
+      color:white;
+      font-size:30px;
+      font-family: 'Noto Sans TC', sans-serif;
+      padding-left:20px;
+    }
+    .dashed_spacer{
+      height:15px;
+    }
+    .expand_first_time_listing{
+      background: none;
+      border:none;
     }
   </style>
   <head>
@@ -687,7 +702,7 @@
           <p id='calendar_by_month' class='calendar_display_settings'><strong>Monthly</strong></p>
         </div>
         <div class='col'>
-          <p id='calendar_settings' class='calendar_display_settings'><strong>Settings</strong></p>
+          <p id='calendar_settings' class='calendar_display_settings'><strong>Manage</strong></p>
         </div>
       </div>
       <div class='row'>
@@ -1092,6 +1107,7 @@
       $('.full_calendar').on('click', '.remove_info_banner', function(){
         $('.info_banner').remove();
       });
+
       function new_event_collection(day_id){
         var collections = [];
         var _last = [];
@@ -1358,6 +1374,21 @@
           }
         });
       });
+      function update_by_month_events(_day){
+
+        $.ajax({
+          url: "/by_month_event_listing",
+          type: "get",
+          data: {payload: JSON.stringify({'month':$('._calendar_month').text(), 'year':$('._calendar_year').text(), 'day':_day})},
+          success: function(response) {
+            $('.day_event_snapshot').html(response.html);
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+
+      }
       $('.calendar_options').on('click', '#calendar_by_month', function(){
         $('#settings_underline').css('background-color', '#21DCAC');
         $('#by_weekly_underline').css('background-color', '#21DCAC');
@@ -1368,6 +1399,7 @@
           data: {val: ''},
           success: function(response) {
             $(".full_calendar").html(response.html);
+            update_by_month_events($('.today').text());
           },
           error: function(xhr) {
             //Do Something to handle error
@@ -1387,7 +1419,19 @@
           type: "get",
           data: {vals: JSON.stringify({'month':month, 'nav':direction, 'year':year})},
           success: function(response) {
+            var _html = '';
+            if ($('.day_event_snapshot').html() != undefined){
+              _html = $('.day_event_snapshot').html();
+            }
             $(".full_calendar").html(response.html);
+            if ($('.today').text() != ''){
+              update_by_month_events($('.today').text());
+            }
+            else{
+              if (_html != ''){
+                $('.day_event_snapshot').html(_html);
+              }
+            }
           },
           error: function(xhr) {
             //Do Something to handle error
@@ -1395,7 +1439,73 @@
         });
       });
 
+      function clear_extra_clicks(){
+        $('.previous_day').each(function(){
+          $(this).css('background-color', 'white');
+          $(this).css('color', 'black');
 
+        });
+        $('.today_day').each(function(){
+          $(this).css('background-color', 'white');
+          $(this).css('color', 'black');
+
+        });
+
+      }
+
+      $('.full_calendar').on('click', '.previous_day', function(){
+        if ($(this).css('background-color') === 'rgb(255, 0, 0)'){
+          $(this).css('background-color', 'white');
+          $(this).css('color', 'black');
+          if ($('.today').text() != ''){
+            update_by_month_events($('.today').text());
+          }
+        }
+        else{
+          clear_extra_clicks();
+          $(this).css('background-color', 'red');
+          $(this).css('color', 'white');
+          update_by_month_events($(this).text());
+        }
+
+
+      });
+      $('.full_calendar').on('click', '.today_day', function(){
+        if ($(this).css('background-color') === 'rgb(255, 0, 0)'){
+          $(this).css('background-color', 'white');
+          $(this).css('color', 'black');
+          if ($('.today').text() != ''){
+            update_by_month_events($('.today').text());
+          }
+
+        }
+        else{
+          clear_extra_clicks();
+          $(this).css('background-color', 'red');
+          $(this).css('color', 'white');
+          update_by_month_events($(this).text());
+        }
+      });
+      $('.full_calendar').on('click', '.expand_first_time_listing', function(){
+        var main_timestamp = $('#_beautified_timestamp').text();
+        var full_timerange = $('#start_time_for_'+this.id.match('\\d+')).data('timerange');
+        $.ajax({
+          url: "/update_pannel_event_listing",
+          type: "get",
+          data: {payload: JSON.stringify({'_timestamp':main_timestamp, 'timerange':full_timerange})},
+          success: function(response) {
+            if (response.success === 'True'){
+              $('#display_quick_look').html(response.html);
+              $('#display_quick_look').modal('toggle');
+            }
+            //$("#place_for_suggestions").html(response);
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+
+      });
     });
   </script>
 </html>
