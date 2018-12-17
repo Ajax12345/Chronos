@@ -1,0 +1,25 @@
+<div class='mini_calendar'>
+  <p style='text-align:center;margin-left:-30px;font-size:18px;'><strong>{{calendar.text_month}} {{calendar.year}}</strong></p>
+  <div style='height:10px'></div>
+
+  <table>
+    <tr style='font-size:14px;'>
+      <th style='padding:4px;'>Mon</th>
+      <th style='padding:4px;'>Tue</th>
+      <th style='padding:4px;'>Wed</th>
+      <th style='padding:4px;'>Thu</th>
+      <th style='padding:4px;'>Fri</th>
+      <th style='padding:4px;'>Sat</th>
+      <th style='padding:4px;'>Sun</th>
+    </tr>
+    {%for week in calendar%}
+    <tr style='font-size:14px;'>
+      {%for day in week%}
+      <td style='padding:4px;' class='{{day.class_attr}}'>{{day.day_num}}</td>
+
+      {%endfor%}
+    </tr>
+    {%endfor%}
+  </table>
+
+</div>
