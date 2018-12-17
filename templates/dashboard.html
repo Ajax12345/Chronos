@@ -2,9 +2,13 @@
 
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+      <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel='stylesheet' href='/static/styles/dashboard_style.css'>
     <script src='/static/styles/dashboard_js.js'></script>
@@ -82,70 +86,77 @@
       <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
     -->
     </div>
-    <div style='height:20px'></div>
-    <div class='container'>
-      <div class='row'>
-        <div class='col' id='upcomming_events'>
-          <table>
-            <tr>
-              <td>
-                <p class='feed_type'><strong>Upcomming events</strong></p>
-              </td>
-              <td>
-                <p><span class='quantity_display'><strong>0</strong></span></p>
-              </td>
-            </tr>
-          </table>
-          <div style='height:20px'></div>
-          <div class='upcomming_event' id='event_1'>
-            <div class='container'>
-              <div class='row'>
+    <div style='height:80px'></div>
+    <div class='main_wrapper' style='width:1000px;height:700px;margin:0 auto'>
 
-                  <div class="col-md-auto event_time_display">
-                    <div style='height:5px;'></div>
-                    <div><span class='event_occurs _time_data'>Today</span></div>
-                    <div style='height:5px;'></div>
-                    <div><span class='event_start _time_data'>9:00 AM -</span></div>
-                    <div style='height:5px;'></div>
-                    <!--<div><span class='_to _time_data'>to</span></div>-->
-                    <div><span class='event_ends _time_data'>10:00 AM</span></div>
-                    <div style='height:5px;'></div>
-                  </div>
+    <div class='main_event_display'>
+      {%if user.has_events%}
+        <div class='nav_tabs' style='width:800px;height:100px;margin:0 auto;text-align:center;'>
+        <div class='container'>
+          <div class='row'>
+            <div class='col'>
+              <p style='font-size:20px;'><strong>Personal Events</strong></p>
+            </div>
+            <div class='col'>
+              <p style='font-size:20px;'><strong>Group Events</strong></p>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col menu_underline' id='personal_events_underline' style='background-color:#FABC09'>
 
-                  <div class="col" style='background-color:white'>
-                      <div style='height:5px;'></div>
-                      <div class='event_name'><span>TestEvent</span></div>
-                      <div style='height:5px;'></div>
-                      <div class='event_description'><span><small><i>This is a test</i></small></span></div>
-                      <div style='height:5px;'></div>
-                      <div class='participants'><span style='font-size:14px;color:#BDBDBD;'>With <u>JamesP</u></span></div>
-                  </div>
-              </div>
+            </div>
+            <div class='col menu_underline' id='personal_events_underline' style='background-color:#21DCAC'>
+
             </div>
           </div>
         </div>
-        <div class='col' id='all_messages'>
-          <table>
-            <tr>
-              <td>
-                <p class='feed_type'><strong>Messages</strong></p>
-              </td>
-              <td>
-                <p><span class='quantity_display'><strong>0</strong></span></p>
-              </td>
-            </tr>
-          </table>
-          <div style='height:20px'></div>
-          <div class='message' id='message_1'>
-
-            <p class='message-text'><strong><u>JamesP</u></strong> added you to group <strong><u>KnightsOfTheAltar</u></strong></p>
-
-
-          </div>
-          <div class='_message_feature'></div>
         </div>
+        <div style='height:60px'></div>
+        <div class='personal_event_listings'>
+          {%if user.has_events%}
+            {%for event in user.personal_events%}
+              <div class='container'>
+                <div class='row'>
+                  <div class='col-md-auto'>
+                    <div class='color_category_div' style='background-color:{{event.background_color}}'></div>
+                  </div>
+                  <div class='col'>
+                    <p style='font-size:25px;margin-top:-15px;'><strong>{{event.title}}</strong></p>
+
+                    <p style='font-size:12px;' class='more_event_details' id='details_for_{{event.id}}'><u>details</u></p>
+                  </div>
+                  <div class='col'>
+                    <p id='event_timerange_for_{{event.id}}' data-timestamp='{{event.timestamp}}' style='margin-top:-10px;font-size:18px;' class='personal_event_timestamp' data-toggle="popover" data-placement="left" data-content="" data-html="true"><small>{{event.timerange}}</small></p>
+                  </div>
+                  <div class='col-md-auto'>
+                    <div class='event_tag' style='background-color:{{event.event_tag.color}}'>{{event.event_tag.name}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class='extra_info_display' id='extra_info_{{event.id}}'></div>
+              <div class='underscore_events'></div>
+              <div style='height:40px;'></div>
+            {%endfor%}
+          {%else%}
+            <p style='color:gray'>Nothing personal events yet</p>
+          {%endif%}
+
+
+        </div>
+
+      {%else%}
+      <div style='height:200px;'></div>
+      <div style='height:400px;width:500px;text-align:center;margin:0 auto;'>
+        <p style='text-align:center;font-size:26px;'><strong>No events yet</strong></p>
+        <p style='text-align:center;font-size:15px;color:gray'>Any events you create or join will be listed here</p>
+        <div style='height:20px;'></div>
+        <a href='/create' class='create_alt_button' style='text-decoration:none;'>Create</a>
       </div>
+      {%endif%}
+      <div style='height:50px'></div>
     </div>
+  </div>
+    <div style='height:100px'></div>
   </body>
 
 </html>
