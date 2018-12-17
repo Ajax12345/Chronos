@@ -40,4 +40,55 @@ $(document).ready(function(){
     $('.tab_pannel').on('click', '.create_event', function(){
       window.location.replace('/create');
     });
+    $('.personal_event_listings').on('click', '.more_event_details', function(){
+      if ($(this).text() === 'details'){
+        var _id = this.id.match('\\d+');
+        var timerange = $('#event_timerange_for_'+_id).text();
+        var timestamp = $('#event_timerange_for_'+_id).data('timestamp');
+        $(this).html('<u>close</u>');
+        $.ajax({
+          url: "/event_display_details",
+          type: "get",
+          data: {payload: JSON.stringify({'timerange':timerange, '_timestamp':timestamp})},
+          success: function(response) {
+            $('#extra_info_'+_id).html(response.html);
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      }
+      else{
+        $(this).html('<u>details</u>');
+        var _id = this.id.match('\\d+');
+        $('#extra_info_'+_id).html('');
+
+      }
+    });
+    //
+    $(document).on({
+      mouseenter: function () {
+        var timestamp = $(this).data('timestamp');
+        var ref = $(this);
+        $.ajax({
+          url: "/render_mini_calendar",
+          type: "get",
+          data: {timestamp: timestamp},
+          success: function(response) {
+            console.log(response.html);
+            ref.data('content', response.html);
+            ref.popover();
+            ref.popover('show');
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+        
+      },
+      mouseleave: function () {
+          $(this).popover('hide');
+      }
+    }, ".personal_event_timestamp"); //pass the element as an argument to .on
+    
   });
