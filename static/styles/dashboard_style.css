@@ -163,3 +163,110 @@ box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
       text-decoration: none;
       color:white;
   }
+  .main_event_display{
+    width:1000px;
+    height:auto;
+    background-color: white;
+    border-radius:10px;
+    margin:0 auto;
+    -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    padding:30px;
+  }
+  .create_alt_button{
+    text-align: center;
+
+    width:100px;
+    padding-left:10px;
+    padding-right:10px;
+    padding-top:5px;
+    padding-bottom:5px;
+    height:80px;
+    font-size:20px;
+    border-radius:4px;
+    border:solid;
+    border-width:1.5px;
+    border-color:#FABC09;
+    margin:0 auto;
+    color:#FABC09
+
+  }
+  .create_alt_button:hover{
+    -webkit-transition:0.2s;
+    /*background-color: #FBFBFB;*/
+
+    background-color: #FABC09;
+    color:white;
+  }
+  .menu_underline{
+    height:4px;
+    width:auto;
+  }
+  .personal_event_listings{
+    width:700px;
+    height:auto;
+    margin-left:70px;
+  }
+  .color_category_div{
+    width:15px;
+    height:15px;
+    border-radius: 50%;
+  }
+  .event_tag{
+    padding-left:5px;
+    padding-right:5px;
+    padding-top:2px;
+    padding-bottom:2px;
+    border-radius:4px;
+    color:white;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:12px;
+    margin-top:-6px;
+  }
+  .event_detail_description{
+    font-family: 'Noto Sans TC', sans-serif;
+    padding:10px;
+    border-radius:10px;
+    border:solid;
+    border-width:1.5px;
+    border-color:#21DCAC;
+    font-size:15px;
+    margin-left:58px;
+
+    max-height: 100px;
+    overflow: scroll;
+
+
+  }
+  .underscore_events{
+    height:1px;
+    width:700px;
+    background-color: #CBCBCB;
+    margin-left:60px;
+  }
+  .mini_calendar{
+    width:290px;
+    height:240px;
+    padding:10px;
+    text-align: center;
+  }
+  .today{
+ 
+    
+    color:#21DCAC;
+    font-weight:bold;
+
+    
+   
+  }
+  .today_day{
+    
+
+  }
+  .ignore_date{
+    
+    color:gray;
+
+
+}
