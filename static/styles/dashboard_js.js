@@ -40,7 +40,7 @@ $(document).ready(function(){
     $('.tab_pannel').on('click', '.create_event', function(){
       window.location.replace('/create');
     });
-    $('.personal_event_listings').on('click', '.more_event_details', function(){
+    $('.main_wrapper').on('click', '.more_event_details', function(){
       if ($(this).text() === 'details'){
         var _id = this.id.match('\\d+');
         var timerange = $('#event_timerange_for_'+_id).text();
@@ -65,7 +65,21 @@ $(document).ready(function(){
 
       }
     });
-    //
+    $('.main_wrapper').on('click', '._month_nav', function(){
+      //user_personal_event_listings
+      var _page_num = $(this).data('page');
+      $.ajax({
+        url: "/user_personal_event_listings",
+        type: "get",
+        data: {page: _page_num},
+        success: function(response) {
+          $(".main_wrapper").html(response.html);
+        },
+        error: function(xhr) {
+          //Do Something to handle error
+        }
+      });
+    });
     $(document).on({
       mouseenter: function () {
         var timestamp = $(this).data('timestamp');
