@@ -23,6 +23,9 @@ class _rangified:
             return True
         return False
 
+
+    
+
 class Event:
     def __init__(self, _row:dict) -> None:
         self.__dict__ = _row
@@ -39,6 +42,11 @@ class Event:
     def __getitem__(self, _date:datetime.date) -> bool:
         return Calendar.event_datetime(dict(self)).day == _date
     @property
+    def event_creation_date(self):
+        _year, _month, _day, *_ = re.findall('\d+', self.created_on)
+        return f'{Calendar.months[int(_month)-1]} {_day}, {_year}'
+    
+    @property
     def starttime(self):
         return re.findall('^\d+:\d+\s[APM]+', self.timerange)[0]
     def __eq__(self, _event) -> bool:
@@ -51,7 +59,57 @@ class Event:
         if all(all(getattr(c, i) == getattr(d, i) for i in ['year', 'month', 'day', 'hour']) for c, d in zip(a, b)) and abs(a[-1].day - b[-1].day) < 5:
             return True
         return False
+
+class _event_wrapper:
+    def __init__(self, _id:int, _event:Event, _time:datetime.datetime) -> None:
+        self._event, self._time, self.id = _event, _time, _id
+    def __getattr__(self, _attr:str) -> typing.Any:
+        return getattr(self._event, _attr)
+    @property
+    def event_tag(self):
+        class _tag:
+            def __init__(self, _name:str) -> None:
+                self.name = _name
+            @property
+            def color(self):
+                return '#FF354D' if self.name == 'upcomming' else '#21DCAC'
+        _d = personalEvents.event_rank_key({i:getattr(self, i) for i in ['timestamp', 'timerange']})
+        return _tag('upcomming' if _d >= self._time else 'past event')    
         
+
+class personalEvents:
+    def __init__(self, _page:int, _flag:bool, _row:typing.List[dict]) -> None:
+        self._row, self._page, self._flag = _row, _page, _flag
+    @property
+    def has_previous(self):
+        return self._page > 0
+    @property
+    def has_next(self):
+        return self._flag
+    @property
+    def next_page(self):
+        if not self.has_next:
+            raise ValueError('End of results')
+        return self._page + 1
+    @property
+    def previous_page(self):
+        if not self.has_previous:
+            raise ValueError('start of results')
+        return self._page - 1
+    @staticmethod
+    def event_rank_key(_payload:dict) -> datetime.datetime:
+        _hour1, _minutes1, meridian1 = re.findall('\w+', _payload['timerange'].split(' - ')[0])
+        return datetime.datetime(*map(int, _payload['timestamp'].split('-')), int(_hour1)+(0 if meridian1 == 'AM' else 12), int(_minutes1))
+    def __iter__(self) -> typing.Generator:
+        yield from self._row
+
+    @classmethod
+    def personal_events(cls, _user:int, _page:int = 0) -> typing.Callable:
+        [_events] = [b for a, b in tigerSqlite.Sqlite('user_calendars.db').get_id_events('calendars') if int(a) == int(_user)]
+        new_events = sorted(_events, key=cls.event_rank_key, reverse=True)
+        _groups = [_events[i:i+5] for i in range(0, len(_events), 5)]
+        _d = datetime.datetime.now()
+        return cls(_page, _page+1 < len(_groups), [_event_wrapper(i, Event(a), _d) for i, a in enumerate(_groups[_page], 1)]) 
 
 class _events_on_day:
     def __init__(self, _day:datetime.date, _listing:typing.List[Event]) -> None:
