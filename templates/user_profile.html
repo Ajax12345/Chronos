@@ -2,8 +2,10 @@
 
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel='stylesheet' href='/static/styles/user_profile_style.css'>
@@ -80,71 +82,95 @@
       <!--
       <p class='datetime_info'>Saturday, November 17, 2018</p>
       <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
+      {{owner.avatar_color}}
+      {{owner.initials}}
+      {{owner.name}}
+      {{owner.email}}
     -->
     </div>
     <div style='height:100px;'></div>
     {%if visitor.id == owner.id%}
-    <div class='container_wrapper'>
-    <div class='container'>
-      <div class='row'>
-        <div class='col-md-auto' style='text-align:center'>
-          <div class='avatar_profile' style='background-color:{{owner.avatar_color}}'>
-            <p class='avatar_text'>{{owner.initials}}</p>
-          </div>
-          <div style='height:10px;'></div>
-          <button class='change_profile'>Change Profile</button>
-        </div>
-        <div class='col-md-auto personal_info'>
-          <input type='text' class='detail_input' id='event_name' value='{{owner.name}}' placeholder="name...">
-          <p class='warning_text' id='for_update_name' style='color:red'></p>
-          <div style='height:20px;'></div>
-          <input type='text' class='detail_input' id='event_email' value='{{owner.email}}' placeholder="email...">
-          <p class='warning_text' id='for_update_email' style='color:red'></p>
-          <div style='height:10px;'></div>
-          <div class='update_message_display' style='display:none'>
-            You profile has been updated!
-          </div>
-        </div>
-        <div class='col button_pannel'>
-          <div style='height:10px;'></div>
-          <div class='for_profile_update' style='display:none'>
-            <button class='update_profile' style='margin-left:40px;'>Update profile</button>
-            <div style='height:30px;'></div>
-          </div>
-          <button class='delete_account' id='logout' style='margin-left:40px;'>Signout</button>
-          <div style='height:30px;'></div>
-          <button class='delete_account' id='delete_account' style='margin-left:40px;'>Delete account</button>
+      <div class='user_settings_examine_pannel'>
+        <div style='height:20px;'></div>
 
-        </div>
-      </div>
-    </div>
-  </div>
-  {%else%}
-    <div class='user_profile_card'>
-      <div class='container'>
-        <div class='row'>
-          <div class='col-md-auto'>
-            <div style='height:40px;'></div>
-            <div class='avatar_profile' style='background-color:{{visitor.avatar_color}}'>
-              <p class='avatar_text'>{{visitor.initials}}</p>
+        <p style='text-align:center;font-size:25px;'>Account Settings</p>
+        <div style='height:50px;'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-auto' style='width:185px;border-right:solid;border-right-width:1px;border-right-color:#C1C1C1;'>
+              <p style='margin-left:20px;font-size:20px;color:#21DCAC'><strong><u>Profile</u></strong></p>
+              <p style='margin-left:20px;font-size:20px;color:#FABC09'>Picture</p>
+              <div style='height:50px;'></div>
+              <button class='profile_view' data-toggle="popover" data-placement="right" data-content="<p>Your name will be visible to viewers on your profile.</p>" data-html='true'><i class="fas fa-user"></i> Profile view</button>
             </div>
+            <div class='col-md-auto' style='text-align:center;'>
+              <div class='container'>
+                <div class='row'>
+                  <div class='col'>
+                    <p style='font-size:16px;float:left'><strong>Name:</strong></p>
+                  </div>
+                  <div class='col'>
+                    <input type='text' class='detail_input' id='event_name' value='{{owner.name}}' placeholder="name...">
+                    <p class='warning_text' id='for_update_name' style='color:red'></p>
+                  </div>
+                  <div class='col-md-auto'>
+                    <i class="fas fa-question-circle extra_information" style='margin-top:10px;font-size:1.3em;color:#FABC09' data-toggle="popover" data-placement="right" data-content="<p>Your name will be visible to viewers on your profile.</p>" data-html='true'></i>
+                  </div>
+                </div>
+              </div>
+              <div style='height:30px;'></div>
+              <div class='container'>
+                <div class='row'>
+                  <div class='col-md-auto'>
+                    <p style='font-size:16px;' id='email_text_header'><strong>Email ({{owner.email_status}}):</strong></p>
+                  </div>
+                  <div class='col-md-auto'>
+                    <input type='text' class='detail_input' id='event_email' value='{{owner.email}}' placeholder="email...">
+                    <p class='warning_text' id='for_update_email' style='color:red'></p>
+                  </div>
+                  <div class='col-md-auto' id='main_email_stuff'>
+                    <i class="fas fa-question-circle extra_information" id='email_extra_information' style='margin-top:10px;font-size:1.3em;color:#FABC09' data-toggle="popover" data-placement="right" data-content="<p>{{owner.email_status_message}}</p>" data-html='true'></i>
+                  </div>
+                </div>
+              </div>
+              <div style='height:80px;'></div>
+              <button class='email_actions'>{{owner.email_action}}</button>
+              <div style='height:80px;'></div>
+              <button class='logout'>Logout</button>
+              <div style='height:100px;'></div>
+              <p class='view_more' style='float:left;margin-left:16px;'>More<i class="fas fa-angle-down" style='margin-top:5px;margin-left:5px;'></i></p>
+              <div style='height:50px;'></div>
+              <div class='view_more_results'></div>
+              <div style='height:50px;'></div>
+              <div class='button_action_pannel' style='float:right;'></div>
+              <div style='height:50px;'></div>
+              <div class='update_message_display' style='display:none'>
+                You profile has been updated!
+              </div>
+              <div style='height:50px;'></div>
           </div>
-          <div class='col-md-auto'>
-              <div style='height:40px;'></div>
-            <p class='user_banner_text_display'><strong>{{visitor.name}}</strong></p>
-            <table>
-              <tr>
-                <td><i class="fas fa-envelope" style='font-size:1.5em'></i></td>
-                <td><a href='mailto:{{visitor.email}}' class='email_banner_display' style='color:black'>{{visitor.email}}</a></td>
-              </tr>
-
-            </table>
-    
-
           </div>
         </div>
       </div>
+      <div style='height:100px;'></div>
+    {%else%}
+    <div class='global_profile_display'>
+      <div style='height:80px;'></div>
+      <div class='avatar_display' style='background-color:{{owner.avatar_color}}'>
+        <strong>{{owner.initials}}</strong>
+      </div>
+      <div style='height:30px;'></div>
+      <p style='font-size:30px;'><strong>{{owner.name}}</strong></p>
+      {%if not owner.hide_email%}
+      <table style='margin:0 auto'>
+        <tr>
+          <td><i class="fas fa-envelope" style='font-size:1.5em'></i></td>
+          <td><a href='mailto:{{visitor.email}}' class='email_banner_display' style='color:black'>{{visitor.email}}</a></td>
+        </tr>
+      </table>
+      {%endif%}
     </div>
+    <div style='height:100px'></div>
   {%endif%}
   </body>
 
