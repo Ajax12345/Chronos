@@ -201,18 +201,7 @@ a{
   border-width:1px;
   border-color:#FFE345;
 }
-.delete_account{
-  color:white;
-  font-family: 'Noto Sans TC', sans-serif;
-  border-radius:5px;
-  font-size:20px;
-  border:none;
-  padding-top:5px;
-  padding-left:10px;
-  padding-right:10px;
-  padding-bottom:5px;
-  background-color: #FF354D;
-}
+
 .update_profile{
   background-color: #FABC09;
   border:solid;
@@ -244,8 +233,9 @@ a{
   font-family: 'Noto Sans TC', sans-serif;
   width:400px;
   height:40px;
-  font-size:22px;
+  font-size:18px;
   border:none;
+  margin-top:-5px;
   border-bottom:solid;
   border-bottom-color: #21DCAC;
   background: none;
@@ -296,4 +286,118 @@ a{
 .dashboard_link:hover{
   color:white;
   text-decoration: none;
+}
+.user_settings_examine_pannel{
+  width:900px;
+  padding:20px;
+  margin:0 auto;
+  border-radius:10px;
+  background-color: white;
+  -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+}
+.email_actions{
+  float:left;
+  margin-left:16px;
+  font-size:20px;
+  font-family: 'Noto Sans TC', sans-serif;
+  border-radius:5px;
+  background:none;
+  border-width:1.5px;
+  padding:10px;
+  border-color:#FABC09;
+  color:#FABC09;
+}
+
+.logout{
+  float:left;
+  margin-left:16px;
+  font-size:20px;
+  font-family: 'Noto Sans TC', sans-serif;
+  border-radius:5px;
+  background:none;
+  padding-left:28px;
+  padding-right:28px;
+  border-width:1.5px;
+  padding-top:10px;
+  padding-bottom:10px;
+  border-color:#FF354D;
+  color:#FF354D
+}
+
+
+.delete_account{
+  width:500px;
+  height:150px;
+  border:solid;
+  border-width:1.5px;
+  border-color:#FF354D;
+  border-radius:4px;
+  margin-left:16px;
+}
+._delete_account{
+  background-color:#FF354D;
+  color:white;
+  border:none;
+  padding:10px;
+  font-size:18px;
+  border-radius:4px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.cancel_changes{
+  background:none;
+  border:solid;
+  font-family: 'Noto Sans TC', sans-serif;
+  padding:10px;
+  border-width:1.5px;
+  border-radius:4px;
+  border-color:#979797;
+  color:#979797;
+}
+
+.update_changes{
+  background:none;
+  border:solid;
+  font-family: 'Noto Sans TC', sans-serif;
+  padding:10px;
+  border-width:1.5px;
+  border-radius:4px;
+  border-color:#21DCAC;
+  color:#21DCAC;
+}
+
+.profile_view{
+  background:none;
+  border:none;
+  font-family: 'Noto Sans TC', sans-serif;
+  padding:10px;
+  border-width:1.5px;
+  border-radius:4px;
+  border-color:#21DCAC;
+  color:#21DCAC;
+
+}
+
+.global_profile_display{
+  width:600px;
+  height:600px;
+  text-align: center;
+  margin:0 auto;
+  border-radius:10px;
+  background-color:white;
+  font-family: 'Noto Sans TC', sans-serif;
+  -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+-moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+}
+.avatar_display{
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  text-align: center;
+  color:white;
+  margin:0 auto;
+  line-height:140px;
+  font-size:40px;
 }
