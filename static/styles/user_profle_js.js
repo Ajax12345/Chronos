@@ -44,46 +44,8 @@ $(document).ready(function(){
       $('#for_update_'+headers[i]).text('');
     }
   });
-  $('.for_profile_update').on('click', '.update_profile', function(){
-    var headers = ['name', 'email'];
-    var _result = {};
-    var flag = true;
-    for (var i = 0; i < headers.length; i++){
-      var _temp = $('#event_'+headers[i]).val();
-      if (_temp === ''){
-        $('#for_update_'+headers[i]).text('cannot be left blank');
-        flag = false
-        break;
-      }
-      _result[headers[i]] = _temp;
-    }
-    if (flag){
-
-      var full_structure = JSON.stringify(_result);
-
-      $.ajax({
-      url: "/update_profile",
-      type: "get",
-      data: {info: full_structure},
-      success: function(response) {
-        if (response.success === 'True'){
-          $('.dashboard_username').text(response.name);
-          $('.avatar').text(response.initials);
-          $('.avatar_text').text(response.initials);
-          $('.update_message_display').css('display', 'block');
-          $('.for_profile_update').css('display', 'none');
-          setTimeout(function(){$(".update_message_display").fadeOut("slow");}, 1000);
-
-          setTimeout(function(){$('.update_message_display').css('display', 'none');}, 3000);
-        }
-      },
-      error: function(xhr) {
-        //Do Something to handle error
-      }
-    });
-    }
-  });
-  $('.button_pannel').on('click', '#logout', function(){
+  
+  $('.user_settings_examine_pannel').on('click', '.logout', function(){
     $.ajax({
       url: "/signout",
       type: "get",
@@ -98,5 +60,117 @@ $(document).ready(function(){
       }
     });
   })
+  $(document).on({
+    mouseenter: function () {
+     
+      $(this).popover();
+      $(this).popover('show');
+      
+      
+    },
+    mouseleave: function () {
+        $(this).popover('hide');
+    }
+  }, ".extra_information"); 
+  //user_email_visibility
+  $('.user_settings_examine_pannel').on('click', '.email_actions', function(){
+    var _text = $(this).text();
+    $.ajax({
+      url: "/user_email_visibility",
+      type: "get",
+      data: {action: _text},
+      success: function(response) {
+        //pass
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+    $('#email_extra_information').popover();
+    if (_text === 'Hide email'){
+      $('#email_text_header').html('<strong>Email (hidden):</strong>');
+      $('.email_actions').text('Show email');
+      $('#main_email_stuff').html("<i class='fas fa-question-circle extra_information' id='email_extra_information' style='margin-top:10px;font-size:1.3em;color:#FABC09' data-toggle='popover' data-placement='right' data-content='<p>Your email is currently hidden from profile viewers.</p>' data-html='true'></i>")
+      //$('#email_extra_information').data('content', '<p>Your email is currently hidden from profile viewers.</p>');
 
+    }
+    else{
+      $('#email_text_header').html('<strong>Email (visible):</strong>');
+      $('.email_actions').text('Hide email');
+      $('#main_email_stuff').html("<i class='fas fa-question-circle extra_information' id='email_extra_information' style='margin-top:10px;font-size:1.3em;color:#FABC09' data-toggle='popover' data-placement='right' data-content='<p>Your email is currently visible on your profile.</p>' data-html='true'></i>")
+      //$('#email_extra_information').data('content', '<p>Your email is currently visible on your profile.</p>');
+    }
+  });
+  $('.user_settings_examine_pannel').on('click', '.view_more', function(){
+    if ($(this).text() === 'More'){
+      $(this).html("Close<i class='fas fa-times' style='margin-top:8px;margin-left:5px;'></i>")
+      var the_html = `
+        <div class='delete_account'>
+          <div style='height:30px'></div>
+          <button class='_delete_account'>Delete account</button>
+          <div style='height:30px'></div>
+          <p><small>This action cannot be undone.</small></p>
+        </div>
+      `;
+      $('.view_more_results').html(the_html);
+    }
+    else{
+      $(this).html("More<i class='fas fa-angle-down' style='margin-top:5px;margin-left:5px;'></i>");
+      $('.view_more_results').html('');
+    }
+  });
+  $('.user_settings_examine_pannel').on('input', '.detail_input', function(){
+    var the_html = `
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-auto'>
+            <button class='cancel_changes'>Cancel</button>
+          </div>
+          <div class='col-md-auto'>
+            <button class='update_changes'>Save changes</button>
+          </div>
+
+        </div>
+      </div>
+    `;
+    $('.button_action_pannel').html(the_html);
+  });
+  $('.user_settings_examine_pannel').on('click', '.cancel_changes', function(){
+    window.location.replace('/profile');
+  });
+  $('.user_settings_examine_pannel').on('click', '.update_changes', function(){
+    var _name = $('#event_name').val();
+    var _email = $('#event_email').val();
+    if (_name === ''){
+      $("#for_update_name").text('cannot be left blank');
+    } 
+    else if (_email === ''){
+      $("#for_update_email").text('cannot be left blank');
+    }
+    else{
+      $.ajax({
+        url: "/update_profile",
+        type: "get",
+        data: {info: JSON.stringify({'name':_name, 'email':_email})},
+        success: function(response) {
+          $('.avatar').html(response.initials);
+          $('.dashboard_username').html(response.name);
+          $('.avatar_text').text(response.initials); //may not be needed
+          $('.button_action_pannel').html('');
+          $('.update_message_display').css('display', 'block');
+          //$('.for_profile_update').css('display', 'none');
+          setTimeout(function(){$(".update_message_display").fadeOut("slow");}, 1000);
+
+          setTimeout(function(){$('.update_message_display').css('display', 'none');}, 3000);
+        },
+        error: function(xhr) {
+          //Do Something to handle error
+        }
+      });
+    }
+    
+  });
+  $('.user_settings_examine_pannel').on('click', '.profile_view', function(){
+    window.location.replace('/profile/view');
+  });
 });
