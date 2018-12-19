@@ -1,0 +1,79 @@
+
+
+        <div style='height:20px;'></div>
+        <div class='calendar_settings_events_color'>
+          <div class='container'>
+            <div class='row'>
+              <div class='col-md-auto'>
+                <div class='pallete_sample' style='background-color:#FF354D;border-color:red;'></div>
+              </div>
+              <div class='col-md-auto'><p class='category_text' style='color:gray'><strong>default</strong></p></div>
+    
+            </div>
+            {%for category in categories%}
+            <div class='row'>
+                <div class='col-md-auto'>
+                  <div class='pallete_sample' style='background-color:{{category.main}};border-color:{{category.border}};'></div>
+                </div>
+                <div class='col-md-auto'><p class='category_text'><strong>{{category.text}}</strong></p></div>
+    
+            </div>
+            {%endfor%}
+          </div>
+    
+        </div>
+    
+    
+        <button class='add_event_category' style='float:left;margin-left:10px' data-toggle="modal" data-target="#create_category_modal"><i class="fas fa-plus" style='line-height:60px;font-size:1.5em'></i></button>
+        <div style='height:70px'></div>
+        <div class='info_banner_wrapper'>
+          <div class='info_banner'>
+            <i class="fas fa-times remove_info_banner" style='font-size:1em;color:white;float:right'></i>
+            Group categories give you a quick, easy way to identify and prioritize group listings.
+          </div>
+        </div>
+    
+        <div class="modal" id="create_category_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title create_event_modal_header" id="exampleModalLabel">Create event category</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="-body">
+          <div class='container'>
+            <div class='row'>
+              <div class='col-md-auto'><p class='create_event_modal_header'><strong>Category:</strong></p></div>
+              <div class='col'>
+                <input type="text" class="detail_input" id="category_name">
+                <p class='warning_text' id='for_color_input'></p>
+              </div>
+            </div>
+          </div>
+          <div style='height:20px'></div>
+          <p class='create_event_modal_header' style='float:left;margin-left:15px;'><strong>Select color:</strong></p>
+          <div style='height:30px'></div>
+          <div class='container' style='margin-left:120px;'>
+            {%for row in categories.pallete%}
+              <div class='row' style='margin-top:10px;'>
+                {%for test in row%}
+                  <div class='col-md-auto'>
+                    <div class='pallete_sample color_sample' id='color_{{test.id}}' style='background-color:{{test.main}};border-color:{{test.border}};'></div>
+                  </div>
+                {%endfor%}
+              </div>
+            {%endfor%}
+          </div>
+          <p class='warning_text' id='for_color_select' style='margin-left:120px;'></p>
+        </div>
+        <div class="modal-footer">
+    
+          <button type="button" class="create_new_event_category">Create</button>
+        </div>
+      </div>
+    </div>
+    </div>
+    
+    
