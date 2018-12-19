@@ -1,0 +1,397 @@
+<html>
+  <style>
+    .top_header{
+      height:60px;
+      background-color:#37176A;
+    }
+    .logo{
+      padding-left: 140px;
+      color:white;
+    }
+    p{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    a{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .avatar{
+      font-family: 'Noto Sans TC', sans-serif;
+      padding:2px;
+      padding-left:4px;
+      padding-right:4px;
+      border-radius:4px;
+      background-color: blue;
+      color:white;
+      font-size:18px;
+    }
+    .dashboard_username{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:18px;
+    }
+    .tab_pannel{
+      height:110px;
+      background-color: #37176A;
+    }
+    .nav_tab{
+      color:white;
+      font-size:16px;
+    }
+    #full_selected{
+      height:3px;
+      width:auto;
+      background-color: red;
+      margin-top:-10px;
+
+    }
+
+    .create_event{
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background-color: #FABC09;
+      border:none;
+      -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+    }
+    .create_event:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+    }
+    .create_event:focus{
+      outline:none;
+    }
+    .datetime_display{
+      height:55px;
+      background-color: #21DCAC;
+      width:68%;
+      border-bottom-right-radius: 80px;
+    }
+    .datetime_info{
+      margin-left:20px;
+      color:white;
+    }
+    .datetime_text{
+      color:white;
+      margin-top:10px;
+      font-size:19px;
+      margin-left:50px;
+    }
+    #all_messages{
+      height:500px;
+      border-left:solid;
+      border-left-width:1px;
+      border-left-color:#C6C6C6;
+    }
+    .feed_type{
+      font-size:20px;
+    }
+    .quantity_display{
+      padding-top:2px;
+      padding-bottom:2px;
+      padding-left:8px;
+      padding-right:8px;
+      background-color: #FABC09;
+      border-radius:50%;
+
+    }
+    .actions{
+      padding-right: 150px;
+    }
+    .upcomming_event{
+      -webkit-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      font-family: 'Noto Sans TC', sans-serif;
+
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    .event_occurs{
+      color:white;
+      font-size:25px;
+    }
+    .event_time_display{
+      background-color: #21DCAC;
+      /*for pressing events: #FF354D */
+    }
+    ._time_data{
+      color:white;
+
+    }
+    .event_name{
+      font-size:24px;
+    }
+    .event_description{
+      font-size:18px;
+    }
+    .event_upcomming_warning{
+      color:white;
+      font-size:19px;
+      margin-top:10px;
+      padding-left:150px;
+    }
+
+    .user_settings_examine_pannel{
+  width:900px;
+  padding:20px;
+  margin:0 auto;
+  border-radius:10px;
+  background-color: white;
+  -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+}
+
+  .create_group{
+    background: none;
+    border:solid;
+    border-width:1.5px;
+    border-radius:4px;
+    color:#21DCAC;
+    border-color:#21DCAC;
+    padding:10px;
+    font-size:18px;
+  }
+  .group_menu_item:hover{
+
+  }
+  .calendar_settings_events_color{
+    height:300px;
+    max-height:300px;
+    overflow: scroll;
+    width:200px;
+    margin:0 auto;
+  }
+  .full_category_listing{
+    height:400px;
+    max-height:400px;
+    overflow:scroll;
+  }
+  .pallete_sample{
+    width:30px;
+    height:30px;
+    border-radius:4px;
+    border-width:3px;
+  }
+  .category_text{
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:18px;
+    margin-top:5px;
+  }
+  .info_banner{
+    border-radius:16px;
+    background-color: #21DCAC;
+    font-family: 'Noto Sans TC', sans-serif;
+    color:white;
+    padding:10px;
+  }
+  .detail_input{
+  width:350px;
+  height:40px;
+  font-size:20px;
+  border:none;
+  border-bottom:solid;
+  border-bottom-color: #21DCAC;
+}
+.detail_input:focus{
+  outline:none;
+  border-bottom-color: #FABC09;
+}
+.warning_text{
+  color:red;
+  font-size:13px;
+
+
+}
+.pallete_sample{
+    width:30px;
+    height:30px;
+    border-radius:4px;
+    border-width:3px;
+  }
+
+  </style>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+
+  </head>
+  <body style='background-color: #E4E4E4;'>
+    <nav class="navbar top_header">
+      <p class="navbar-brand logo" style='font-size:30px;'>Chronos</p>
+      <div class='actions'>
+            <table>
+                 <tr>
+                    <td>
+                    <div class='user_avatar'>
+                     <div class='avatar' style='background-color: {{user.avatar_color}}'>{{user.initials}}</div>
+
+                    </div>
+                </td>
+                      <td><a href='/profile' class='dashboard_username' style='color:white'>{{user.condensed_name}}</a></td>
+                    </tr>
+            </table>
+
+      </div>
+    </nav>
+    <div class='tab_pannel'>
+      <div style='height:65px;'></div>
+      <div class='container'>
+        <div class='row no-gutters'>
+          <div class='col'>
+
+            <a href='/dashboard' class='nav_tab' style='color:white;text-decoration:none'>Dashboard</a>
+          </div>
+
+          <div class='col'>
+            <a href='/calendar' class='nav_tab' style='color:white;text-decoration:none'>Calendar</a>
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Groups</p>
+            <div id='full_selected' style='width:55px;'></div>
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Past events</p>
+
+          </div>
+          <div class='col'>
+            <a href='/profile' class='nav_tab' style='color:white;text-decoration:none'>Profile</a>
+          </div>
+
+          <div class='col'>
+            <button class='create_event'>
+              <i class="fas fa-plus" style='font-size:2em;color:white;'></i>
+            </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='datetime_display'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'>
+            <p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>
+          </div>
+
+          <div class='col'><p class='datetime_text'><strong><span class='hour_min'></span> on <span class='day_of_week'></span>, <span class='month'></span> <span class='day'></span>, <span class='year'></span></strong></p></div>
+
+        </div>
+      </div>
+      <!--
+      <p class='datetime_info'>Saturday, November 17, 2018</p>
+      <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
+    -->
+    </div>
+    <div style='height:100px;'></div>
+    <div class='user_settings_examine_pannel'>
+        <div style='height:20px;'></div>
+
+        <p style='text-align:center;font-size:30px;'>Groups</p>
+        <div style='height:20px;'></div>
+        <div class='container'>
+        <div class='row'>
+            <div class='col-md-auto' style='width:200px;border-right:solid;border-right-width:1px;border-right-color:#C1C1C1;'>
+              <a href='/groups' style='font-size:16px;color:#21DCAC;text-decoration: none;' class='group_menu_item'><strong>Created groups</strong></a>
+              <div style='height:35px'></div>
+              <a href='/groups/joined' style='font-size:16px;color:#FABC09;text-decoration: none;' class='group_menu_item'>Joined groups</a>
+              <div style='height:35px'></div>
+              <a href='/groups/categories' style='font-size:16px;color:#FABC09;text-decoration: none;' class='group_menu_item'>Categories</a>
+              <div style='height:35px'></div>
+              <a href='/groups/create' style='font-size:16px;color:#FABC09;text-decoration: none;' class='group_menu_item'>Create group</a>
+            </div>
+            <div class='col-md-auto main_data_display' style='text-align:center;'>
+              <p style='margin-left:30px;'><i>No groups yet</i></p>
+            </div>
+         </div>
+      </div>
+      <div style='height:70px;'></div>
+    </div>
+    <div style='height:100px;'></div>
+  </body>
+  <script>
+    $(document).ready(function(){
+      function display_warning(count){
+        $('.event_upcomming_warning').fadeOut(500);
+	       $('.event_upcomming_warning').fadeIn(500);
+         if (count < 10){
+           setTimeout(function(){display_warning(count+1)}, 1000);
+         }
+      }
+      //display_warning(0);
+      function hours_min(_hours, _minutes){
+        _meridian = 'AM';
+        if (_hours > 12){
+          _hours = (_hours%12).toString()
+          _meridian = 'PM';
+        }
+        else{
+          _hours = _hours.toString();
+        }
+        if (_minutes < 10){
+          _minutes = '0'+_minutes.toString();
+        }
+        else{
+          _minutes = _minutes.toString();
+        }
+        return _hours+':'+_minutes+' '+_meridian;
+      }
+      function update_datetime(){
+
+        var _date = new Date();
+        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        $('.hour_min').text(hours_min(_date.getHours(), _date.getMinutes()));
+        $('.day_of_week').text(days[_date.getDay()]);
+        $('.day').text(_date.getDate());
+        $('.month').text(months[_date.getMonth()]);
+        $('.year').text(_date.getFullYear());
+        setTimeout(function(){ update_datetime(); }, 1000);
+      }
+      update_datetime();
+      $('.user_settings_examine_pannel').on('click', '.group_menu_item', function(){
+        if ($(this).data('selected') === 'False'){
+          var ref = $(this);
+          $('.group_menu_item').each(function(){
+            if ($(this).data('selected') === 'True'){
+              $(this).data('selected', 'False');
+            }
+
+          });
+          ref.data('selected', 'True');
+          if (ref.prop('id') === 'menu_category'){
+            ref.html('<strong>Categories</strong>');
+            ref.css('color', '#21DCAC');
+            $.ajax({
+              url: "/group_color_categories",
+              type: "get",
+              data: {vals: ''},
+              success: function(response) {
+                $('.main_data_display').html(response.html)
+              },
+              error: function(xhr) {
+                //Do Something to handle error
+              }
+            });
+          }
+          $('.group_menu_item').each(function(){
+            if ($(this).data('selected') === 'False'){
+              $(this).css('color', '#FABC09');
+              $(this).html($(this).text());
+            }
+
+          });
+
+        }
+      });
+    });
+  </script>
+</html>
