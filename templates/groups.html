@@ -119,6 +119,10 @@
       color:white;
 
     }
+    .all_group_options{
+      max-height:300px;
+      margin:0 auto;
+    }
     .event_name{
       font-size:24px;
     }
@@ -209,6 +213,10 @@
     height:30px;
     border-radius:4px;
     border-width:3px;
+  }
+  .created_group_listing{
+    max-height:300px;
+    overflow:scroll;
   }
 
   </style>
@@ -309,7 +317,29 @@
               <a href='/groups/create' style='font-size:16px;color:#FABC09;text-decoration: none;' class='group_menu_item'>Create group</a>
             </div>
             <div class='col-md-auto main_data_display' style='text-align:center;'>
-              <p style='margin-left:30px;'><i>No groups yet</i></p>
+              {%if not groups%}
+                <p style='margin-left:30px;'><i>No groups yet</i></p>
+              {%else%}
+                <div class='container created_group_listing'>
+                  {%for group in groups%}
+                    <div class='row'>
+                      <div class='col-md-auto'>
+                        <div class="user_avatar">
+                          <div class="avatar" style='background-color:{{group.background_color}};margin-top:12px;width:15px;height:15px;border-radius:50%'>
+                              <div style='height:3px'></div>
+                                <i id='category_color_check_{{group.id}}' class="fas fa-check" style="color:white;font-size:1.6em;display:none"></i>
+                              </div>
+
+                          </div>
+                        </div>
+                        <div class='col-md-auto'>
+                        <a style='font-size:25px;margin-top:-5px;color:black;' href='/group/{{group.id}}'><strong>{{group.title}}</strong></a>
+                        </div>
+                  </div>
+                  <div style='height:10px'></div>
+                  {%endfor%}
+                </div>
+              {%endif%}
             </div>
          </div>
       </div>
@@ -392,6 +422,8 @@
 
         }
       });
+      //group_category_checkbox
+
     });
   </script>
 </html>
