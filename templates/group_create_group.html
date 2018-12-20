@@ -144,7 +144,9 @@
     -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
     box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
 }
-
+  .include_group_checkbox{
+    margin-top:7px;
+  }
   .create_group{
     background: none;
     border:solid;
@@ -203,6 +205,9 @@
 .modal_search_text{
   font-family: 'Noto Sans TC', sans-serif;
 }
+i{
+  font-family: 'Noto Sans TC', sans-serif;
+}
 .detail_input:focus{
   outline:none;
   border-bottom-color: #FABC09;
@@ -242,6 +247,21 @@
     overflow:scroll;
   }
   .find_users{
+    background: none;
+    border:solid;
+    border-width:1.5px;
+    border-radius:4px;
+    color:#FABC09;
+    border-color:#FABC09;
+    padding:7px;
+    font-size:18px;
+  }
+  .modal-body1{
+    height:100px;
+    max-height:300px;
+    overflow:scroll;
+  }
+  .find_groups{
     background: none;
     border:solid;
     border-width:1.5px;
@@ -292,6 +312,22 @@
   .remove_user_from_search_results{
     border:none;
     margin-top:10px;
+  }
+  .remove_user_from_main_page{
+    border:none;
+    margin-top:10px;
+  }
+  .create_group{
+    background: none;
+    border:solid;
+    border-width:1.5px;
+    border-radius:4px;
+    color:white;
+    border-color:#21DCAC;
+    background-color:#21DCAC;
+    padding:7px;
+    font-size:18px;
+    float:right;
   }
   </style>
   <head>
@@ -447,6 +483,39 @@
             </div>
             <div style='height:30px'></div>
             <button class='find_users' data-toggle="modal" data-target="#search_for_users">Find users</button>
+            <div style='height:50px'></div>
+            <div class="underline" style='background-color:#E8E8E8'></div>
+            <div style='height:20px'></div>
+            <p style='font-size:20px;'><strong>Select groups:</strong></p>
+            {%if not groups%}
+              <div style='height:10px;'></div>
+              <i style='margin-left:20px;'>You have not created any groups yet</i>
+              <div style='height:40px;'></div>
+          {%else%}
+              <div style='height:10px;'></div>
+              <div class='container all_group_options'>
+                  {%for group in groups%}
+                      <div class='row'>
+                          <div class='col-md-auto'>
+                              <div class="user_avatar">
+                                  <div class="avatar group_category_checkbox" id='select_group_{{group.id}}' style='background-color:{{group.background_color}};margin-top:2px;width:35px;height:35px;line-height:35px;'>
+                                      <div style='height:3px'></div>
+                                      <i id='category_color_check_{{group.id}}' class="fas fa-check" style="color:white;font-size:1.6em;display:none"></i>
+                                  </div>
+
+                              </div>
+
+                          </div>
+                          <div class='col-md-auto'>
+                              <p style='font-size:22px;margin-top:2px;'>{{group.title}}</p>
+                          </div>
+                      </div>
+                  {%endfor%}
+              </div>
+
+          {%endif%}
+            <div style='height:50px'></div>
+            <button class='create_group' style='display:none'>Create group</button>
             </div>
          </div>
       </div>
@@ -485,6 +554,27 @@
         <div class="modal-footer">
 
           <button type="button" class="add_users_button" style='display:none;'>Add users</button>
+        </div>
+      </div>
+    </div>
+    </div>
+    <!---->
+    <div class="modal" id="search_for_groups" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <p class="create_event_modal_header" id="exampleModalLabel" style='font-size:20px;'>Select groups</p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body1">
+
+
+        </div>
+        <div class="modal-footer">
+
+          <button type="button" class="add_groups_button" style='display:none;'>Add groups</button>
         </div>
       </div>
     </div>
@@ -530,6 +620,27 @@
         setTimeout(function(){ update_datetime(); }, 1000);
       }
       update_datetime();
+      function contains_checked_group(){
+        var flag = false;
+        $('.group_category_checkbox').each(function(){
+          var _id = this.id.match('\\d+');
+          if ($('#category_color_check_'+_id).css('display') != 'none'){
+            flag = true;
+          }
+
+        });
+        return flag;
+      }
+      function display_create_group_button(){
+
+        if ($('#group_name').val() != '' && (contains_final_added_results() || contains_checked_group())){
+          $('.create_group').css('display', 'block');
+        }
+        else{
+          $('.create_group').css('display', 'none');
+        }
+
+      }
       $('.user_settings_examine_pannel').on('click', '.category_listing_text', function(){
         var _id = $(this).prop('id').match('\\d+');
         var _new_text = $(this).text();
@@ -558,6 +669,13 @@
       function contains_filtered_results(){
         var _count = 0;
         $('.filtered_server_results').each(function(){
+          _count++;
+        });
+        return _count > 0;
+      }
+      function contains_final_added_results(){
+        var _count = 0;
+        $('.added_user_results').each(function(){
           _count++;
         });
         return _count > 0;
@@ -739,7 +857,7 @@
           `;
 
           $('.display_added_users').append(row_html);
-
+          display_create_group_button();
         });
         var new_modal_body=`
         <div class='user_search_result_listings'>
@@ -762,6 +880,78 @@
 
         `;
         $('.-body').html(new_modal_body);
+      });
+      $('.user_settings_examine_pannel').on('click', '.remove_user_from_main_page', function(){
+        var _id = $(this).prop('id').match('\\d');
+        $("#final_user_result_"+_id).remove();
+        display_create_group_button();
+      });
+      function update_group_search_modal(){
+        $.ajax({
+          url: "/display_user_groups",
+          type: "get",
+          data: {val: ''},
+          success: function(response) {
+            $('.modal-body1').html(response.html);
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      }
+      $('.user_settings_examine_pannel').on('click', '.find_groups', function(){
+        update_group_search_modal();
+      });
+      $('.user_settings_examine_pannel').on('input', '#group_name', function(){
+
+        display_create_group_button();
+      });
+      $('.user_settings_examine_pannel').on('click', '.create_group', function(){
+        var name = $('#group_name').val();
+        var description = $('#group_description').val();
+        var background_color = $('#category_square_0').css('background-color');
+        var border_color = $('#category_square_0').css('border-color');
+        var category = $("#category_text_0").text();
+        var _users = [];
+        $('.added_user_results').each(function(){
+          _users.push(parseInt($(this).prop('id').match('\\d+')));
+        });
+        var _groups = [];
+        $('.group_category_checkbox').each(function(){
+          var _id = this.id.match('\\d+');
+          if ($('#category_color_check_'+_id).css('display') != 'none'){
+            _groups.push(parseInt(_id));
+          }
+
+        });
+        var payload = {'title':name, 'description':description, 'background_color':background_color, 'border_color':border_color, 'people':_users, 'groups':_groups, 'category':category};
+        alert(JSON.stringify(payload));
+        $.ajax({
+          url: "/create_group",
+          type: "get",
+          data: {payload: JSON.stringify(payload)},
+          success: function(response) {
+            //$("#place_for_suggestions").html(response);
+            window.location.replace('/group/'+response.linkto)
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      });
+
+
+      $(".user_settings_examine_pannel").on('click', '.group_category_checkbox', function(){
+        var _id = this.id.match('\\d+');
+
+        if ($("#category_color_check_"+_id).css('display') === 'none'){
+          $("#category_color_check_"+_id).css('display', 'block');
+        }
+        else{
+          $("#category_color_check_"+_id).css('display', 'none');
+        }
+        display_create_group_button();
+
       });
     });
   </script>
