@@ -301,11 +301,28 @@ $(document).ready(function(){
       <p class='create-event-header' style='font-size:30px;text-align:center;'><span style='color:#FABC09'><strong>${jsonified_data[0]["name"]}</strong></span> created!</p>
       <div style='height:20px;'></div>
       <div class='green_check'><i class="fas fa-check" style='font-size:4em;line-height:100px'></i></div>
+      <div style='height:40px;'></div>
+      
+      <div class='container' style='margin-left:60px;'>
+        <div class='row'>
+          <div class='col-md-auto'>
+          <p class='create-event-header' style='font-size:23px;margin-top:5px;text-align:center;'>Link: </p>
+          </div>
+          <div class='col-md-auto'>
+            <input class='detail_input' id='final_event_link' value='http://chronos.com/events/1'>
+          </div>
+        </div>
+      </div>
       `
       $('.create_event_pannel').html(the_html);
+      $("#final_event_link").select();
+      $("#final_event_link").prop("readonly", true)
+      //$('.create_event_pannel').css('text-align', 'center');
+      /*
       setTimeout(function(){
         window.location.replace('/dashboard')
       }, 700);
+      */
     }
     else{
       $.ajax({
