@@ -186,6 +186,7 @@ box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
   font-size:20px;
   border:none;
   border-bottom:solid;
+  font-family: 'Noto Sans TC', sans-serif;
   border-bottom-color: #21DCAC;
 }
 .detail_input:focus{
@@ -281,6 +282,7 @@ box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
     height:30px;
     padding:5px;
     color:gray;
+
 
 }
 .privacy_setting_banner{
