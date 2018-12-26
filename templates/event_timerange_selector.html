@@ -1,0 +1,516 @@
+<html>
+  <style>
+    .top_header{
+      height:60px;
+      background-color:#37176A;
+    }
+    .logo{
+      padding-left: 140px;
+      color:white;
+    }
+    p{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    a{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .avatar{
+      font-family: 'Noto Sans TC', sans-serif;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: blue;
+    color: white;
+    font-size: 18px;
+    }
+    .dashboard_username{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:18px;
+    }
+    .tab_pannel{
+      height:110px;
+      background-color: #37176A;
+    }
+    .nav_tab{
+      color:white;
+      font-size:16px;
+    }
+    #full_selected{
+      height:3px;
+      width:auto;
+      background-color: red;
+      margin-top:-10px;
+
+    }
+
+    .create_event{
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background-color: #FABC09;
+      border:none;
+      -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+    }
+    .create_event:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+    }
+    .create_event:focus{
+      outline:none;
+    }
+    .datetime_display{
+      height:55px;
+      background-color: #21DCAC;
+      width:68%;
+      border-bottom-right-radius: 80px;
+    }
+    .datetime_info{
+      margin-left:20px;
+      color:white;
+    }
+    .datetime_text{
+      color:white;
+      margin-top:10px;
+      font-size:19px;
+      margin-left:50px;
+    }
+    #all_messages{
+      height:500px;
+      border-left:solid;
+      border-left-width:1px;
+      border-left-color:#C6C6C6;
+    }
+    .feed_type{
+      font-size:20px;
+    }
+    .quantity_display{
+      padding-top:2px;
+      padding-bottom:2px;
+      padding-left:8px;
+      padding-right:8px;
+      background-color: #FABC09;
+      border-radius:50%;
+
+    }
+    .actions{
+      padding-right: 150px;
+    }
+    .upcomming_event{
+      -webkit-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      font-family: 'Noto Sans TC', sans-serif;
+
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    .event_occurs{
+      color:white;
+      font-size:25px;
+    }
+    .event_time_display{
+      background-color: #21DCAC;
+      /*for pressing events: #FF354D */
+    }
+    ._time_data{
+      color:white;
+
+    }
+    .event_name{
+      font-size:24px;
+    }
+    .event_description{
+      font-size:18px;
+    }
+    .event_upcomming_warning{
+      color:white;
+      font-size:19px;
+      margin-top:10px;
+      padding-left:150px;
+    }
+
+    .timerange_listing_wrapper{
+      -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      width:1200px;
+      padding-bottom:50px;
+      border-radius:10px;
+      background-color: white;
+      margin: 0 auto;
+    }
+    .timelisting_container{
+      width:1200px;
+      height:auto;
+      margin:0 auto;
+    }
+    .datetime_display_listing{
+
+
+      width:auto;
+
+      overflow-x: scroll;
+      margin-top:30px;
+      margin-left:1px;
+    }
+    .user_block_widget{
+      width:220px;
+      height:70px;
+      background-color: #21DCAC;
+
+      text-align: center;
+      line-height: 70px;
+      border-bottom:solid;
+      border-bottom-color:white;
+      border-bottom-width:1px;
+    }
+    .widget_top{
+      border-top-left-radius: 20px;
+      border-top:solid;
+      border-top-width:1px;
+      border-top-color:#21DCAC;
+      height:71px;
+    }
+    .time_filler{
+      width:45px;
+    }
+    .widget_bottom{
+      border-bottom-left-radius: 20px;
+      border-bottom:none;
+    }
+    .is_logged_in{
+      background-color: #21DCAC;
+    }
+    .it_is_you{
+    padding-left:7px;
+    padding-right:7px;
+    height:20px;
+    padding-top:3px;
+    padding-bottom:3px;
+    border-radius: 4px;
+    color: white;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 12px;
+    margin-top: 20px;
+    background-color: #FABC09;
+    margin-left:-13px;
+
+
+  }
+  .all_time_slot_displays{
+    width:700px;
+
+
+    overflow-y: hidden;
+    overflow-x:scroll;
+    margin-left:-30px;
+
+  }
+  .timestamp_display{
+    max-width:900px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+  }
+  .timeslot-display .singleton_timestamp{
+    min-width: 80px;
+
+
+  }
+
+  .user_availability_row .time_hour_block{
+    width:80px;
+    border-right:solid;
+    border-right-width:1px;
+    border-right-color:gray;
+    height:70px;
+  }
+  .user_availability_row{
+    border-bottom:solid;
+    border-bottom-width:1px;
+    border-color:gray;
+    border-right:solid;
+    border-right-width:1px;
+    border-right-color:gray;
+  }
+
+  </style>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+
+
+  </head>
+  <body style='background-color: #E4E4E4;'>
+    <nav class="navbar top_header">
+      <p class="navbar-brand logo" style='font-size:30px;'>Chronos</p>
+      <div class='actions'>
+        <table>
+          <tr>
+            <td>
+            <div class='user_avatar'>
+              <div class='avatar'>JP</div>
+
+            </div>
+          </td>
+            <td><a href='/user/1' class='dashboard_username' style='color:white'>JamesPetullo</a></td>
+          </tr>
+        </table>
+
+      </div>
+    </nav>
+    <div class='tab_pannel'>
+      <div style='height:65px;'></div>
+      <div class='container'>
+        <div class='row no-gutters'>
+          <div class='col'>
+            <p class='nav_tab'>Dashboard</p>
+            <div id='full_selected' style='width:80px;'></div>
+          </div>
+
+          <div class='col'>
+            <p class='nav_tab'>Calendar</p>
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Groups</p>
+
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Past events</p>
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>Profile</p>
+
+          </div>
+
+          <div class='col'>
+            <button class='create_event'>
+              <i class="fas fa-plus" style='font-size:2em;color:white;'></i>
+            </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='datetime_display'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'>
+            <p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>
+          </div>
+
+          <div class='col'><p class='datetime_text'><strong><span class='hour_min'></span> on <span class='day_of_week'></span>, <span class='month'></span> <span class='day'></span>, <span class='year'></span></strong></p></div>
+
+        </div>
+      </div>
+      <!--
+      <p class='datetime_info'>Saturday, November 17, 2018</p>
+      <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
+    -->
+    </div>
+    <div style='height:100px;'></div>
+    <div class='timerange_listing_wrapper'>
+      <div style='height:20px;'></div>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'><i class="fas fa-bars" style='font-size:1.6em;color:#21DCAC'></i></div>
+          <div class='col'><p style="text-align:center;font-size:30px;">Timelistings for <strong style='color:#FABC09'>Test</strong></p></div>
+          <div class='col'><i class="fas fa-cog" style='float:right;font-size:1.6em;color:#21DCAC'></i></div>
+        </div>
+      </div>
+      <div class='timelisting_container'>
+
+        <div class='availability_wrapper'>
+
+          <div class='container'>
+            <div class='row'>
+              <div class='col-md-auto'>
+                <div class='user_block_widget' style='width:220px;background:none;'>
+                  <div class='container' style='margin-left:-15px;'>
+                    <div class='row'>
+                      <div class='col-md-auto'><i class="fas fa-plus-circle" style='font-size:1.5em;color:#FABC09;margin-top:30px;'></i></div>
+                      <div class='col-md-auto'><p style='font-size:15px;margin-top:1px;margin-left:-15px;color:#FABC09;margin-top:5px;'><u>add your availability</u></p></div>
+                    </div>
+                  </div>
+                </div>
+                <div class='user_block_widget widget_top'>
+                  <div class='container'>
+                    <div class='row'>
+                      <div class='col-md-auto'>
+                        <a href='/user/1' class='dashboard_username' style='color:white'>JamesPetullo</a>
+                      </div>
+                      <div class='col-md-auto'>
+                        <span class='it_is_you'>owner</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class='user_block_widget is_logged_in'>
+                  <div class='container'>
+                    <div class='row'>
+                      <div class='col-md-auto'>
+                        <a href='/user/1' class='dashboard_username' style='color:white'>Ajax1234</a>
+                      </div>
+                      <div class='col-md-auto'>
+                        <span class='it_is_you'>you</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class='user_block_widget'>
+                  <div class='container'>
+                    <div class='row'>
+                      <div class='col-md-auto'>
+                        <a href='/user/1' class='dashboard_username' style='color:white'>JoePetullo65</a>
+                      </div>
+                      <div class='col-md-auto'>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class='user_block_widget widget_bottom'></div>
+              </div>
+              <div class='col all_time_slot_displays'>
+
+
+                <div class='datetime_display_listing'>
+                  <table class="timeslot-display">
+
+                    <tr class='timestamp_display_row' style='border-bottom:solid;border-width:1px;border-color:gray'>
+
+                    </tr>
+                    <tr class='user_availability_row' id='availability_for_1'>
+
+                    </tr>
+                    <tr class='user_availability_row' id='availability_for_2'>
+
+                    </tr>
+                    <tr class='user_availability_row' id='availability_for_3'>
+
+                    </tr>
+                    <tr class='user_availability_row' id='availability_for_4'>
+
+                    </tr>
+
+                  </table>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style='height:100px;'></div>
+  </body>
+  <script>
+    $(document).ready(function(){
+      function display_warning(count){
+        $('.event_upcomming_warning').fadeOut(500);
+	       $('.event_upcomming_warning').fadeIn(500);
+         if (count < 10){
+           setTimeout(function(){display_warning(count+1)}, 1000);
+         }
+      }
+      //display_warning(0);
+      function hours_min(_hours, _minutes){
+        _meridian = 'AM';
+        if (_hours > 12){
+          _hours = (_hours%12).toString()
+          _meridian = 'PM';
+        }
+        else{
+          _hours = _hours.toString();
+        }
+        if (_minutes < 10){
+          _minutes = '0'+_minutes.toString();
+        }
+        else{
+          _minutes = _minutes.toString();
+        }
+        return _hours+':'+_minutes+' '+_meridian;
+      }
+      function update_datetime(){
+
+        var _date = new Date();
+        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        $('.hour_min').text(hours_min(_date.getHours(), _date.getMinutes()));
+        $('.day_of_week').text(days[_date.getDay()]);
+        $('.day').text(_date.getDate());
+        $('.month').text(months[_date.getMonth()]);
+        $('.year').text(_date.getFullYear());
+        setTimeout(function(){ update_datetime(); }, 1000);
+      }
+      update_datetime();
+      function add_time_blocks(){
+        $('.user_availability_row').each(function(){
+          var ref = $(this);
+          for (var i = 0; i < 24; i++){
+            var _the_html = `
+            <td class='time_hour_block' id='hour_block_${i+1}'>
+
+
+            </td>
+            `
+            ref.append(_the_html);
+          }
+
+        });
+      }
+      add_time_blocks();
+      function add_timestamps(){
+        for (var i = 1; i < 25; i++){
+          var meridian = 'AM';
+          var _final_hour = i;
+          if (i > 11){
+            meridian = 'PM';
+
+          }
+          if ( i > 12){
+            if (i === 24){
+              _final_hour = 12;
+            }
+            else{
+              _final_hour = i%12;
+            }
+
+          }
+          var _html = `
+          <td class='singleton_timestamp'>
+
+              <p style='color:gray;font-size:18px;'><small>${_final_hour} ${meridian}</small></p>
+          </td>
+          `;
+          $('.timestamp_display_row').append(_html);
+        }
+        var _html = `
+        <td class='singleton_timestamp'>
+
+            <p style='color:gray;font-size:18px;'><small>1 AM</small></p>
+        </td>
+        `;
+
+      }
+      add_timestamps();
+    });
+  </script>
+</html>
