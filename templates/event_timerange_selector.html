@@ -182,6 +182,10 @@
       border-bottom-left-radius: 20px;
       border-bottom:none;
     }
+    .remove_timeslot{
+      background: none;
+      border:none;
+    }
     .is_logged_in{
       background-color: #21DCAC;
     }
@@ -215,29 +219,43 @@
     overflow-x: scroll;
     overflow-y: hidden;
 
+
   }
   .timeslot-display .singleton_timestamp{
-    min-width: 80px;
+    min-width: 120px;
 
 
   }
+  .timeslot-display table{
 
+  }
+  .timeslot{
+    height:67px;
+    width:119px;
+    background-color: #FF354D;
+    border-radius:5px;
+  }
   .user_availability_row .time_hour_block{
-    width:80px;
+    min-width: 120;
     border-right:solid;
     border-right-width:1px;
-    border-right-color:gray;
-    height:70px;
+    border-right-color:#B6B6B6;
+    height:69px;
+
   }
   .user_availability_row{
     border-bottom:solid;
     border-bottom-width:1px;
-    border-color:gray;
+    border-color:#B6B6B6;
     border-right:solid;
     border-right-width:1px;
-    border-right-color:gray;
+    border-right-color:#B6B6B6;
   }
-
+  .timeslot_timestamp{
+    color:white;
+    font-size:12px;
+    margin-left:5px;
+  }
   </style>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -390,25 +408,34 @@
 
 
                 <div class='datetime_display_listing'>
-                  <table class="timeslot-display">
+                  <div class="timeslot-display">
+                    <table>
+                      <tr class='timestamp_display_row' style='border-bottom:solid;border-width:1px;border-color:#B6B6B6'>
 
-                    <tr class='timestamp_display_row' style='border-bottom:solid;border-width:1px;border-color:gray'>
+                      </tr>
+                    </table>
+                    <table>
+                      <tr class='user_availability_row' id='availability_for_1'>
 
-                    </tr>
-                    <tr class='user_availability_row' id='availability_for_1'>
+                      </tr>
+                    </table>
+                    <table>
+                      <tr class='user_availability_row' id='availability_for_2'>
 
-                    </tr>
-                    <tr class='user_availability_row' id='availability_for_2'>
+                      </tr>
+                    </table>
+                    <table>
+                      <tr class='user_availability_row' id='availability_for_3'>
 
-                    </tr>
-                    <tr class='user_availability_row' id='availability_for_3'>
+                      </tr>
+                    </table>
+                    <table>
+                      <tr class='user_availability_row' id='availability_for_4'>
 
-                    </tr>
-                    <tr class='user_availability_row' id='availability_for_4'>
+                      </tr>
+                    </table>
 
-                    </tr>
-
-                  </table>
+                  </div>
                 </div>
 
 
@@ -423,6 +450,7 @@
   </body>
   <script>
     $(document).ready(function(){
+
       function display_warning(count){
         $('.event_upcomming_warning').fadeOut(500);
 	       $('.event_upcomming_warning').fadeIn(500);
@@ -464,9 +492,10 @@
       function add_time_blocks(){
         $('.user_availability_row').each(function(){
           var ref = $(this);
+          var user_id = $(this).prop('id').match('\\d+');
           for (var i = 0; i < 24; i++){
             var _the_html = `
-            <td class='time_hour_block' id='hour_block_${i+1}'>
+            <td class='time_hour_block' id='hour_block_${i+1}_${user_id}'>
 
 
             </td>
@@ -497,7 +526,7 @@
           var _html = `
           <td class='singleton_timestamp'>
 
-              <p style='color:gray;font-size:18px;'><small>${_final_hour} ${meridian}</small></p>
+              <p style='color:#B6B6B6;font-size:18px;'><small>${_final_hour} ${meridian}</small></p>
           </td>
           `;
           $('.timestamp_display_row').append(_html);
@@ -505,12 +534,295 @@
         var _html = `
         <td class='singleton_timestamp'>
 
-            <p style='color:gray;font-size:18px;'><small>1 AM</small></p>
+            <p style='color:#B6B6B6;font-size:18px;'><small>1 AM</small></p>
         </td>
         `;
 
       }
       add_timestamps();
+    });
+    function start_end_timestamps(start){
+
+      var time1 = start[0];
+      //console.log('times below')
+      //console.log(time1);
+      var time2 = start[start.length-1];
+      //console.log(time2);
+      var timestamp1 = get_timestamp(time1.substring(9)).split(' - ');
+      var timestamp2 = get_timestamp(time2.substring(9)).split(' - ');
+      //console.log('returned timestamps below');
+      //console.log(timestamp1);
+      //console.log(timestamp2);
+      //console.log('++++++++++++++++');
+      var starting1 = time_conversion(timestamp1[0]);
+      var ending1 = time_conversion(timestamp2[1]);
+      //console.log(starting1);
+      //console.log(ending1);
+      //console.log('+++++++++++');
+      return [starting1, ending1];
+    }
+    function group_row(_user_id){
+      //console.log('user id here '+_user_id)
+      var _starting = [];
+      var _full_slots = [];
+      var _final = [];
+      $('.time_hour_block').each(function(){
+        var _id = $(this).prop('id').match("\\d+_\\d+");
+        var _id_info = _id[0].split('_');
+        if (parseInt(_user_id) === parseInt(_id_info[1])){
+          if ($(this).html().match('^\\s+$')){
+            _full_slots.push([]);
+
+          }
+          else{
+            _full_slots.push($($(this).html()).prop('id'));
+          }
+        }
+      });
+
+      console.log('_full_slots here');
+      console.log(_full_slots);
+      var _grouped = [];
+      var _current_queue = [];
+      for (var i = 0; i < _full_slots.length; i++){
+        if (_full_slots[i].length === 0){
+          if (_current_queue.length > 0){
+            _grouped.push(start_end_timestamps(_current_queue));
+            _current_queue= [];
+            _grouped.push(_full_slots[i]);
+          }
+          else{
+            _grouped.push(_full_slots[i])
+          }
+        }
+        else{
+          _current_queue.push(_full_slots[i]);
+        }
+      }
+      if (_current_queue.length > 0){
+        _grouped.push(start_end_timestamps(_current_queue));
+      }
+
+
+      $('.time_hour_block').each(function(){
+        var _id = $(this).prop('id').match("\\d+_\\d+");
+        var _id_info = _id[0].split('_');
+        if (parseInt(_user_id) === parseInt(_id_info[1])){
+          $(this).remove();
+        }
+      });
+      console.log('grouped below')
+      console.log(_grouped);
+      var counter = 1;
+      var seen_timeslot = false;
+      for (var i = 0; i < _grouped.length; i++){
+        if (_grouped[i].length === 0){
+          var _the_html = `
+          <td class='time_hour_block' id='hour_block_${counter}_${_user_id}'>
+
+
+          </td>
+          `
+          $("#availability_for_"+_user_id).append(_the_html);
+          counter++;
+        }
+        else{
+          var start = _grouped[i][0];
+          var end = _grouped[i][1];
+
+
+          console.log('start and end:')
+          console.log(start)
+          console.log(end);
+          console.log('---------------');
+
+          var _from_left = Math.floor(120*(start[1]/60));
+          var _from_right = Math.floor(120*(end[1]/60));
+          var timeslot_width = ((end[0]*120)-(start[0]*120))+(_from_right-_from_left)
+          //console.log('timesamp width '+timeslot_width.toString());
+          var main_width;
+          if (end[1] === 0){
+            main_width = 120*(end[0]-start[0]);
+          }
+          else{
+            main_width = 120*(end[0]+1-start[0]);
+          }
+
+          console.log('main width '+main_width.toString());
+          var new_html = `
+          <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='width:${main_width}px'>
+            <div class="timeslot" id="timeslot_${counter}_${_user_id}" data-created="False" style='width:${timeslot_width}px;left:${_from_left}px'>
+
+              <button id="remove_timeslot_${counter}_${_user_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
+              <p class="timeslot_timestamp" id="timestamp_for_${counter}_${_user_id}"></p>
+            </div>
+
+          </td>
+          `
+          counter++;
+          $("#availability_for_"+_user_id).append(new_html);
+
+        }
+
+      }
+
+    }
+    function time_conversion(stamp){
+      //console.log('timestamp'+stamp)
+      var _hour1 = parseInt(stamp.match('^\\d+'));
+      var _minutes1 = parseInt(stamp.match(':\\d+')[0].substring(1));
+      var meridian1 = stamp.match('[AMP]+');
+      if (meridian1[0] === 'PM'){
+        _hour1 += 12;
+      }
+
+      return [_hour1, _minutes1];
+    }
+    function get_timestamp(_id){
+      var _id_info = _id.split('_');
+      var _unit = parseInt(_id_info[0]);
+      var _user_id = _id_info[1];
+      var previous_space = find_previous_space(_id);
+      var ref = $("#timeslot_"+_id);
+
+      var _from_left = parseInt(ref.css('left').match('\\d+'));
+      var _width = parseInt(ref.css('width').match('\\d+'));
+      if (_width === 117){
+        _width = 120;
+      }
+      var _start = previous_space + _from_left;
+
+      var _end = previous_space + _from_left + _width;
+
+      var hour1 = Math.floor(_start/120);
+      var minutes1 = Math.floor(((_start%120)/120)*60);
+      var hour2 = Math.floor(_end/120);
+      var minutes2 =  Math.floor(((_end%120)/120)*60);
+      var meridian1 = 'AM';
+      var meridian2 = 'AM';
+      var pad1 = '0';
+      var pad2 = '0';
+      if (hour1 > 12){
+        meridian1 = 'PM';
+        hour1 = hour1%12;
+      }
+      if (hour2 > 12){
+        if (hour2 === 24){
+          hour2 = 12;
+        }
+        else{
+          hour2 = hour2 %12;
+        }
+        meridian2 = 'PM';
+      }
+      if (minutes1 > 9){
+        pad1 = '';
+      }
+      if (minutes2 > 9){
+        pad2 = '';
+      }
+      var timestamp = `${hour1}:${pad1}${minutes1} ${meridian1} - ${hour2}:${pad2}${minutes2} ${meridian2}`;
+      return timestamp;
+
+    }
+    function find_previous_space(_id){
+      var _split = _id.split('_');
+      var _previous = 120;
+      $('.time_hour_block').each(function(){
+        var _info = $(this).prop('id').match("\\d+_\\d+")[0].split('_');
+        if (parseInt(_info[1]) === parseInt(_split[1]) && parseInt(_info[0]) < parseInt(_split[0])){
+
+          _previous += parseInt($(this).css('width').match('\\d+'));
+        }
+      });
+      return _previous;
+    }
+    function update_timestamps(){
+      $('.timeslot').each(function(){
+        var _id = $(this).prop('id').match("\\d+_\\d+");
+        var _id_info = _id[0].split('_');
+        var _unit = parseInt(_id_info[0]);
+        var _user_id = _id_info[1];
+        var previous_space = find_previous_space(_id[0]);
+        var ref = $(this);
+
+
+        var _from_left = parseInt(ref.css('left').match('\\d+'));
+        var _width = parseInt(ref.css('width').match('\\d+'));
+        if (_width === 117){
+          _width = 120;
+        }
+        var _start = previous_space + _from_left;
+
+        var _end = previous_space + _from_left + _width;
+
+        var hour1 = Math.floor(_start/120);
+        var minutes1 = Math.floor(((_start%120)/120)*60);
+        var hour2 = Math.floor(_end/120);
+        var minutes2 =  Math.floor(((_end%120)/120)*60);
+        if (minutes2 + 2 >= 60){
+          minutes2 = 0;
+          hour2 ++;
+        }
+        var meridian1 = 'AM';
+        var meridian2 = 'AM';
+        var pad1 = '0';
+        var pad2 = '0';
+        if (hour1 > 12){
+          meridian1 = 'PM';
+          hour1 = hour1%12;
+        }
+        if (hour2 > 12){
+          if (hour2 === 24){
+            hour2 = 12;
+          }
+          else{
+            hour2 = hour2 %12;
+          }
+          meridian2 = 'PM';
+        }
+        if (minutes1 > 9){
+          pad1 = '';
+        }
+        if (minutes2 > 9){
+          pad2 = '';
+        }
+        var timestamp = `
+          ${hour1}:${pad1}${minutes1} ${meridian1} - ${hour2}:${pad2}${minutes2} ${meridian2}
+        `;
+        $("#timestamp_for_"+_id).html(timestamp);
+      });
+      setTimeout(function(){
+        update_timestamps()
+      }, 50);
+    }
+    update_timestamps()
+    var test_count = 0;
+    $('.timelisting_container').on('click', '.time_hour_block', function(){
+      var _id = $(this).prop('id').match('\\d+_\\d+');
+      var info_id = _id[0].split("_");
+      var _html = `
+      <div class="timeslot" id="timeslot_${_id}" data-created="False">
+
+        <button id="remove_timeslot_${_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
+        <p class="timeslot_timestamp" id="timestamp_for_${_id}"></p>
+      </div>
+      `;
+      $(this).html(_html);
+      $('#timeslot_'+_id).resizable({handles:"e,w", minWidth:0, maxWidth:117});
+
+
+      group_row(info_id[1]);
+
+
+
+
+    });
+    $('.timelisting_container').on('click', '.remove_timeslot', function(event){
+      event.stopPropagation();
+      var _id = $(this).prop('id').match('\\d+_\\d+');
+      //alert(_id);
+      $("#timeslot_"+_id).remove();
     });
   </script>
 </html>
