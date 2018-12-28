@@ -234,6 +234,7 @@
     width:119px;
     background-color: #FF354D;
     border-radius:5px;
+    border:none;
   }
   .user_availability_row .time_hour_block{
     min-width: 120;
@@ -495,7 +496,7 @@
           var user_id = $(this).prop('id').match('\\d+');
           for (var i = 0; i < 24; i++){
             var _the_html = `
-            <td class='time_hour_block' id='hour_block_${i+1}_${user_id}'>
+            <td class='time_hour_block' id='hour_block_${i+1}_${user_id}' data-storingslot='False'>
 
 
             </td>
@@ -561,6 +562,7 @@
       //console.log('+++++++++++');
       return [starting1, ending1];
     }
+    var time_divisor = 120;
     function group_row(_user_id){
       //console.log('user id here '+_user_id)
       var _starting = [];
@@ -618,7 +620,7 @@
       for (var i = 0; i < _grouped.length; i++){
         if (_grouped[i].length === 0){
           var _the_html = `
-          <td class='time_hour_block' id='hour_block_${counter}_${_user_id}'>
+          <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' data-storingslot='False'>
 
 
           </td>
@@ -631,26 +633,32 @@
           var end = _grouped[i][1];
 
 
-          console.log('start and end:')
-          console.log(start)
-          console.log(end);
-          console.log('---------------');
 
-          var _from_left = Math.floor(120*(start[1]/60));
-          var _from_right = Math.floor(120*(end[1]/60));
-          var timeslot_width = ((end[0]*120)-(start[0]*120))+(_from_right-_from_left)
+          var _from_left = Math.round(time_divisor*(start[1]/60));
+          var _from_right = Math.round(time_divisor*(end[1]/60));
+          if (_from_left < 3){
+            _from_left = 0;
+          }
+          if (_from_right < 3){
+            _from_right = 0;
+          }
+
+
+          var timeslot_width = ((end[0]*time_divisor)-(start[0]*time_divisor))+(_from_right-_from_left)-1
           //console.log('timesamp width '+timeslot_width.toString());
           var main_width;
           if (end[1] === 0){
-            main_width = 120*(end[0]-start[0]);
+            main_width = time_divisor*(end[0]-start[0]);
           }
           else{
-            main_width = 120*(end[0]+1-start[0]);
+            main_width = time_divisor*(end[0]+1-start[0]);
           }
 
           console.log('main width '+main_width.toString());
+          var _factor_off = main_width%120;
+
           var new_html = `
-          <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='width:${main_width}px'>
+          <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='min-width:${main_width-_factor_off}px' data-storingslot='True'>
             <div class="timeslot" id="timeslot_${counter}_${_user_id}" data-created="False" style='width:${timeslot_width}px;left:${_from_left}px'>
 
               <button id="remove_timeslot_${counter}_${_user_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
@@ -659,9 +667,10 @@
 
           </td>
           `
-          counter++;
-          $("#availability_for_"+_user_id).append(new_html);
 
+          $("#availability_for_"+_user_id).append(new_html);
+          $('#timeslot_'+counter.toString()+'_'+_user_id).resizable({handles:"e,w", minWidth:0, maxWidth:main_width-3});
+          counter++;
         }
 
       }
@@ -687,24 +696,31 @@
 
       var _from_left = parseInt(ref.css('left').match('\\d+'));
       var _width = parseInt(ref.css('width').match('\\d+'));
-      if (_width === 117){
-        _width = 120;
+      if (_width === 118){
+        _width = time_divisor;
       }
       var _start = previous_space + _from_left;
 
       var _end = previous_space + _from_left + _width;
 
-      var hour1 = Math.floor(_start/120);
-      var minutes1 = Math.floor(((_start%120)/120)*60);
-      var hour2 = Math.floor(_end/120);
-      var minutes2 =  Math.floor(((_end%120)/120)*60);
+      var hour1 = Math.floor(_start/time_divisor);
+      var minutes1 = Math.floor(((_start%time_divisor)/time_divisor)*60);
+      var hour2 = Math.floor(_end/time_divisor);
+      var minutes2 =  Math.floor(((_end%time_divisor)/time_divisor)*60);
       var meridian1 = 'AM';
       var meridian2 = 'AM';
       var pad1 = '0';
       var pad2 = '0';
       if (hour1 > 12){
+
         meridian1 = 'PM';
-        hour1 = hour1%12;
+        if (hour1 === 24){
+          hour1 = 12;
+        }
+        else{
+          hour1 = hour1%12;
+        }
+
       }
       if (hour2 > 12){
         if (hour2 === 24){
@@ -727,7 +743,7 @@
     }
     function find_previous_space(_id){
       var _split = _id.split('_');
-      var _previous = 120;
+      var _previous = time_divisor;
       $('.time_hour_block').each(function(){
         var _info = $(this).prop('id').match("\\d+_\\d+")[0].split('_');
         if (parseInt(_info[1]) === parseInt(_split[1]) && parseInt(_info[0]) < parseInt(_split[0])){
@@ -749,17 +765,17 @@
 
         var _from_left = parseInt(ref.css('left').match('\\d+'));
         var _width = parseInt(ref.css('width').match('\\d+'));
-        if (_width === 117){
-          _width = 120;
+        if (_width === 118){
+          _width = time_divisor;
         }
         var _start = previous_space + _from_left;
 
         var _end = previous_space + _from_left + _width;
 
-        var hour1 = Math.floor(_start/120);
-        var minutes1 = Math.floor(((_start%120)/120)*60);
-        var hour2 = Math.floor(_end/120);
-        var minutes2 =  Math.floor(((_end%120)/120)*60);
+        var hour1 = Math.floor(_start/time_divisor);
+        var minutes1 = Math.floor(((_start%time_divisor)/time_divisor)*60);
+        var hour2 = Math.floor(_end/time_divisor);
+        var minutes2 =  Math.floor(((_end%time_divisor)/time_divisor)*60);
         if (minutes2 + 2 >= 60){
           minutes2 = 0;
           hour2 ++;
@@ -769,17 +785,35 @@
         var pad1 = '0';
         var pad2 = '0';
         if (hour1 > 12){
-          meridian1 = 'PM';
-          hour1 = hour1%12;
+
+          if (hour1 === 24){
+            hour1 = 12;
+            meridian1 = 'PM';
+          }
+          else if (hour1 === 25){
+            meridian1 = 'AM';
+            hour1 = 1;
+          }
+          else{
+            hour1 = hour1%12;
+            meridian1 = 'PM';
+          }
+
         }
         if (hour2 > 12){
           if (hour2 === 24){
             hour2 = 12;
+            meridian2 = 'PM';
+          }
+          else if (hour2 === 25){
+            meridian2 = 'AM';
+            hour2 = 1;
           }
           else{
             hour2 = hour2 %12;
+            meridian2 = 'PM';
           }
-          meridian2 = 'PM';
+
         }
         if (minutes1 > 9){
           pad1 = '';
@@ -799,23 +833,22 @@
     update_timestamps()
     var test_count = 0;
     $('.timelisting_container').on('click', '.time_hour_block', function(){
-      var _id = $(this).prop('id').match('\\d+_\\d+');
-      var info_id = _id[0].split("_");
-      var _html = `
-      <div class="timeslot" id="timeslot_${_id}" data-created="False">
+      if ($(this).data('storingslot') === 'False'){
+        var _id = $(this).prop('id').match('\\d+_\\d+');
+        var info_id = _id[0].split("_");
+        var _html = `
+        <div class="timeslot" id="timeslot_${_id}" data-created="False">
 
-        <button id="remove_timeslot_${_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
-        <p class="timeslot_timestamp" id="timestamp_for_${_id}"></p>
-      </div>
-      `;
-      $(this).html(_html);
-      $('#timeslot_'+_id).resizable({handles:"e,w", minWidth:0, maxWidth:117});
-
-
-      group_row(info_id[1]);
+          <button id="remove_timeslot_${_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
+          <p class="timeslot_timestamp" id="timestamp_for_${_id}"></p>
+        </div>
+        `;
+        $(this).html(_html);
+        $('#timeslot_'+_id).resizable({handles:"e,w", minWidth:0, maxWidth:118});
 
 
-
+        group_row(info_id[1]);
+      }
 
     });
     $('.timelisting_container').on('click', '.remove_timeslot', function(event){
@@ -823,6 +856,9 @@
       var _id = $(this).prop('id').match('\\d+_\\d+');
       //alert(_id);
       $("#timeslot_"+_id).remove();
+    });
+    $('.timelisting_container').on('click', '.timeslot', function(event){
+      event.stopPropagation();
     });
   </script>
 </html>
