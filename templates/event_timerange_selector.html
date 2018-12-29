@@ -138,6 +138,7 @@
       -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
       box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
       width:1200px;
+
       padding-bottom:50px;
       border-radius:10px;
       background-color: white;
@@ -582,8 +583,8 @@
         }
       });
 
-      console.log('_full_slots here');
-      console.log(_full_slots);
+      //console.log('_full_slots here');
+      //console.log(_full_slots);
       var _grouped = [];
       var _current_queue = [];
       for (var i = 0; i < _full_slots.length; i++){
@@ -613,8 +614,7 @@
           $(this).remove();
         }
       });
-      console.log('grouped below')
-      console.log(_grouped);
+
       var counter = 1;
       var seen_timeslot = false;
       for (var i = 0; i < _grouped.length; i++){
@@ -633,7 +633,6 @@
           var end = _grouped[i][1];
 
 
-
           var _from_left = Math.round(time_divisor*(start[1]/60));
           var _from_right = Math.round(time_divisor*(end[1]/60));
           if (_from_left < 3){
@@ -642,10 +641,15 @@
           if (_from_right < 3){
             _from_right = 0;
           }
-
+          console.log(start)
+          console.log(end);
+          console.log(end[0]);
+          console.log(start[0]);
+          console.log(_from_right-_from_left);
+          console.log('-------------');
 
           var timeslot_width = ((end[0]*time_divisor)-(start[0]*time_divisor))+(_from_right-_from_left)-1
-          //console.log('timesamp width '+timeslot_width.toString());
+
           var main_width;
           if (end[1] === 0){
             main_width = time_divisor*(end[0]-start[0]);
@@ -654,11 +658,11 @@
             main_width = time_divisor*(end[0]+1-start[0]);
           }
 
-          console.log('main width '+main_width.toString());
-          var _factor_off = main_width%120;
 
+          var _factor_off = main_width%120;
+          //alert(timeslot_width);
           var new_html = `
-          <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='min-width:${main_width-_factor_off}px' data-storingslot='True'>
+          <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='min-width:${main_width}px' data-storingslot='True'>
             <div class="timeslot" id="timeslot_${counter}_${_user_id}" data-created="False" style='width:${timeslot_width}px;left:${_from_left}px'>
 
               <button id="remove_timeslot_${counter}_${_user_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
@@ -696,9 +700,15 @@
 
       var _from_left = parseInt(ref.css('left').match('\\d+'));
       var _width = parseInt(ref.css('width').match('\\d+'));
-      if (_width === 118){
-        _width = time_divisor;
+      //alert(_width);
+      /*
+      if (_width%118 != 0){
+        if (_width != 119){
+          _width ++;
+        }
+
       }
+      */
       var _start = previous_space + _from_left;
 
       var _end = previous_space + _from_left + _width;
@@ -707,6 +717,15 @@
       var minutes1 = Math.floor(((_start%time_divisor)/time_divisor)*60);
       var hour2 = Math.floor(_end/time_divisor);
       var minutes2 =  Math.floor(((_end%time_divisor)/time_divisor)*60);
+      if (minutes2 + 2 >= 59 && minutes2 < 59){
+        minutes2 = 59;
+      }
+      else if (minutes2 < 59){
+        minutes2++;
+      }
+      if (minutes1 > 0){
+        minutes1 -= 1;
+      }
       var meridian1 = 'AM';
       var meridian2 = 'AM';
       var pad1 = '0';
