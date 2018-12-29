@@ -570,17 +570,23 @@
       var _full_slots = [];
       var _final = [];
       $('.time_hour_block').each(function(){
-        var _id = $(this).prop('id').match("\\d+_\\d+");
-        var _id_info = _id[0].split('_');
-        if (parseInt(_user_id) === parseInt(_id_info[1])){
-          if ($(this).html().match('^\\s+$')){
+        if ($(this).prop('id').match('^dummy_hour_block')){
             _full_slots.push([]);
+        }
+        else{
+          var _id = $(this).prop('id').match("\\d+_\\d+");
+          var _id_info = _id[0].split('_');
+          if (parseInt(_user_id) === parseInt(_id_info[1])){
+            if ($(this).html().match('^\\s+$')){
+              _full_slots.push([]);
 
-          }
-          else{
-            _full_slots.push($($(this).html()).prop('id'));
+            }
+            else{
+              _full_slots.push($($(this).html()).prop('id'));
+            }
           }
         }
+
       });
 
       //console.log('_full_slots here');
@@ -608,11 +614,17 @@
 
 
       $('.time_hour_block').each(function(){
-        var _id = $(this).prop('id').match("\\d+_\\d+");
-        var _id_info = _id[0].split('_');
-        if (parseInt(_user_id) === parseInt(_id_info[1])){
+        if ($(this).prop('id').match('^dummy_hour_block')){
           $(this).remove();
         }
+        else{
+          var _id = $(this).prop('id').match("\\d+_\\d+");
+          var _id_info = _id[0].split('_');
+          if (parseInt(_user_id) === parseInt(_id_info[1])){
+            $(this).remove();
+          }
+        }
+
       });
 
       var counter = 1;
@@ -764,11 +776,17 @@
       var _split = _id.split('_');
       var _previous = time_divisor;
       $('.time_hour_block').each(function(){
-        var _info = $(this).prop('id').match("\\d+_\\d+")[0].split('_');
-        if (parseInt(_info[1]) === parseInt(_split[1]) && parseInt(_info[0]) < parseInt(_split[0])){
-
-          _previous += parseInt($(this).css('width').match('\\d+'));
+        if ($(this).prop('id').match('^dummy_hour_block_')){
+          _previous += 120;
         }
+        else{
+          var _info = $(this).prop('id').match("\\d+_\\d+")[0].split('_');
+          if (parseInt(_info[1]) === parseInt(_split[1]) && parseInt(_info[0]) < parseInt(_split[0])){
+
+            _previous += parseInt($(this).css('width').match('\\d+'));
+          }
+        }
+
       });
       return _previous;
     }
@@ -870,10 +888,84 @@
       }
 
     });
+    function remove_timeslot(_id){
+      var _block_width = parseInt($('#hour_block_'+_id).css('width').match('\\d+'));
+      var _range = Math.floor(_block_width/120);
+
+      var _user_id = parseInt(_id.split('_')[1]);
+      var _hour_id = parseInt(_id.split('_')[0]);
+      var _has_next = false;
+      var _has_previous = false;
+      $('.time_hour_block').each(function(){
+        var _this_id = $(this).prop('id').match('\\d+_\\d+')[0].split('_');
+        if (parseInt(_this_id[1]) === _user_id && parseInt(_this_id[0]) > _hour_id){
+          _has_next = true;
+        }
+      });
+      $('.time_hour_block').each(function(){
+        var _this_id = $(this).prop('id').match('\\d+_\\d+')[0].split('_');
+        if (parseInt(_this_id[1]) === _user_id && parseInt(_this_id[0]) < _hour_id){
+          _has_previous = true;
+        }
+      });
+      $("#hour_block_"+_id).remove();
+      if (_has_next){
+        var _next_id = _hour_id+1;
+        var _counter = _range;
+        var _the_html = `
+        <td class='time_hour_block' id='dummy_hour_block_${_counter}' data-storingslot='False'>
+        </td>
+        `
+        $(_the_html).insertBefore('#hour_block_'+_next_id.toString()+'_'+_user_id.toString());
+        for (var i = 0; i < _range-1; i++){
+          var _the_html = `
+          <td class='time_hour_block' id='dummy_hour_block_${_counter-1}' data-storingslot='False'>
+          </td>
+          `
+          $(_the_html).insertBefore('#dummy_hour_block_'+_counter.toString());
+          _counter -= 1;
+        }
+        group_row(_user_id.toString());
+      }
+      else{
+        if (_has_previous){
+          var _next_id = _hour_id-1;
+          var _counter = _range;
+          var _the_html = `
+          <td class='time_hour_block' id='dummy_hour_block_${_counter}' data-storingslot='False'>
+          </td>
+          `
+          $(_the_html).insertAfter('#hour_block_'+_next_id.toString()+'_'+_user_id.toString());
+          for (var i = 0; i < _range-1; i++){
+            var _the_html = `
+            <td class='time_hour_block' id='dummy_hour_block_${_counter-1}' data-storingslot='False'>
+            </td>
+            `
+            $(_the_html).insertAfter('#dummy_hour_block_'+_counter.toString());
+            _counter -= 1;
+          }
+          group_row(_user_id.toString());
+        }
+        else{
+          //availability_for_
+          for (var i = 0; i < 24; i++){
+            var _the_html = `
+            <td class='time_hour_block' id='dummy_hour_block_${i+1}' data-storingslot='False'>
+            </td>
+            `
+            $("#availability_for_"+_user_id.toString()).append(_the_html);
+          }
+          group_row(_user_id.toString());
+
+        }
+      }
+
+    }
     $('.timelisting_container').on('click', '.remove_timeslot', function(event){
       event.stopPropagation();
       var _id = $(this).prop('id').match('\\d+_\\d+');
       //alert(_id);
+      remove_timeslot(_id[0]);
       $("#timeslot_"+_id).remove();
     });
     $('.timelisting_container').on('click', '.timeslot', function(event){
