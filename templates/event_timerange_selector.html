@@ -187,6 +187,11 @@
       background: none;
       border:none;
     }
+    .create_timeslot{
+      background: none;
+      border:none;
+      float:right;
+    }
     .is_logged_in{
       background-color: #21DCAC;
     }
@@ -678,6 +683,7 @@
             <div class="timeslot" id="timeslot_${counter}_${_user_id}" data-created="False" style='width:${timeslot_width}px;left:${_from_left}px'>
 
               <button id="remove_timeslot_${counter}_${_user_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
+              <button id='create_timeslot_${counter}_${_user_id}' class='create_timeslot'><i class="fas fa-plus" style='color:white;font-size:1em'></i></button>
               <p class="timeslot_timestamp" id="timestamp_for_${counter}_${_user_id}"></p>
             </div>
 
@@ -877,6 +883,7 @@
         <div class="timeslot" id="timeslot_${_id}" data-created="False">
 
           <button id="remove_timeslot_${_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
+          <button id='create_timeslot_${_id}' class='create_timeslot'><i class="fas fa-plus" style='color:white;font-size:1em'></i></button>
           <p class="timeslot_timestamp" id="timestamp_for_${_id}"></p>
         </div>
         `;
