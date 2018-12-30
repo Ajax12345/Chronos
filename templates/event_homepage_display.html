@@ -288,14 +288,38 @@
     border-color:#13B374
   }
   .selected_event_times{
-    width:500px;
-    min-height:200px;
+    width:560px;
+    max-height:600px;
     margin:0 auto;
+    overflow: scroll;
   }
   .datetime_event_select{
-    padding:10px;
-    text-align: left;
-    border-bottom:solid;
+    margin:0 auto;
+    width:520px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+
+
+  }
+  .day_tab_display{
+    background-color: #37176A;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+
+    padding:5px;
+    color:white;
+  }
+  .main_event_date_content{
+    padding:5px;
+    width:250px;
+    border:solid;
+    border-left:none;
+    border-width:1px;
+    border-color:#ADADAD;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+
   }
   </style>
   <head>
@@ -394,11 +418,13 @@
       </div>
       <p style='font-size:18px;'>Created by <a href='/user/1' style='color:#21DCAC'><strong>James Petullo</strong></a></p>
       <div style='height:15px;'></div>
+      <!--
       <div class='info_banner not_set_scheduled'>
         <strong><u>Test</u></strong> has not yet been scheduled. You can add your availability below and view other attendees' listings.
       </div>
+    -->
       <div style='height:30px;'></div>
-      <div class="nav_tabs" style="width:500px;margin:0 auto;text-align:center;">
+      <div class="nav_tabs" style="width:570px;margin:0 auto;text-align:center;">
         <div class="container">
         <div class="row">
           <div class="col">
@@ -426,11 +452,39 @@
       </div>
         <div class='home_content_wrapper'>
           <div class='selected_event_times'>
-
+            <div style='height:20px;'></div>
             <div class='datetime_event_select'>
-              <p style='font-size:18px;'><strong>Today</strong></p>
-              <div style='height:15px'></div>
-              <p style='font-size:13px;color:gray'><u>4 attendee responses</u></p>
+              <div class='container'>
+                <div class='row'>
+                  <div class='col-md-auto day_tab_display'>
+                    <p style='font-size:35px;'>15</p>
+                    <p style='font-size:19px;'>Dec 2018</p>
+                  </div>
+                  <div class='col-md-auto main_event_date_content' style='text-align:left'>
+                    <p style='font-size:23px;'><strong>Thursday (tomorrow)</strong></p>
+
+                    <p style='color:gray;font-size:13px;'><u>4 user responses</u></p>
+                    <p style='font-size:13px;'>Last updated 4 minutes ago by <strong>James Petullo</strong></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style='height:20px'></div>
+            <div class='datetime_event_select'>
+              <div class='container'>
+                <div class='row'>
+                  <div class='col-md-auto day_tab_display'>
+                    <p style='font-size:35px;'>15</p>
+                    <p style='font-size:19px;'>Dec 2018</p>
+                  </div>
+                  <div class='col-md-auto main_event_date_content' style='text-align:left'>
+                    <p style='font-size:23px;'><strong>Thursday (tomorrow)</strong></p>
+
+                    <p style='color:gray;font-size:13px;'><u>4 user responses</u></p>
+                    <p style='font-size:13px;'>Last updated 4 minutes ago by <strong>James Petullo</strong></p>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
