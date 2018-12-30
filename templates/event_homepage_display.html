@@ -288,14 +288,14 @@
     border-color:#13B374
   }
   .selected_event_times{
-    width:560px;
+    width:590px;
     max-height:600px;
     margin:0 auto;
     overflow: scroll;
   }
   .datetime_event_select{
     margin:0 auto;
-    width:520px;
+    width:450px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
 
@@ -321,12 +321,26 @@
 
 
   }
+  .user_has_responded_day{
+    margin-top:35px;
+  }
+  .display_user_responses:hover{
+    cursor:pointer;
+  }
+  .timerange_user_display{
+    /*color:#FABC09;*/
+  }
+  .user_time_range_display{
+
+    margin-left:35px;
+  }
   </style>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
@@ -453,38 +467,35 @@
         <div class='home_content_wrapper'>
           <div class='selected_event_times'>
             <div style='height:20px;'></div>
-            <div class='datetime_event_select'>
-              <div class='container'>
-                <div class='row'>
-                  <div class='col-md-auto day_tab_display'>
-                    <p style='font-size:35px;'>15</p>
-                    <p style='font-size:19px;'>Dec 2018</p>
-                  </div>
-                  <div class='col-md-auto main_event_date_content' style='text-align:left'>
-                    <p style='font-size:23px;'><strong>Thursday (tomorrow)</strong></p>
 
-                    <p style='color:gray;font-size:13px;'><u>4 user responses</u></p>
-                    <p style='font-size:13px;'>Last updated 4 minutes ago by <strong>James Petullo</strong></p>
+            <div class='container'>
+              <div class='row'>
+                <div class='col-md-auto'>
+                  <div class='datetime_event_select'>
+                    <div class='container'>
+                      <div class='row'>
+                        <div class='col-md-auto day_tab_display'>
+                          <p style='font-size:35px;'>15</p>
+                          <p style='font-size:19px;'>Dec 2018</p>
+                        </div>
+                        <div class='col-md-auto main_event_date_content' style='text-align:left'>
+                          <p style='font-size:23px;'><strong>Thursday (tomorrow)</strong></p>
+
+                          <p class='display_user_responses' style='color:gray;font-size:13px;'><u>4 user responses</u></p>
+                          <p style='font-size:13px;'>Last updated 4 minutes ago by <a href='/user/1' style='color:black'><strong>@JamesPetullo</strong></a></p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div style='height:20px'></div>
-            <div class='datetime_event_select'>
-              <div class='container'>
-                <div class='row'>
-                  <div class='col-md-auto day_tab_display'>
-                    <p style='font-size:35px;'>15</p>
-                    <p style='font-size:19px;'>Dec 2018</p>
-                  </div>
-                  <div class='col-md-auto main_event_date_content' style='text-align:left'>
-                    <p style='font-size:23px;'><strong>Thursday (tomorrow)</strong></p>
-
-                    <p style='color:gray;font-size:13px;'><u>4 user responses</u></p>
-                    <p style='font-size:13px;'>Last updated 4 minutes ago by <strong>James Petullo</strong></p>
+                <div class='col-md-auto'>
+                  <div class='user_has_responded_day' data-toggle='popover' data-placement='left' data-content='<p>You have already added availability for this day</p>' data-html='true'>
+                    <i class="fas fa-check-circle" style='font-size:3em;color:#21DCAC'></i>
                   </div>
                 </div>
+
               </div>
+
             </div>
 
           </div>
@@ -494,6 +505,47 @@
     </div>
 
     <div style='height:100px;'></div>
+    <div class="modal" id="full_user_responses" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><p><strong>User responses on <span style='color:#FABC09'>December 18, 2018</span></p></strong></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class='user_quick_look_availability'>
+                  <table>
+                    <tr>
+                      <td>
+                      <div class='user_avatar'>
+                        <div class='avatar'>JP</div>
+
+                      </div>
+                    </td>
+                      <td>
+                        <div style='height:14px;'></div>
+                        <a href='/user/1' style='color:black;font-size:18px;'><p><strong>JamesPetullo</strong></p></a>
+
+                      </td>
+                      <td><p style='font-size:18px;margin-top:10px;margin-left:3px;'> is available from:</p></td>
+                    </tr>
+                  </table>
+                  <div class='user_time_range_display'>
+                    <p class='timerange_user_display'>11:00 AM-1:00PM</p>
+                    <p class='timerange_user_display'>11:00 AM-1:00PM</p>
+                  </div>
+
+                </div>
+
+          </div>
+          <div class="modal-footer" style='border-top:none;'>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
   <script>
     $(document).ready(function(){
@@ -536,7 +588,19 @@
         setTimeout(function(){ update_datetime(); }, 1000);
       }
       update_datetime();
+      $(document).on({
+          mouseenter: function () {
+            $(this).popover();
+            $(this).popover('show');
+          },
+          mouseleave: function () {
+              $(this).popover('hide');
+          }
+      }, ".user_has_responded_day");
 
+      $('.home_content_wrapper').on('click', '.display_user_responses', function(){
+        $('#full_user_responses').modal('toggle');
+      });
     });
 
   </script>
