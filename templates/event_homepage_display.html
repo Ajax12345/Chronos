@@ -413,6 +413,9 @@
     border-width:2px;
     border-color:#21DCAC;
     padding-left:5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-right:none;
 
   }
   .post_message_event:focus{
@@ -422,14 +425,15 @@
   .add_message_to_event{
     width:40px;
     height:40px;
-    border-radius: 50%;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
     text-align: center;
     line-height: 40px;
     font-size:20px;
     background-color: rgb(250, 188, 9);
     border:none;
     color:white;
-
+    margin-left:-2px;
   }
   </style>
   <head>
@@ -733,7 +737,7 @@
         </div>
         <div style='height:50px'></div>
 
-        <table style='margin-left:50px;'>
+        <table style='margin-left:60px;'>
           <tr>
             <td><input class='post_message_event' placeholder='Post message....'></td>
             <td><button class='add_message_to_event'><i class="fas fa-arrow-up" style='font-size:1em;color:white;'></i></button></td>
