@@ -289,15 +289,19 @@
   }
   .selected_event_times{
     width:590px;
-    max-height:600px;
+    max-height:400px;
     margin:0 auto;
     overflow: scroll;
+
   }
   .datetime_event_select{
     margin:0 auto;
-    width:450px;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
+    width:540px;
+
+    border:none;
+    border-bottom:solid;
+    border-width:1px;
+    border-color:#ADADAD;
 
 
   }
@@ -305,24 +309,23 @@
     background-color: #37176A;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
-
-    padding:5px;
+    border:solid;
+    border-width:2px;
+    border-color:#37176A;
+    padding:2px;
     color:white;
   }
   .main_event_date_content{
-    padding:5px;
+    padding:2px;
     width:250px;
-    border:solid;
-    border-left:none;
-    border-width:1px;
-    border-color:#ADADAD;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+
+
 
 
   }
   .user_has_responded_day{
     margin-top:35px;
+    float:right;
   }
   .display_user_responses:hover{
     cursor:pointer;
@@ -333,6 +336,100 @@
   .user_time_range_display{
 
     margin-left:35px;
+  }
+  .add_availability_button{
+    color:white;
+    background-color: #FABC09;
+    border-radius:25px;
+    border:none;
+    font-size:13px;
+    padding:5px;
+    font-family: 'Noto Sans TC', sans-serif;
+    float:right;
+    margin-top:10px;
+    width:120px;
+  }
+  .add_availability_button:hover{
+    cursor:pointer
+  }
+  .about_info_wrapper{
+    width:580px;
+    height:300px;
+    margin:0 auto;
+
+  }
+  .description_display{
+    border:solid;
+    border-radius:10px;
+    border-color:#21DCAC;
+    border-width:1.5px;
+    width:300px;
+    max-height:400px;
+    overflow:scroll;
+    padding:2px;
+    margin-top:22px;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .large_user_avatar{
+    width:70px;
+    height:70px;
+    background-color: blue;
+    border-radius:50%;
+    color:white;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:25px;
+    line-height:70px;
+    text-align: center;
+  }
+  .event_message_display{
+    width:450px;
+    padding:10px;
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #E7E7E7;
+    border-radius: 10px;
+    max-height:300px;
+    overflow: scroll;
+    text-align: left;
+    margin-left:-25px;
+    margin-top:-8px;
+    /*
+    border:solid;
+    border-width:1px;
+    border-color:#D2D2D2;
+    */
+  }
+  .event_messages{
+    height:200px;
+    max-height:200px;
+    overflow:scroll;
+  }
+  .post_message_event{
+    width:450px;
+    height:40px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:17px;
+    border-radius:5px;
+    border:solid;
+    border-width:2px;
+    border-color:#21DCAC;
+    padding-left:5px;
+
+  }
+  .post_message_event:focus{
+    outline: none;
+    border-color:rgb(250, 188, 9);
+  }
+  .add_message_to_event{
+    width:40px;
+    height:40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    font-size:20px;
+    background-color: rgb(250, 188, 9);
+    border:none;
+    color:white;
+
   }
   </style>
   <head>
@@ -423,6 +520,7 @@
     <div style='height:100px;'></div>
     <div class='timerange_listing_wrapper'>
       <div style='height:20px;'></div>
+
       <div class='container'>
         <div class='row'>
           <div class='col'></div>
@@ -432,6 +530,36 @@
       </div>
       <p style='font-size:18px;'>Created by <a href='/user/1' style='color:#21DCAC'><strong>James Petullo</strong></a></p>
       <div style='height:15px;'></div>
+      <!--
+      <div style='height:10px;'></div>
+      <i class="fas fa-circle" style='text-align:center;font-size:0.5em;color:#FABC09'></i>
+      <div style='height:10px;'></div>
+
+      <table style='margin:0 auto;'>
+        <tr>
+          <td>
+            <div class='user_avatar lineup_listing' data-toggle='popover' data-placement='top' data-content='<p>James Petullo</p>' data-html='true'>
+              <div class='avatar' style='border-radius:50%'>JP</div>
+
+            </div>
+          </td>
+          <td>
+            <div class='user_avatar lineup_listing' data-toggle='popover' data-placement='top' data-content='<p>Ajax1234</p>' data-html='true'>
+              <div class='avatar' style='background-color:red;border-radius:50%'>AJ</div>
+
+            </div>
+          </td>
+          <td>
+            <div class='user_avatar lineup_listing' data-toggle='popover' data-placement='top' data-content='<p>CP27</p>' data-html='true'>
+              <div class='avatar' style='background-color:green;border-radius:50%'>CP</div>
+
+            </div>
+          </td>
+          <td><p style='margin-top:15px;margin-left:5px;'><strong>and 4 others. <u>See all</u></strong></p></td>
+        </tr>
+      </table>
+    -->
+
       <!--
       <div class='info_banner not_set_scheduled'>
         <strong><u>Test</u></strong> has not yet been scheduled. You can add your availability below and view other attendees' listings.
@@ -452,100 +580,76 @@
             </div>
           </div>
           <div class="row">
-            <div class="col menu_underline" id="personal_events_underline_user" style="background-color:#FABC09">
+            <div class="col menu_underline" id="personal_events_underline_dates" style="background-color:#FABC09">
 
           </div>
-            <div class="col menu_underline" id="personal_events_underline_group" style="background-color:#21DCAC">
+            <div class="col menu_underline" id="personal_events_underline_about" style="background-color:#21DCAC">
 
           </div>
-          <div class="col menu_underline" id="personal_events_underline_group" style="background-color:#21DCAC">
+          <div class="col menu_underline" id="personal_events_underline_messages" style="background-color:#21DCAC">
 
         </div>
           </div>
         </div>
       </div>
+
         <div class='home_content_wrapper'>
+          <div style='height:10px'></div>
           <div class='selected_event_times'>
             <div style='height:20px;'></div>
 
-            <div class='container'>
-              <div class='row'>
-                <div class='col-md-auto'>
-                  <div class='datetime_event_select'>
-                    <div class='container'>
-                      <div class='row'>
-                        <div class='col-md-auto day_tab_display'>
-                          <p style='font-size:35px;'>15</p>
-                          <p style='font-size:19px;'>Dec 2018</p>
-                        </div>
-                        <div class='col-md-auto main_event_date_content' style='text-align:left'>
-                          <p style='font-size:23px;'><strong>Thursday (tomorrow)</strong></p>
-
-                          <p class='display_user_responses' style='color:gray;font-size:13px;'><u>4 user responses</u></p>
-                          <p style='font-size:13px;'>Last updated 4 minutes ago by <a href='/user/1' style='color:black'><strong>@JamesPetullo</strong></a></p>
-                        </div>
+                <div class='datetime_event_select'>
+                  <div class='container'>
+                    <div class='row'>
+                      <div class='col-md-auto' style='text-align:left;margin-left:-15px;'>
+                        <p style='font-size:18px'><strong>Thursday, December 2, 2018</strong></p>
+                        <p style='font-size:13px;'>Last updated 4 minutes ago by <a href='/user/1' style='color:black'><strong>@JamesPetullo</strong></a></p>
+                      </div>
+                      <div class='col'>
+                        <button class='add_availability_button' style='text-decoration:none;color:white;'>Add availability</button>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class='col-md-auto'>
-                  <div class='user_has_responded_day' data-toggle='popover' data-placement='left' data-content='<p>You have already added availability for this day</p>' data-html='true'>
-                    <i class="fas fa-check-circle" style='font-size:3em;color:#21DCAC'></i>
-                  </div>
-                </div>
 
-              </div>
 
-            </div>
+                </div>
 
           </div>
+          <div style='height:60px;'></div>
+          <i class="fas fa-circle" style='text-align:center;font-size:0.5em;color:#FABC09'></i>
+          <div style='height:10px;'></div>
+
+          <table style='margin:0 auto;'>
+            <tr>
+              <td><p style='margin-top:15px;'><strong>With</strong></p></td>
+              <td>
+                <div class='user_avatar lineup_listing' data-toggle='popover' data-placement='top' data-content='<p>James Petullo</p>' data-html='true'>
+                  <div class='avatar' style='border-radius:50%'>JP</div>
+
+                </div>
+              </td>
+              <td>
+                <div class='user_avatar lineup_listing' data-toggle='popover' data-placement='top' data-content='<p>Ajax1234</p>' data-html='true'>
+                  <div class='avatar' style='background-color:red;border-radius:50%'>AJ</div>
+
+                </div>
+              </td>
+              <td>
+                <div class='user_avatar lineup_listing' data-toggle='popover' data-placement='top' data-content='<p>CP27</p>' data-html='true'>
+                  <div class='avatar' style='background-color:green;border-radius:50%'>CP</div>
+
+                </div>
+              </td>
+              <td><p style='margin-top:15px;margin-left:5px;'><strong>and 4 others. <u>See all</u></strong></p></td>
+            </tr>
+          </table>
+
         </div>
 
       <div style='height:20px;'></div>
     </div>
-
     <div style='height:100px;'></div>
-    <div class="modal" id="full_user_responses" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title"><p><strong>User responses on <span style='color:#FABC09'>December 18, 2018</span></p></strong></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-              <div class='user_quick_look_availability'>
-                  <table>
-                    <tr>
-                      <td>
-                      <div class='user_avatar'>
-                        <div class='avatar'>JP</div>
 
-                      </div>
-                    </td>
-                      <td>
-                        <div style='height:14px;'></div>
-                        <a href='/user/1' style='color:black;font-size:18px;'><p><strong>JamesPetullo</strong></p></a>
-
-                      </td>
-                      <td><p style='font-size:18px;margin-top:10px;margin-left:3px;'> is available from:</p></td>
-                    </tr>
-                  </table>
-                  <div class='user_time_range_display'>
-                    <p class='timerange_user_display'>11:00 AM-1:00PM</p>
-                    <p class='timerange_user_display'>11:00 AM-1:00PM</p>
-                  </div>
-
-                </div>
-
-          </div>
-          <div class="modal-footer" style='border-top:none;'>
-
-          </div>
-        </div>
-      </div>
-    </div>
   </body>
   <script>
     $(document).ready(function(){
@@ -596,10 +700,119 @@
           mouseleave: function () {
               $(this).popover('hide');
           }
-      }, ".user_has_responded_day");
+      }, ".lineup_listing");
 
       $('.home_content_wrapper').on('click', '.display_user_responses', function(){
         $('#full_user_responses').modal('toggle');
+      });
+      var _message_html = `
+      <div style='height:30px'></div>
+      <div class='about_info_wrapper'>
+      <div class='event_messages'>
+        <div class='event_message'>
+          <div class='container'>
+            <div class='row'>
+              <div class='col-md-auto'>
+                <div class='large_user_avatar'>JP</div>
+              </div>
+              <div class='col-md-auto'>
+                <table style='margin-left:-20px;'>
+                  <tr>
+                    <td style='margin-top:10px;'><a href='/user/1' style='color:black;font-size:15px;'><p><strong>James Petullo</strong></p></a></td>
+                    <td><i class="fas fa-circle" style='font-size:0.5em;margin-top:-12px;padding-left:10px;padding-right:10px;color:#FABC09'></i></td>
+                    <td style='margin-top:10px;'><p style='font-size:15px;color:gray'>4 minutes ago</p></td>
+                  </tr>
+                </table>
+                <div class='event_message_display'>
+                  Hey guys this is the offical event listing for the upcomming week. Please fill out your timeslots as soon as possible. Thanks!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div style='height:50px'></div>
+
+        <table style='margin-left:50px;'>
+          <tr>
+            <td><input class='post_message_event' placeholder='Post message....'></td>
+            <td><button class='add_message_to_event'><i class="fas fa-arrow-up" style='font-size:1em;color:white;'></i></button></td>
+          </tr>
+        </table>
+
+      </div>
+      `;
+      var _about_html = `
+      <div style='height:30px'></div>
+      <div class='about_info_wrapper'>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <table>
+                <tr>
+                  <td><i class="fas fa-map-marker-alt" style="font-size:1.4em"></i></td>
+                  <td><p style='margin-top:15px;font-size:18px;margin-left:5px;'>Location:</p></td>
+                </tr>
+
+              </table>
+
+            </div>
+            <div class='col-md-auto'>
+              <p style='font-size:18px;margin-top:15px;'><strong>Library</strong></p>
+            </div>
+
+          </div>
+          <div class='row'>
+            <div class='col-md-auto'>
+
+              <p style='margin-top:15px;font-size:18px;'>Created on:</p>
+
+
+            </div>
+            <div class='col-md-auto'>
+              <p style='font-size:18px;margin-top:15px;'><strong>December 10, 2018</strong></p>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-md-auto'>
+
+              <p style='margin-top:15px;font-size:18px;'>Description:</p>
+
+
+            </div>
+            <div class='col-md-auto'>
+              <div class='description_display'>
+                this is a simple description for the event test
+              </div>
+            </div>
+          </div>
+          </div>
+          <div style='height:40px;'></div>
+          <div style='height:40px;'></div>
+
+          <div style='height:10px;'></div>
+        </div>
+      `
+      var _seen_html_content = {'dates':$('.home_content_wrapper').html(), 'about':_about_html, 'messages':_message_html};
+      $('.nav_tabs').on('click', '.external_entities_select', function(){
+        var _tabs = ['dates', 'about', 'messages']
+        var _look_to = $(this).prop('id').split('_')[1];
+        $('.home_content_wrapper').html(_seen_html_content[_look_to]);
+        for (var i = 0; i < _tabs.length; i++){
+          if ($("#entity_"+_tabs[i]).css('background-color') === 'rgb(250, 188, 9)'){
+            //_seen_html_content[_tabs[i]] = $('.home_content_wrapper').html();
+
+            $("#personal_events_underline_"+_tabs[i]).css('background-color', '#21DCAC');
+          }
+          if (_tabs[i] === _look_to){
+
+            $("#personal_events_underline_"+_tabs[i]).css('background-color', '#FABC09');
+          }
+          else{
+            $("#personal_events_underline_"+_tabs[i]).css('background-color', '#21DCAC');
+           }
+        }
+
       });
     });
 
