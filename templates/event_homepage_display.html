@@ -435,6 +435,17 @@
     color:white;
     margin-left:-2px;
   }
+  .message_num{
+    font-size:18px;
+    margin-top:-10px;
+    color:white;
+    width:27px;
+    height:27px;
+    border-radius: 50%;
+    background-color: rgb(250, 188, 9);
+    text-align: center;
+    line-height: 27px;
+  }
   </style>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -580,7 +591,15 @@
               <p style="font-size:20px;" class='external_entities_select' id='entity_about' data-selected='False'><strong>About</strong></p>
             </div>
             <div class="col">
-              <p style="font-size:20px;" class='external_entities_select' id='entity_messages' data-selected='False'><strong>Messages</strong></p>
+
+                <table>
+                  <tr>
+                    <td><strong><p style="font-size:20px;" class='external_entities_select' id='entity_messages' data-selected='False'>Messages</p></strong></td>
+                    <td><div class='message_num'>4</div></td>
+                  </tr>
+
+                </table>
+
             </div>
           </div>
           <div class="row">
