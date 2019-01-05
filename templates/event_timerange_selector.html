@@ -263,6 +263,36 @@
     font-size:12px;
     margin-left:5px;
   }
+  .create_final_event_timeslot{
+    font-family: 'Noto Sans TC', sans-serif;
+    color:white;
+    font-size:18px;
+    padding:5px;
+    padding-left:10px;
+    padding-right:10px;
+    border-radius:20px;
+    border:none;
+    background-color: #FABC09;
+  }
+  .create_final_event_timeslot:hover{
+    cursor:pointer;
+  }
+  .timeslot_event_day_nav{
+    border:none;
+    background: none;
+
+  }
+  .timeslot_event_day_nav:hover{
+    cursor:pointer;
+  }
+  .timeslot_event_day_nav:focus{
+    outline:none;
+  }
+  .user_block_widget:hover{
+    cursor:pointer;
+    background-color: #22CA9F;
+    -webkit-transition:0.2s;
+  }
   </style>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -361,6 +391,21 @@
       <div class='timelisting_container'>
 
         <div class='availability_wrapper'>
+          <div style='height:20px;'></div>
+          <table style='margin:0 auto;'>
+            <tr>
+              <td class='col-md-auto'>
+                <button class='timeslot_event_day_nav'><i class="fas fa-angle-left" style="font-size:2em;color: #FABC09;"></i></button>
+
+              </td>
+              <td><p style='text-align:center;font-size:22px;padding-left:15px;padding-right:15px;margin-top:10px;'><strong>December 28, 2018</strong></p></td>
+              <td class='col-md-auto'>
+                <button class='timeslot_event_day_nav'><i class="fas fa-angle-right" style="font-size:2em;color: #FABC09;"></i></button>
+
+              </td>
+            </tr>
+
+          </table>
 
           <div class='container'>
             <div class='row'>
@@ -397,7 +442,7 @@
                     </div>
                   </div>
                 </div>
-                <div class='user_block_widget'>
+                <div class='user_block_widget widget_bottom'>
                   <div class='container'>
                     <div class='row'>
                       <div class='col-md-auto'>
@@ -409,7 +454,7 @@
                     </div>
                   </div>
                 </div>
-                <div class='user_block_widget widget_bottom'></div>
+
               </div>
               <div class='col all_time_slot_displays'>
 
@@ -436,11 +481,7 @@
 
                       </tr>
                     </table>
-                    <table>
-                      <tr class='user_availability_row' id='availability_for_4'>
 
-                      </tr>
-                    </table>
 
                   </div>
                 </div>
@@ -449,9 +490,23 @@
 
               </div>
             </div>
+            <div style='height:20px;'></div>
+            <table>
+              <tr>
+                <td>
+                  <button class='create_final_event_timeslot' id='manual_select'>Manually choose times</button>
+                </td>
+                <td>
+                  <button class='create_final_event_timeslot' id='auto_select' style='margin-left:20px;'>View time overlaps</button>
+                </td>
+              </tr>
+            </table>
           </div>
+
         </div>
+
       </div>
+
     </div>
     <div style='height:100px;'></div>
   </body>

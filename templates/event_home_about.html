@@ -1,0 +1,60 @@
+<div style='height:10px'></div>
+<div class='about_info_wrapper'>
+  <div class='container'>
+    <div class='row'>
+      <div class='col-md-auto'>
+        <table>
+          <tr>
+            <td><i class="fas fa-map-marker-alt" style="font-size:1.4em"></i></td>
+            <td><p style='margin-top:15px;font-size:18px;margin-left:5px;'>Location:</p></td>
+          </tr>
+
+        </table>
+
+      </div>
+      <div class='col-md-auto'>
+
+        <p style='font-size:18px;margin-top:15px;'>
+          {%if event.has_location%}
+            <strong>{{event.location}}</strong>
+          {%else%}
+            <i>No location added yet</i>
+          {%endif%}
+        </p>
+      </div>
+
+    </div>
+    <div class='row'>
+      <div class='col-md-auto'>
+
+        <p style='margin-top:15px;font-size:18px;'>Created on:</p>
+
+
+      </div>
+      <div class='col-md-auto'>
+        <p style='font-size:18px;margin-top:15px;'><strong>{{event.created_on}}</strong></p>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-md-auto'>
+
+        <p style='margin-top:15px;font-size:18px;'>Description:</p>
+
+
+      </div>
+      <div class='col-md-auto'>
+        {%if event.has_description%}
+          <div class='description_display'>
+            {{event.description}}
+          </div>
+        {%else%}
+          <p style='margin-top:15px;font-size:18px;'><i>No description provided</i></p>
+        {%endif%}
+      </div>
+    </div>
+    </div>
+    <div style='height:40px;'></div>
+    <div style='height:40px;'></div>
+
+    <div style='height:10px;'></div>
+  </div>

@@ -1,0 +1,902 @@
+<html>
+  <style>
+    .top_header{
+      height:60px;
+      background-color:#37176A;
+    }
+    .logo{
+      padding-left: 140px;
+      color:white;
+    }
+    p{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    a{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .avatar{
+        font-family: 'Noto Sans TC', sans-serif;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: blue;
+    color: white;
+    font-size: 18px;
+    }
+    .dashboard_username{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:18px;
+    }
+    .tab_pannel{
+      height:110px;
+      background-color: #37176A;
+    }
+    .nav_tab{
+      color:white;
+      font-size:16px;
+    }
+    #full_selected{
+      height:3px;
+      width:auto;
+      background-color: red;
+      margin-top:-10px;
+
+    }
+
+    .create_event{
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background-color: #FABC09;
+      border:none;
+      -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+    }
+    .create_event:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+    }
+    .create_event:focus{
+      outline:none;
+    }
+    .datetime_display{
+      height:55px;
+      background-color: #21DCAC;
+      width:68%;
+      border-bottom-right-radius: 80px;
+    }
+    .datetime_info{
+      margin-left:20px;
+      color:white;
+    }
+    .datetime_text{
+      color:white;
+      margin-top:10px;
+      font-size:19px;
+      margin-left:50px;
+    }
+    #all_messages{
+      height:500px;
+      border-left:solid;
+      border-left-width:1px;
+      border-left-color:#C6C6C6;
+    }
+    .feed_type{
+      font-size:20px;
+    }
+    .quantity_display{
+      padding-top:2px;
+      padding-bottom:2px;
+      padding-left:8px;
+      padding-right:8px;
+      background-color: #FABC09;
+      border-radius:50%;
+
+    }
+    .actions{
+      padding-right: 150px;
+    }
+    .upcomming_event{
+      -webkit-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      font-family: 'Noto Sans TC', sans-serif;
+
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    .event_occurs{
+      color:white;
+      font-size:25px;
+    }
+    .event_time_display{
+      background-color: #21DCAC;
+      /*for pressing events: #FF354D */
+    }
+    ._time_data{
+      color:white;
+
+    }
+    .event_name{
+      font-size:24px;
+    }
+    .event_description{
+      font-size:18px;
+    }
+    .event_upcomming_warning{
+      color:white;
+      font-size:19px;
+      margin-top:10px;
+      padding-left:150px;
+    }
+
+    .timerange_listing_wrapper{
+      -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      width:900px;
+
+      padding-bottom:50px;
+      border-radius:10px;
+      background-color: white;
+      margin: 0 auto;
+      text-align: center;
+      height:auto;
+    }
+    .timelisting_container{
+      width:1200px;
+      height:auto;
+      margin:0 auto;
+    }
+    .datetime_display_listing{
+
+
+      width:auto;
+
+      overflow-x: scroll;
+      margin-top:30px;
+      margin-left:1px;
+    }
+    .user_block_widget{
+      width:220px;
+      height:70px;
+      background-color: #21DCAC;
+
+      text-align: center;
+      line-height: 70px;
+      border-bottom:solid;
+      border-bottom-color:white;
+      border-bottom-width:1px;
+    }
+    .widget_top{
+      border-top-left-radius: 20px;
+      border-top:solid;
+      border-top-width:1px;
+      border-top-color:#21DCAC;
+      height:71px;
+    }
+    .time_filler{
+      width:45px;
+    }
+    .widget_bottom{
+      border-bottom-left-radius: 20px;
+      border-bottom:none;
+    }
+    .remove_timeslot{
+      background: none;
+      border:none;
+    }
+    .create_timeslot{
+      background: none;
+      border:none;
+      float:right;
+    }
+    .is_logged_in{
+      background-color: #21DCAC;
+    }
+    .it_is_you{
+    width:30px;
+    height:20px;
+
+    text-align: center;
+    line-height: 20px;
+    border-radius: 4px;
+    color: white;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 12px;
+    margin-top: 20px;
+    background-color:#37176A;
+    margin-left:-13px;
+    text-align: center;
+
+
+  }
+  .all_time_slot_displays{
+    width:700px;
+
+
+    overflow-y: hidden;
+    overflow-x:scroll;
+    margin-left:-30px;
+
+  }
+  .timestamp_display{
+    max-width:900px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+
+  }
+  .timeslot-display .singleton_timestamp{
+    min-width: 120px;
+
+
+  }
+  .timeslot-display table{
+
+  }
+  .timeslot{
+    height:67px;
+    width:119px;
+    background-color: #FF354D;
+    border-radius:5px;
+    border:none;
+  }
+  .user_availability_row .time_hour_block{
+    min-width: 120;
+    border-right:solid;
+    border-right-width:1px;
+    border-right-color:#B6B6B6;
+    height:69px;
+
+  }
+  .menu_underline{
+    height:3px;
+  }
+  .user_availability_row{
+    border-bottom:solid;
+    border-bottom-width:1px;
+    border-color:#B6B6B6;
+    border-right:solid;
+    border-right-width:1px;
+    border-right-color:#B6B6B6;
+  }
+  .timeslot_timestamp{
+    color:white;
+    font-size:12px;
+    margin-left:5px;
+  }
+  .info_banner{
+    padding:10px;
+    border-radius:10px;
+    font-family: 'Noto Sans TC', sans-serif;
+    width:500px;
+    margin:0 auto;
+
+
+  }
+  .external_entities_select:hover{
+    cursor: pointer;
+  }
+  .not_set_scheduled{
+    color:white;
+    background-color:#24D58F;
+    border:solid;
+    border-width:1px;
+    border-color:#13B374
+  }
+  .selected_event_times{
+    width:590px;
+    max-height:400px;
+    margin:0 auto;
+    overflow: scroll;
+
+  }
+  .datetime_event_select{
+    margin:0 auto;
+    width:540px;
+
+    border:none;
+    border-bottom:solid;
+    border-width:1px;
+    border-color:#ADADAD;
+
+
+  }
+  .day_tab_display{
+    background-color: #37176A;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border:solid;
+    border-width:2px;
+    border-color:#37176A;
+    padding:2px;
+    color:white;
+  }
+  .main_event_date_content{
+    padding:2px;
+    width:250px;
+
+
+
+
+  }
+  .user_has_responded_day{
+    margin-top:35px;
+    float:right;
+  }
+  .display_user_responses:hover{
+    cursor:pointer;
+  }
+  .timerange_user_display{
+    /*color:#FABC09;*/
+  }
+  .user_time_range_display{
+
+    margin-left:35px;
+  }
+  .add_availability_button{
+    color:white;
+    background-color: #FABC09;
+    border-radius:25px;
+    border:none;
+    font-size:13px;
+    padding:5px;
+    font-family: 'Noto Sans TC', sans-serif;
+    float:right;
+    margin-top:10px;
+    width:120px;
+  }
+  .add_availability_button:hover{
+    cursor:pointer
+  }
+  .message_info_wrapper{
+    width:580px;
+    height:300px;
+    margin:0 auto;
+
+  }
+  .about_info_wrapper{
+    width:580px;
+    height:300px;
+    margin:0 auto;
+  }
+  .description_display{
+    border:solid;
+    border-radius:10px;
+    border-color:#21DCAC;
+    border-width:1.5px;
+    width:300px;
+    max-height:400px;
+    overflow:scroll;
+    padding:2px;
+    margin-top:22px;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .large_user_avatar{
+    width:70px;
+    height:70px;
+    background-color: blue;
+    border-radius:50%;
+    color:white;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:25px;
+    line-height:70px;
+    text-align: center;
+  }
+  .event_message_display{
+    width:450px;
+    padding:10px;
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #E7E7E7;
+    border-radius: 10px;
+    max-height:300px;
+    overflow: scroll;
+    text-align: left;
+    margin-left:-25px;
+    margin-top:-8px;
+    /*
+    border:solid;
+    border-width:1px;
+    border-color:#D2D2D2;
+    */
+  }
+  .event_messages{
+    height:300px;
+    max-height:400px;
+    overflow:scroll;
+  }
+  .event_messages_wrapper{
+    height:300px;
+    width:auto;
+    text-align: center;
+  }
+  .post_message_event{
+    width:450px;
+    height:50px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:17px;
+    border-radius:5px;
+    border:solid;
+    border-width:2px;
+    border-color:#21DCAC;
+    padding-left:5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-right:none;
+
+  }
+  .post_message_event:focus{
+    outline: none;
+    border-color:rgb(250, 188, 9);
+  }
+  .add_message_to_event{
+    width:55px;
+    height:50px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    text-align: center;
+    line-height: 40px;
+    font-size:20px;
+    background-color: rgb(250, 188, 9);
+    border:none;
+    color:white;
+    margin-left:-2px;
+  }
+  .message_num{
+    font-size:18px;
+    margin-top:-10px;
+    color:white;
+    width:27px;
+    height:27px;
+    border-radius: 50%;
+    background-color: rgb(250, 188, 9);
+    text-align: center;
+    line-height: 27px;
+  }
+  .view_users_and_groups_event:hover{
+    cursor:pointer;
+  }
+  
+  </style>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+
+
+  </head>
+  <body style='background-color: #E4E4E4;'>
+    <nav class="navbar top_header">
+      <p class="navbar-brand logo" style='font-size:30px;'>Chronos</p>
+      <div class='actions'>
+        <table>
+          <tr>
+            <td>
+            <div class='user_avatar'>
+              <div class='avatar' style='background-color:{{user.avatar_color}}'>{{user.initials}}</div>
+
+            </div>
+          </td>
+            <td><a href='/profile' class='dashboard_username' style='color:white'>{{user.condensed_name}}</a></td>
+          </tr>
+        </table>
+
+      </div>
+    </nav>
+    <div class='tab_pannel'>
+      <div style='height:65px;'></div>
+      <div class='container'>
+        <div class='row no-gutters'>
+          <div class='col'>
+            <a href='/dashboard' style='color:white;text-decoration:none' class='nav_tab'>Dashboard</a>
+          </div>
+
+          <div class='col'>
+            <a href='/calendar' style='color:white;text-decoration:none' class='nav_tab'>Calendar</a>
+
+          </div>
+          <div class='col'>
+            <a href='/groups' style='color:white;text-decoration:none' class='nav_tab'>Groups</a>
+
+
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>My events</p>
+            <div id='full_selected' style='width:75px;'></div>
+
+          </div>
+          <div class='col'>
+            <a href='/profile' style='color:white;text-decoration:none' class='nav_tab'>Profile</a>
+
+          </div>
+
+          <div class='col'>
+            <button class='create_event'>
+              <i class="fas fa-plus" style='font-size:2em;color:white;'></i>
+            </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='datetime_display'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'>
+            <p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>
+          </div>
+
+          <div class='col'><p class='datetime_text'><strong><span class='hour_min'></span> on <span class='day_of_week'></span>, <span class='month'></span> <span class='day'></span>, <span class='year'></span></strong></p></div>
+
+        </div>
+      </div>
+      <!--
+      <p class='datetime_info'>Saturday, November 17, 2018</p>
+      <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
+    -->
+    </div>
+    <div style='height:100px;'></div>
+    <div class='timerange_listing_wrapper'>
+      <div style='height:20px;'></div>
+
+      <div class='container'>
+        <div class='row'>
+          <div class='col'></div>
+          <div class='col'><p style="text-align:center;font-size:36px;margin-top:-15px;" data-eventid='{{event.event_id}}' id='event_header_info'><strong style='color:#FABC09;'>{{event.name}}</strong></p></div>
+
+          <div class='col'>
+            {%if event.logged_in_is_creator%}
+              <i class="fas fa-cog" style='float:right;font-size:1.6em;color:#21DCAC'></i>
+            {%endif%}
+          </div>
+
+        </div>
+      </div>
+      <p style='font-size:18px;'>Created by <a href='/user/{{event.creator_obj.id}}' style='color:#21DCAC'><strong>{{event.creator_obj.name}}</strong></a></p>
+      <div style='height:15px;'></div>
+      <!--
+      <div style='height:10px;'></div>
+      <i class="fas fa-circle" style='text-align:center;font-size:0.5em;color:#FABC09'></i>
+      <div style='height:10px;'></div>
+
+      <table style='margin:0 auto;'>
+        <tr>
+          <td>
+            <div class='user_avatar lineup_listing' data-toggle='popover' data-placement='top' data-content='<p>James Petullo</p>' data-html='true'>
+              <div class='avatar' style='border-radius:50%'>JP</div>
+
+            </div>
+          </td>
+          <td>
+            <div class='user_avatar lineup_listing' data-toggle='popover' data-placement='top' data-content='<p>Ajax1234</p>' data-html='true'>
+              <div class='avatar' style='background-color:red;border-radius:50%'>AJ</div>
+
+            </div>
+          </td>
+          <td>
+            <div class='user_avatar lineup_listing' data-toggle='popover' data-placement='top' data-content='<p>CP27</p>' data-html='true'>
+              <div class='avatar' style='background-color:green;border-radius:50%'>CP</div>
+
+            </div>
+          </td>
+          <td><p style='margin-top:15px;margin-left:5px;'><strong>and 4 others. <u>See all</u></strong></p></td>
+        </tr>
+      </table>
+    -->
+
+      <!--
+      <div class='info_banner not_set_scheduled'>
+        <strong><u>Test</u></strong> has not yet been scheduled. You can add your availability below and view other attendees' listings.
+      </div>
+    -->
+      <div style='height:30px;'></div>
+      <div class="nav_tabs" style="width:570px;margin:0 auto;text-align:center;">
+        <div class="container">
+        <div class="row">
+          <div class="col">
+              <p style="font-size:20px;" class='external_entities_select' id='entity_dates' data-selected='True'><strong>Dates</strong></p>
+          </div>
+            <div class="col">
+              <p style="font-size:20px;" class='external_entities_select' id='entity_about' data-selected='False'><strong>About</strong></p>
+            </div>
+            <div class="col">
+
+                <table>
+                  <tr>
+                    <td><strong><p style="font-size:20px;" class='external_entities_select' id='entity_messages' data-selected='False'>Messages</p></strong></td>
+                    <td><div class='message_num'>{{event.message_num}}</div></td>
+                  </tr>
+
+                </table>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col menu_underline" id="personal_events_underline_dates" style="background-color:#FABC09">
+
+          </div>
+            <div class="col menu_underline" id="personal_events_underline_about" style="background-color:#21DCAC">
+
+          </div>
+          <div class="col menu_underline" id="personal_events_underline_messages" style="background-color:#21DCAC">
+
+        </div>
+          </div>
+        </div>
+      </div>
+
+        <div class='home_content_wrapper'>
+
+          <div class='selected_event_times'>
+
+              {%for date in event%}
+                <div class='datetime_event_select'>
+                  <div style='height:20px;'></div>
+                  <div class='container'>
+                    <div class='row'>
+                      <div class='col-md-auto' style='text-align:left;margin-left:-15px;'>
+                        <p style='font-size:18px'><strong>{{date.date_title}}</strong></p>
+                        <p style='font-size:13px;'>{{date.lasted_updated_by|safe}}</p>
+                      </div>
+                      <div class='col'>
+                        <button class='add_availability_button' style='text-decoration:none;color:white;' data-datetime='{{date.date}}'>{{date.button_text}}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {%endfor%}
+          </div>
+          <div style='height:60px;'></div>
+
+          <i class="fas fa-circle" style='text-align:center;font-size:0.5em;color:#FABC09'></i>
+          <div style='height:10px;'></div>
+
+          <table style='margin:0 auto;'>
+            <tr>
+              <td><p style='margin-top:15px;'><strong>With</strong></p></td>
+              {%for avatar in event.avatar_display%}
+              <td>
+                <div class='user_avatar lineup_listing' data-toggle='popover' data-placement='top' data-content='<p>{{avatar.name}}</p>' data-html='true'>
+                  <div class='avatar' style='border-radius:50%;background-color:{{avatar.avatar_color}}'>{{avatar.initials}}</div>
+
+                </div>
+              </td>
+              {%endfor%}
+              {%if event.has_trailing_users%}
+                <td><p style='margin-top:15px;margin-left:5px;'><strong>{{event.trailing_message}}<u class='view_users_and_groups_event'>See all</u></strong></p></td>
+
+              {%else%}
+                <td><p style='margin-top:15px;margin-left:5px;'><strong> <u class='view_users_and_groups_event'>See all</u></strong></p></td>
+              {%endif%}
+
+            </tr>
+          </table>
+
+        </div>
+
+      <div style='height:20px;'></div>
+    </div>
+    <div style='height:100px;'></div>
+    <div class="modal" id="event_users_and_groups" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><p><strong>Event attendees</strong></p></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            {%for user in event.see_all_list%}
+              <div class="row" id="group_user_row_1">
+              <div class="col-md-auto">
+                <div class="user_avatar">
+                  <div class="avatar" style="background-color:{{user.user.avatar_color}};width:35px;height:35px;"><p style="line-height:35px;">{{user.user.initials}}</p></div>
+
+                </div>
+              </div>
+              <div class="col-md-auto" style="margin-top:3px;"><a href="/user/{{user.user.id}}" style="color:black;margin-left:-20px;font-size:18px;"><strong>{{user.user.name}}</strong></a></div>
+                {%for tag in user.tags%}
+                <div class="col-md-auto">
+                  <div class="it_is_you" style="margin-top:7px;width:auto;padding-left:5px;padding-right:5px;background-color:{{tag.color}}">
+                    {{tag.name}}
+
+                </div>
+
+                </div>
+                {%endfor%}
+
+            </div>
+            <div style="height:15px"></div>
+            {%endfor%}
+
+            </div>
+        </div>
+        <div class="modal-footer" style='border-top:none;'>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+  <script>
+    $(document).ready(function(){
+
+      function display_warning(count){
+        $('.event_upcomming_warning').fadeOut(500);
+	       $('.event_upcomming_warning').fadeIn(500);
+         if (count < 10){
+           setTimeout(function(){display_warning(count+1)}, 1000);
+         }
+      }
+      //display_warning(0);
+      function hours_min(_hours, _minutes){
+        _meridian = 'AM';
+        if (_hours > 12){
+          _hours = (_hours%12).toString()
+          _meridian = 'PM';
+        }
+        else{
+          _hours = _hours.toString();
+        }
+        if (_minutes < 10){
+          _minutes = '0'+_minutes.toString();
+        }
+        else{
+          _minutes = _minutes.toString();
+        }
+        return _hours+':'+_minutes+' '+_meridian;
+      }
+      function update_datetime(){
+
+        var _date = new Date();
+        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        $('.hour_min').text(hours_min(_date.getHours(), _date.getMinutes()));
+        $('.day_of_week').text(days[_date.getDay()]);
+        $('.day').text(_date.getDate());
+        $('.month').text(months[_date.getMonth()]);
+        $('.year').text(_date.getFullYear());
+        setTimeout(function(){ update_datetime(); }, 1000);
+      }
+      update_datetime();
+      $(document).on({
+          mouseenter: function () {
+            $(this).popover();
+            $(this).popover('show');
+          },
+          mouseleave: function () {
+              $(this).popover('hide');
+          }
+      }, ".lineup_listing");
+
+      $('.home_content_wrapper').on('click', '.display_user_responses', function(){
+        $('#full_user_responses').modal('toggle');
+      });
+
+      var _main_display_html = $('.home_content_wrapper').html();
+      function dates_func(){
+        return $('.home_content_wrapper').html(_main_display_html);
+      }
+      function about_html(){
+        $.ajax({
+          url: "/display_event_about",
+          type: "get",
+          data: {id: $("#event_header_info").data('eventid')},
+          success: function(response) {
+            $('.home_content_wrapper').html(response.html);
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+
+      }
+      function message_html(){
+        var _id = $("#event_header_info").data('eventid');
+        $.ajax({
+          url: "/display_event_messages",
+          type: "get",
+          data: {id: _id},
+          success: function(response) {
+            $('.home_content_wrapper').html(response.html)
+            $('.event_messages').scrollTop($('.event_messages')[0].scrollHeight);
+
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+
+
+      }
+      var _seen_html_content = {'dates':dates_func, 'about':about_html, 'messages':message_html};
+      $('.nav_tabs').on('click', '.external_entities_select', function(){
+        var _tabs = ['dates', 'about', 'messages']
+        var _look_to = $(this).prop('id').split('_')[1];
+        _seen_html_content[_look_to]();
+
+        for (var i = 0; i < _tabs.length; i++){
+          if ($("#entity_"+_tabs[i]).css('background-color') === 'rgb(250, 188, 9)'){
+            //_seen_html_content[_tabs[i]] = $('.home_content_wrapper').html();
+
+            $("#personal_events_underline_"+_tabs[i]).css('background-color', '#21DCAC');
+          }
+          if (_tabs[i] === _look_to){
+
+            $("#personal_events_underline_"+_tabs[i]).css('background-color', '#FABC09');
+          }
+          else{
+            $("#personal_events_underline_"+_tabs[i]).css('background-color', '#21DCAC');
+           }
+        }
+
+      });
+      $('.home_content_wrapper').on('click', '.view_users_and_groups_event', function(){
+        $("#event_users_and_groups").modal('toggle');
+      });
+      $('.home_content_wrapper').on('click', '.add_message_to_event', function(){
+        var message = $('.post_message_event').val();
+        var id = $("#event_header_info").data('eventid');
+        $.ajax({
+          url: "/post_event_message",
+          type: "get",
+          data: {payload: JSON.stringify({'message':message, 'id':id})},
+          success: function(response) {
+            $('.home_content_wrapper').html(response.html);
+            var _counter = 0;
+            $('.event_message').each(function(){
+              _counter ++;
+            });
+            $(".message_num").text(_counter.toString());
+            $('.event_messages').scrollTop($('.event_messages')[0].scrollHeight);
+
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      })
+      $('.home_content_wrapper').on('input', '.post_message_event', function(){
+        if ($('.post_message_event').val() != ''){
+          $('.add_message_to_event').attr('disabled', false);
+          $('.add_message_to_event').css('opacity', '1');
+        }
+        else{
+          $('.add_message_to_event').attr('disabled', true);
+          $('.add_message_to_event').css('opacity', '0.6');
+        }
+      });
+      $('.home_content_wrapper').on('click', '.add_availability_button', function(){
+
+        $.ajax({
+          url: "/update_timelisting_timestmap",
+          type: "get",
+          data: {timestamp: $(this).data('datetime'), id:$('#event_header_info').data('eventid')},
+          success: function(response) {
+            window.location.replace('/event/timeslots/'+$('#event_header_info').data('eventid'));
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+
+      });
+    });
+
+  </script>
+</html>

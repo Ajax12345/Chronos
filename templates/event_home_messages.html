@@ -1,0 +1,49 @@
+<div style='height:30px'></div>
+<div class='message_info_wrapper'>
+<div class='event_messages_wrapper'>
+<div class='event_messages'>
+  {%if not event.has_messages%}
+    <p><i>No messages posted yet</i></p>
+    <div style='height:70px'></div>
+  {%else%}
+  {%for message in event.all_messages%}
+  <div class='event_message'>
+    <div class='container'>
+      <div class='row'>
+        <div class='col-md-auto'>
+          <div class='large_user_avatar' style='background-color:{{message.poster_obj.avatar_color}}'>{{message.poster_obj.initials}}</div>
+        </div>
+        <div class='col-md-auto'>
+          <table style='margin-left:-20px;'>
+            <tr>
+              <td style='margin-top:10px;'>
+
+                <a href='/user/{{message.poster_obj.id}}' style='color:black;font-size:15px;'><p><strong>{{message.poster_obj.name}}</strong></p></a>
+
+              </td>
+              <td><i class="fas fa-circle" style='font-size:0.5em;margin-top:-12px;padding-left:10px;padding-right:10px;color:#FABC09'></i></td>
+              <td style='margin-top:10px;'><p style='font-size:15px;color:gray'>{{message.timestamp}}</p></td>
+            </tr>
+          </table>
+          <div class='event_message_display'>
+            {{message.message}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style='height:40px;'></div>
+  {%endfor%}
+  {%endif%}
+</div>
+
+
+  <table style='margin:0 auto'>
+    <tr>
+      <td><input class='post_message_event' placeholder='Post message....'></td>
+      <td><button class='add_message_to_event' disabled style='opacity:0.6'><i class="fas fa-arrow-up" style='font-size:1em;color:white;'></i></button></td>
+    </tr>
+  </table>
+</div>
+</div>
+<div style='height:50px;'></div>
