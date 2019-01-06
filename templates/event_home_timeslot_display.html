@@ -461,7 +461,7 @@
             <a href='/event/{{event.id}}' style='color:#21DCAC'><i class="fas fa-bars" style='font-size:1.6em;color:#21DCAC'></i></a>
 
           </div>
-          <div class='col'><p style="text-align:center;font-size:30px;" id ='timelisting_header' data-timestamp='{{event.default_timestamp}}' data-eventid='{{event.id}}'>Timelistings for <strong style='color:#FABC09'>{{event.name}}</strong></p></div>
+          <div class='col-md-auto'><p style="text-align:center;font-size:30px;" id ='timelisting_header' data-timestamp='{{event.default_timestamp}}' data-eventid='{{event.id}}'>Timelistings for <strong style='color:#FABC09'>{{event.name}}</strong></p></div>
           <div class='col'>
             {%if event.logged_in_is_creator%}
               <i class="fas fa-cog" style='float:right;font-size:1.6em;color:#21DCAC'></i>
@@ -752,270 +752,185 @@
 
       }
       add_timestamps();
-    });
-    function start_end_timestamps(start){
+      function start_end_timestamps(start){
 
-      var time1 = start[0];
-      //console.log('times below')
-      //console.log(time1);
-      var time2 = start[start.length-1];
-      //console.log(time2);
-      var timestamp1 = get_timestamp(time1.substring(9)).split(' - ');
-      var timestamp2 = get_timestamp(time2.substring(9)).split(' - ');
-      //console.log('returned timestamps below');
-      //console.log(timestamp1);
-      //console.log(timestamp2);
-      //console.log('++++++++++++++++');
-      var starting1 = time_conversion(timestamp1[0]);
-      var ending1 = time_conversion(timestamp2[1]);
-      //console.log(starting1);
-      //console.log(ending1);
-      //console.log('+++++++++++');
-      return [starting1, ending1];
-    }
-    var time_divisor = 120;
-    function group_row(_user_id){
-      //console.log('user id here '+_user_id)
-      var _starting = [];
-      var _full_slots = [];
-      var _final = [];
-      $('.time_hour_block').each(function(){
-        if ($(this).prop('id').match('^dummy_hour_block')){
-            _full_slots.push([]);
-        }
-        else{
-          var _id = $(this).prop('id').match("\\d+_\\d+");
-          var _id_info = _id[0].split('_');
-          if (parseInt(_user_id) === parseInt(_id_info[1])){
-            if ($(this).html().match('^\\s+$')){
+        var time1 = start[0];
+        //console.log('times below')
+        //console.log(time1);
+        var time2 = start[start.length-1];
+        //console.log(time2);
+        var timestamp1 = get_timestamp(time1.substring(9)).split(' - ');
+        var timestamp2 = get_timestamp(time2.substring(9)).split(' - ');
+        //console.log('returned timestamps below');
+        //console.log(timestamp1);
+        //console.log(timestamp2);
+        //console.log('++++++++++++++++');
+        var starting1 = time_conversion(timestamp1[0]);
+        var ending1 = time_conversion(timestamp2[1]);
+        //console.log(starting1);
+        //console.log(ending1);
+        //console.log('+++++++++++');
+        return [starting1, ending1];
+      }
+      var time_divisor = 120;
+      function group_row(_user_id){
+        //console.log('user id here '+_user_id)
+        var _starting = [];
+        var _full_slots = [];
+        var _final = [];
+        $('.time_hour_block').each(function(){
+          if ($(this).prop('id').match('^dummy_hour_block')){
               _full_slots.push([]);
+          }
+          else{
+            var _id = $(this).prop('id').match("\\d+_\\d+");
+            var _id_info = _id[0].split('_');
+            if (parseInt(_user_id) === parseInt(_id_info[1])){
+              if ($(this).html().match('^\\s+$')){
+                _full_slots.push([]);
 
+              }
+              else{
+                _full_slots.push($($(this).html()).prop('id'));
+              }
+            }
+          }
+
+        });
+
+        //console.log('_full_slots here');
+        //console.log(_full_slots);
+        var _grouped = [];
+        var _current_queue = [];
+        for (var i = 0; i < _full_slots.length; i++){
+          if (_full_slots[i].length === 0){
+            if (_current_queue.length > 0){
+              _grouped.push(start_end_timestamps(_current_queue));
+              _current_queue= [];
+              _grouped.push(_full_slots[i]);
             }
             else{
-              _full_slots.push($($(this).html()).prop('id'));
+              _grouped.push(_full_slots[i])
             }
           }
-        }
-
-      });
-
-      //console.log('_full_slots here');
-      //console.log(_full_slots);
-      var _grouped = [];
-      var _current_queue = [];
-      for (var i = 0; i < _full_slots.length; i++){
-        if (_full_slots[i].length === 0){
-          if (_current_queue.length > 0){
-            _grouped.push(start_end_timestamps(_current_queue));
-            _current_queue= [];
-            _grouped.push(_full_slots[i]);
-          }
           else{
-            _grouped.push(_full_slots[i])
+            _current_queue.push(_full_slots[i]);
           }
         }
-        else{
-          _current_queue.push(_full_slots[i]);
+        if (_current_queue.length > 0){
+          _grouped.push(start_end_timestamps(_current_queue));
         }
-      }
-      if (_current_queue.length > 0){
-        _grouped.push(start_end_timestamps(_current_queue));
-      }
 
 
-      $('.time_hour_block').each(function(){
-        if ($(this).prop('id').match('^dummy_hour_block')){
-          $(this).remove();
-        }
-        else{
-          var _id = $(this).prop('id').match("\\d+_\\d+");
-          var _id_info = _id[0].split('_');
-          if (parseInt(_user_id) === parseInt(_id_info[1])){
+        $('.time_hour_block').each(function(){
+          if ($(this).prop('id').match('^dummy_hour_block')){
             $(this).remove();
           }
-        }
-
-      });
-
-      var counter = 1;
-      var seen_timeslot = false;
-      for (var i = 0; i < _grouped.length; i++){
-        if (_grouped[i].length === 0){
-          var _the_html = `
-          <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' data-storingslot='False'>
-
-
-          </td>
-          `
-          $("#availability_for_"+_user_id).append(_the_html);
-          counter++;
-        }
-        else{
-          var start = _grouped[i][0];
-          var end = _grouped[i][1];
-
-
-          var _from_left = Math.round(time_divisor*(start[1]/60));
-          var _from_right = Math.round(time_divisor*(end[1]/60));
-          if (_from_left < 3){
-            _from_left = 0;
+          else{
+            var _id = $(this).prop('id').match("\\d+_\\d+");
+            var _id_info = _id[0].split('_');
+            if (parseInt(_user_id) === parseInt(_id_info[1])){
+              $(this).remove();
+            }
           }
-          if (_from_right < 3){
-            _from_right = 0;
-          }
-          console.log(start)
-          console.log(end);
-          console.log(end[0]);
-          console.log(start[0]);
-          console.log(_from_right-_from_left);
-          console.log('-------------');
 
-          var timeslot_width = ((end[0]*time_divisor)-(start[0]*time_divisor))+(_from_right-_from_left)-1
+        });
 
-          var main_width;
-          if (end[1] === 0){
-            main_width = time_divisor*(end[0]-start[0]);
+        var counter = 1;
+        var seen_timeslot = false;
+        for (var i = 0; i < _grouped.length; i++){
+          if (_grouped[i].length === 0){
+            var _the_html = `
+            <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' data-storingslot='False'>
+
+
+            </td>
+            `
+            $("#availability_for_"+_user_id).append(_the_html);
+            counter++;
           }
           else{
-            main_width = time_divisor*(end[0]+1-start[0]);
+            var start = _grouped[i][0];
+            var end = _grouped[i][1];
+
+
+            var _from_left = Math.round(time_divisor*(start[1]/60));
+            var _from_right = Math.round(time_divisor*(end[1]/60));
+            if (_from_left < 3){
+              _from_left = 0;
+            }
+            if (_from_right < 3){
+              _from_right = 0;
+            }
+            console.log(start)
+            console.log(end);
+            console.log(end[0]);
+            console.log(start[0]);
+            console.log(_from_right-_from_left);
+            console.log('-------------');
+
+            var timeslot_width = ((end[0]*time_divisor)-(start[0]*time_divisor))+(_from_right-_from_left)-1
+
+            var main_width;
+            if (end[1] === 0){
+              main_width = time_divisor*(end[0]-start[0]);
+            }
+            else{
+              main_width = time_divisor*(end[0]+1-start[0]);
+            }
+
+
+            var _factor_off = main_width%120;
+            //alert(timeslot_width);
+            var new_html = `
+            <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='min-width:${main_width}px' data-storingslot='True'>
+              <div class="timeslot" id="timeslot_${counter}_${_user_id}" data-created="False" style='width:${timeslot_width}px;left:${_from_left}px'>
+
+                <button id="remove_timeslot_${counter}_${_user_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
+                <button id='create_timeslot_${counter}_${_user_id}' class='create_timeslot'><i class="fas fa-plus" style='color:white;font-size:1em'></i></button>
+                <p class="timeslot_timestamp" id="timestamp_for_${counter}_${_user_id}"></p>
+              </div>
+
+            </td>
+            `
+
+            $("#availability_for_"+_user_id).append(new_html);
+            $('#timeslot_'+counter.toString()+'_'+_user_id).resizable({handles:"e,w", minWidth:0, maxWidth:main_width-3});
+            counter++;
           }
 
-
-          var _factor_off = main_width%120;
-          //alert(timeslot_width);
-          var new_html = `
-          <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='min-width:${main_width}px' data-storingslot='True'>
-            <div class="timeslot" id="timeslot_${counter}_${_user_id}" data-created="False" style='width:${timeslot_width}px;left:${_from_left}px'>
-
-              <button id="remove_timeslot_${counter}_${_user_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
-              <button id='create_timeslot_${counter}_${_user_id}' class='create_timeslot'><i class="fas fa-plus" style='color:white;font-size:1em'></i></button>
-              <p class="timeslot_timestamp" id="timestamp_for_${counter}_${_user_id}"></p>
-            </div>
-
-          </td>
-          `
-
-          $("#availability_for_"+_user_id).append(new_html);
-          $('#timeslot_'+counter.toString()+'_'+_user_id).resizable({handles:"e,w", minWidth:0, maxWidth:main_width-3});
-          counter++;
         }
 
       }
-
-    }
-    function time_conversion(stamp){
-      //console.log('timestamp'+stamp)
-      var _hour1 = parseInt(stamp.match('^\\d+'));
-      var _minutes1 = parseInt(stamp.match(':\\d+')[0].substring(1));
-      var meridian1 = stamp.match('[AMP]+');
-      if (meridian1[0] === 'PM'){
-        _hour1 += 12;
-      }
-
-      return [_hour1, _minutes1];
-    }
-    function get_timestamp(_id){
-      var _id_info = _id.split('_');
-      var _unit = parseInt(_id_info[0]);
-      var _user_id = _id_info[1];
-      var previous_space = find_previous_space(_id);
-      var ref = $("#timeslot_"+_id);
-
-      var _from_left = parseInt(ref.css('left').match('\\d+'));
-      var _width = parseInt(ref.css('width').match('\\d+'));
-      //alert(_width);
-      /*
-      if (_width%118 != 0){
-        if (_width != 119){
-          _width ++;
+      function time_conversion(stamp){
+        //console.log('timestamp'+stamp)
+        var _hour1 = parseInt(stamp.match('^\\d+'));
+        var _minutes1 = parseInt(stamp.match(':\\d+')[0].substring(1));
+        var meridian1 = stamp.match('[AMP]+');
+        if (meridian1[0] === 'PM'){
+          _hour1 += 12;
         }
 
+        return [_hour1, _minutes1];
       }
-      */
-      var _start = previous_space + _from_left;
-
-      var _end = previous_space + _from_left + _width;
-
-      var hour1 = Math.floor(_start/time_divisor);
-      var minutes1 = Math.floor(((_start%time_divisor)/time_divisor)*60);
-      var hour2 = Math.floor(_end/time_divisor);
-      var minutes2 =  Math.floor(((_end%time_divisor)/time_divisor)*60);
-      if (minutes2 + 2 >= 59 && minutes2 < 59){
-        minutes2 = 59;
-      }
-      else if (minutes2 < 59){
-        minutes2++;
-      }
-      if (minutes1 > 0){
-        minutes1 -= 1;
-      }
-      var meridian1 = 'AM';
-      var meridian2 = 'AM';
-      var pad1 = '0';
-      var pad2 = '0';
-      if (hour1 > 12){
-
-        meridian1 = 'PM';
-        if (hour1 === 24){
-          hour1 = 12;
-        }
-        else{
-          hour1 = hour1%12;
-        }
-
-      }
-      if (hour2 > 12){
-        if (hour2 === 24){
-          hour2 = 12;
-        }
-        else{
-          hour2 = hour2 %12;
-        }
-        meridian2 = 'PM';
-      }
-      if (minutes1 > 9){
-        pad1 = '';
-      }
-      if (minutes2 > 9){
-        pad2 = '';
-      }
-      var timestamp = `${hour1}:${pad1}${minutes1} ${meridian1} - ${hour2}:${pad2}${minutes2} ${meridian2}`;
-      return timestamp;
-
-    }
-    function find_previous_space(_id){
-      var _split = _id.split('_');
-      var _previous = time_divisor;
-      $('.time_hour_block').each(function(){
-        if ($(this).prop('id').match('^dummy_hour_block_')){
-          _previous += 120;
-        }
-        else{
-          var _info = $(this).prop('id').match("\\d+_\\d+")[0].split('_');
-          if (parseInt(_info[1]) === parseInt(_split[1]) && parseInt(_info[0]) < parseInt(_split[0])){
-
-            _previous += parseInt($(this).css('width').match('\\d+'));
-          }
-        }
-
-      });
-      return _previous;
-    }
-    function update_timestamps(){
-      $('.timeslot').each(function(){
-        var _id = $(this).prop('id').match("\\d+_\\d+");
-        var _id_info = _id[0].split('_');
+      function get_timestamp(_id){
+        var _id_info = _id.split('_');
         var _unit = parseInt(_id_info[0]);
         var _user_id = _id_info[1];
-        var previous_space = find_previous_space(_id[0]);
-        var ref = $(this);
-
+        var previous_space = find_previous_space(_id);
+        var ref = $("#timeslot_"+_id);
 
         var _from_left = parseInt(ref.css('left').match('\\d+'));
         var _width = parseInt(ref.css('width').match('\\d+'));
-        if (_width === 118){
-          _width = time_divisor;
+        //alert(_width);
+        /*
+        if (_width%118 != 0){
+          if (_width != 119){
+            _width ++;
+          }
+
         }
+        */
         var _start = previous_space + _from_left;
 
         var _end = previous_space + _from_left + _width;
@@ -1024,9 +939,14 @@
         var minutes1 = Math.floor(((_start%time_divisor)/time_divisor)*60);
         var hour2 = Math.floor(_end/time_divisor);
         var minutes2 =  Math.floor(((_end%time_divisor)/time_divisor)*60);
-        if (minutes2 + 2 >= 60){
-          minutes2 = 0;
-          hour2 ++;
+        if (minutes2 + 2 >= 59 && minutes2 < 59){
+          minutes2 = 59;
+        }
+        else if (minutes2 < 59){
+          minutes2++;
+        }
+        if (minutes1 > 0){
+          minutes1 -= 1;
         }
         var meridian1 = 'AM';
         var meridian2 = 'AM';
@@ -1034,34 +954,23 @@
         var pad2 = '0';
         if (hour1 > 12){
 
+          meridian1 = 'PM';
           if (hour1 === 24){
             hour1 = 12;
-            meridian1 = 'PM';
-          }
-          else if (hour1 === 25){
-            meridian1 = 'AM';
-            hour1 = 1;
           }
           else{
             hour1 = hour1%12;
-            meridian1 = 'PM';
           }
 
         }
         if (hour2 > 12){
           if (hour2 === 24){
             hour2 = 12;
-            meridian2 = 'PM';
-          }
-          else if (hour2 === 25){
-            meridian2 = 'AM';
-            hour2 = 1;
           }
           else{
             hour2 = hour2 %12;
-            meridian2 = 'PM';
           }
-
+          meridian2 = 'PM';
         }
         if (minutes1 > 9){
           pad1 = '';
@@ -1069,237 +978,332 @@
         if (minutes2 > 9){
           pad2 = '';
         }
-        var timestamp = `
-          ${hour1}:${pad1}${minutes1} ${meridian1} - ${hour2}:${pad2}${minutes2} ${meridian2}
-        `;
-        $("#timestamp_for_"+_id).html(timestamp);
-      });
-      setTimeout(function(){
-        update_timestamps()
-      }, 50);
-    }
-    update_timestamps()
-    var test_count = 0;
-    $('.timelisting_container').on('click', '.time_hour_block', function(){
-      if ($(this).data('storingslot') === 'False'){
-        var _id = $(this).prop('id').match('\\d+_\\d+');
-        var info_id = _id[0].split("_");
-        var _html = `
-        <div class="timeslot" id="timeslot_${_id}" data-created="False">
+        var timestamp = `${hour1}:${pad1}${minutes1} ${meridian1} - ${hour2}:${pad2}${minutes2} ${meridian2}`;
+        return timestamp;
 
-          <button id="remove_timeslot_${_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
-          <button id='create_timeslot_${_id}' class='create_timeslot'><i class="fas fa-plus" style='color:white;font-size:1em'></i></button>
-          <p class="timeslot_timestamp" id="timestamp_for_${_id}"></p>
-        </div>
-        `;
-        $(this).html(_html);
-        $('#timeslot_'+_id).resizable({handles:"e,w", minWidth:0, maxWidth:118});
-
-
-        group_row(info_id[1]);
       }
+      function find_previous_space(_id){
+        var _split = _id.split('_');
+        var _previous = time_divisor;
+        $('.time_hour_block').each(function(){
+          if ($(this).prop('id').match('^dummy_hour_block_')){
+            _previous += 120;
+          }
+          else{
+            var _info = $(this).prop('id').match("\\d+_\\d+")[0].split('_');
+            if (parseInt(_info[1]) === parseInt(_split[1]) && parseInt(_info[0]) < parseInt(_split[0])){
 
-    });
-    function remove_timeslot(_id){
-      var _block_width = parseInt($('#hour_block_'+_id).css('width').match('\\d+'));
-      var _range = Math.floor(_block_width/120);
+              _previous += parseInt($(this).css('width').match('\\d+'));
+            }
+          }
 
-      var _user_id = parseInt(_id.split('_')[1]);
-      var _hour_id = parseInt(_id.split('_')[0]);
-      var _has_next = false;
-      var _has_previous = false;
-      $('.time_hour_block').each(function(){
-        var _this_id = $(this).prop('id').match('\\d+_\\d+')[0].split('_');
-        if (parseInt(_this_id[1]) === _user_id && parseInt(_this_id[0]) > _hour_id){
-          _has_next = true;
-        }
-      });
-      $('.time_hour_block').each(function(){
-        var _this_id = $(this).prop('id').match('\\d+_\\d+')[0].split('_');
-        if (parseInt(_this_id[1]) === _user_id && parseInt(_this_id[0]) < _hour_id){
-          _has_previous = true;
-        }
-      });
-      $("#hour_block_"+_id).remove();
-      if (_has_next){
-        var _next_id = _hour_id+1;
-        var _counter = _range;
-        var _the_html = `
-        <td class='time_hour_block' id='dummy_hour_block_${_counter}' data-storingslot='False'>
-        </td>
-        `
-        $(_the_html).insertBefore('#hour_block_'+_next_id.toString()+'_'+_user_id.toString());
-        for (var i = 0; i < _range-1; i++){
-          var _the_html = `
-          <td class='time_hour_block' id='dummy_hour_block_${_counter-1}' data-storingslot='False'>
-          </td>
-          `
-          $(_the_html).insertBefore('#dummy_hour_block_'+_counter.toString());
-          _counter -= 1;
-        }
-        group_row(_user_id.toString());
+        });
+        return _previous;
       }
-      else{
-        if (_has_previous){
-          var _next_id = _hour_id-1;
+      function update_timestamps(){
+        $('.timeslot').each(function(){
+          var _id = $(this).prop('id').match("\\d+_\\d+");
+          var _id_info = _id[0].split('_');
+          var _unit = parseInt(_id_info[0]);
+          var _user_id = _id_info[1];
+          var previous_space = find_previous_space(_id[0]);
+          var ref = $(this);
+
+
+          var _from_left = parseInt(ref.css('left').match('\\d+'));
+          var _width = parseInt(ref.css('width').match('\\d+'));
+          if (_width === 118){
+            _width = time_divisor;
+          }
+          var _start = previous_space + _from_left;
+
+          var _end = previous_space + _from_left + _width;
+
+          var hour1 = Math.floor(_start/time_divisor);
+          var minutes1 = Math.floor(((_start%time_divisor)/time_divisor)*60);
+          var hour2 = Math.floor(_end/time_divisor);
+          var minutes2 =  Math.floor(((_end%time_divisor)/time_divisor)*60);
+          if (minutes2 + 2 >= 60){
+            minutes2 = 0;
+            hour2 ++;
+          }
+          var meridian1 = 'AM';
+          var meridian2 = 'AM';
+          var pad1 = '0';
+          var pad2 = '0';
+          if (hour1 > 12){
+
+            if (hour1 === 24){
+              hour1 = 12;
+              meridian1 = 'PM';
+            }
+            else if (hour1 === 25){
+              meridian1 = 'AM';
+              hour1 = 1;
+            }
+            else{
+              hour1 = hour1%12;
+              meridian1 = 'PM';
+            }
+
+          }
+          if (hour2 > 12){
+            if (hour2 === 24){
+              hour2 = 12;
+              meridian2 = 'PM';
+            }
+            else if (hour2 === 25){
+              meridian2 = 'AM';
+              hour2 = 1;
+            }
+            else{
+              hour2 = hour2 %12;
+              meridian2 = 'PM';
+            }
+
+          }
+          if (minutes1 > 9){
+            pad1 = '';
+          }
+          if (minutes2 > 9){
+            pad2 = '';
+          }
+          var timestamp = `
+            ${hour1}:${pad1}${minutes1} ${meridian1} - ${hour2}:${pad2}${minutes2} ${meridian2}
+          `;
+          $("#timestamp_for_"+_id).html(timestamp);
+        });
+        setTimeout(function(){
+          update_timestamps()
+        }, 50);
+      }
+      update_timestamps()
+      var test_count = 0;
+      $('.timerange_listing_wrapper').on('click', '.time_hour_block', function(){
+        //alert('here on click');
+        if ($(this).data('storingslot') === 'False'){
+          var _id = $(this).prop('id').match('\\d+_\\d+');
+          var info_id = _id[0].split("_");
+          var _html = `
+          <div class="timeslot" id="timeslot_${_id}" data-created="False">
+
+            <button id="remove_timeslot_${_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
+            <button id='create_timeslot_${_id}' class='create_timeslot'><i class="fas fa-plus" style='color:white;font-size:1em'></i></button>
+            <p class="timeslot_timestamp" id="timestamp_for_${_id}"></p>
+          </div>
+          `;
+          $(this).html(_html);
+          $('#timeslot_'+_id).resizable({handles:"e,w", minWidth:0, maxWidth:118});
+
+
+          group_row(info_id[1]);
+        }
+
+      });
+      function remove_timeslot(_id){
+        var _block_width = parseInt($('#hour_block_'+_id).css('width').match('\\d+'));
+        var _range = Math.floor(_block_width/120);
+
+        var _user_id = parseInt(_id.split('_')[1]);
+        var _hour_id = parseInt(_id.split('_')[0]);
+        var _has_next = false;
+        var _has_previous = false;
+        $('.time_hour_block').each(function(){
+          var _this_id = $(this).prop('id').match('\\d+_\\d+')[0].split('_');
+          if (parseInt(_this_id[1]) === _user_id && parseInt(_this_id[0]) > _hour_id){
+            _has_next = true;
+          }
+        });
+        $('.time_hour_block').each(function(){
+          var _this_id = $(this).prop('id').match('\\d+_\\d+')[0].split('_');
+          if (parseInt(_this_id[1]) === _user_id && parseInt(_this_id[0]) < _hour_id){
+            _has_previous = true;
+          }
+        });
+        $("#hour_block_"+_id).remove();
+        if (_has_next){
+          var _next_id = _hour_id+1;
           var _counter = _range;
           var _the_html = `
           <td class='time_hour_block' id='dummy_hour_block_${_counter}' data-storingslot='False'>
           </td>
           `
-          $(_the_html).insertAfter('#hour_block_'+_next_id.toString()+'_'+_user_id.toString());
+          $(_the_html).insertBefore('#hour_block_'+_next_id.toString()+'_'+_user_id.toString());
           for (var i = 0; i < _range-1; i++){
             var _the_html = `
             <td class='time_hour_block' id='dummy_hour_block_${_counter-1}' data-storingslot='False'>
             </td>
             `
-            $(_the_html).insertAfter('#dummy_hour_block_'+_counter.toString());
+            $(_the_html).insertBefore('#dummy_hour_block_'+_counter.toString());
             _counter -= 1;
           }
           group_row(_user_id.toString());
         }
         else{
-          //availability_for_
-          for (var i = 0; i < 24; i++){
+          if (_has_previous){
+            var _next_id = _hour_id-1;
+            var _counter = _range;
             var _the_html = `
-            <td class='time_hour_block' id='dummy_hour_block_${i+1}' data-storingslot='False'>
+            <td class='time_hour_block' id='dummy_hour_block_${_counter}' data-storingslot='False'>
             </td>
             `
-            $("#availability_for_"+_user_id.toString()).append(_the_html);
+            $(_the_html).insertAfter('#hour_block_'+_next_id.toString()+'_'+_user_id.toString());
+            for (var i = 0; i < _range-1; i++){
+              var _the_html = `
+              <td class='time_hour_block' id='dummy_hour_block_${_counter-1}' data-storingslot='False'>
+              </td>
+              `
+              $(_the_html).insertAfter('#dummy_hour_block_'+_counter.toString());
+              _counter -= 1;
+            }
+            group_row(_user_id.toString());
           }
-          group_row(_user_id.toString());
+          else{
+            //availability_for_
+            for (var i = 0; i < 24; i++){
+              var _the_html = `
+              <td class='time_hour_block' id='dummy_hour_block_${i+1}' data-storingslot='False'>
+              </td>
+              `
+              $("#availability_for_"+_user_id.toString()).append(_the_html);
+            }
+            group_row(_user_id.toString());
+
+          }
+        }
+
+      }
+      $('.timerange_listing_wrapper').on('click', '.remove_timeslot', function(event){
+        event.stopPropagation();
+        var _id = $(this).prop('id').match('\\d+_\\d+');
+        //alert(_id);
+        remove_timeslot(_id[0]);
+        $("#timeslot_"+_id).remove();
+      });
+      $('.timerange_listing_wrapper').on('click', '.timeslot', function(event){
+        event.stopPropagation();
+      });
+
+      $('.timerange_listing_wrapper').on('click', '.user_block_widget', function(){
+
+        var _user_id = parseInt($(this).data('blockid'));
+        if (_user_id === parseInt($('#dashboard_user_display').data('loggedinid'))){
+          $.ajax({
+            url: "/user_timelisting_about",
+            type: "get",
+            data: {payload: JSON.stringify({'user_id':_user_id, 'event_id':parseInt($("#timelisting_header").data('eventid')), 'timestamp':$("#timelisting_header").data('timestamp'), 'flag':1})},
+            success: function(response) {
+              $("#modal_content_about_user").html(response.html);
+              $("#more_about_user").modal('toggle');
+            },
+            error: function(xhr) {
+              //Do Something to handle error
+            }
+          });
 
         }
-      }
 
-    }
-    $('.timelisting_container').on('click', '.remove_timeslot', function(event){
-      event.stopPropagation();
-      var _id = $(this).prop('id').match('\\d+_\\d+');
-      //alert(_id);
-      remove_timeslot(_id[0]);
-      $("#timeslot_"+_id).remove();
-    });
-    $('.timelisting_container').on('click', '.timeslot', function(event){
-      event.stopPropagation();
-    });
 
-    $('.timelisting_container').on('click', '.user_block_widget', function(){
+      });
+      $('.timerange_listing_wrapper').on('click', '.dashboard_username', function(event){
+        event.stopPropagation();
+      });
+      $('.timerange_listing_wrapper').on('click', '.create_timeslot', function(){
+        var _trailing_id = $(this).prop('id').match('\\d+_\\d+$')[0];
+        var _timerange = $("#timestamp_for_"+_trailing_id).text();
+        var timerange = _timerange.match('\\d+:\\d+ [AMP]+ \\- \\d+:\\d+ [AMP]+')[0];
+        var timestamp = $('#timelisting_header').data('timestamp').split('-');
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var _full_timestamp = timerange +" on "+months[parseInt(timestamp[0]-1)]+" "+timestamp[1]+", "+timestamp[2];
+        var _the_html = `
+        <div class='container'>
+            <div class='row'>
+              <div class='col-md-auto'>
+                <div class='timeslot_preference' data-preference='1'>This is an optimal timerange for me</div>
+              </div>
+              <div class='col-md-auto preference_check' id='preference_check_1'>
+                <i class="fas fa-check-circle" style='margin-top:14px;font-size:2.3em;color:#22CA9F'></i>
+              </div>
+            </div>
+            <div style='height:10px'></div>
+            <div class='row'>
+              <div class='col-md-auto'>
+                <div class='timeslot_preference' data-preference='2'>I am available but would rather not meet now</div>
+              </div>
+              <div class='col-md-auto preference_check' id='preference_check_2'>
 
-      var _user_id = parseInt($(this).data('blockid'));
-      if (_user_id === parseInt($('#dashboard_user_display').data('loggedinid'))){
+              </div>
+            </div>
+            <div style='height:10px'></div>
+            <div class='row'>
+              <div class='col-md-auto'>
+                <div class='timeslot_preference' data-preference='3'>I am available only if absolutely necessary</div>
+              </div>
+              <div class='col-md-auto preference_check' id='preference_check_3'>
+
+              </div>
+            </div>
+          </div>
+        `;
+        $('.timeslot_preference_wrapper').html(_the_html);
+        $("#optional_timeslot_message").val('');
+        $('#timeslot_time_range').text(_full_timestamp);
+        $("#create_timeslot_date").modal('toggle');
+      });
+      $('.timeslot_preference_wrapper').on('click', '.timeslot_preference', function(){
+        var ref = $(this);
+        $('.preference_check').each(function(){
+          $(this).html('');
+        });
+        $('#preference_check_'+ref.data('preference')).html("<i class='fas fa-check-circle' style='margin-top:14px;font-size:2.3em;color:#22CA9F'></i>");
+      });
+      $('#create_timeslot_date').on('click', '.create_timeslot_final', function(){
+
+        var preference;
+        $(".preference_check").each(function(){
+          if ($(this).html() != ''){
+            preference = parseInt($(this).prop('id').match('\\d+')[0]);
+          }
+        });
+        var message = $("#optional_timeslot_message").val();
+        var _payload = JSON.stringify({'preference':preference, 'message':message, 'timestamp':$("#timelisting_header").data('timestamp'), 'id':parseInt($("#timelisting_header").data('eventid')), 'timerange':$("#timeslot_time_range").text()});
+        //alert(_payload);
+        $("#create_timeslot_date").modal('toggle');
         $.ajax({
-          url: "/user_timelisting_about",
+          url: "/add_timeslot",
           type: "get",
-          data: {payload: JSON.stringify({'user_id':_user_id, 'event_id':parseInt($("#timelisting_header").data('eventid')), 'timestamp':$("#timelisting_header").data('timestamp'), 'flag':1})},
+          data: {payload: _payload},
           success: function(response) {
-            $("#modal_content_about_user").html(response.html);
-            $("#more_about_user").modal('toggle');
+            //pass
           },
           error: function(xhr) {
             //Do Something to handle error
           }
         });
 
-      }
-
-
-    });
-    $('.timelisting_container').on('click', '.dashboard_username', function(event){
-      event.stopPropagation();
-    });
-    $('.timelisting_container').on('click', '.create_timeslot', function(){
-      var _trailing_id = $(this).prop('id').match('\\d+_\\d+$')[0];
-      var _timerange = $("#timestamp_for_"+_trailing_id).text();
-      var timerange = _timerange.match('\\d+:\\d+ [AMP]+ \\- \\d+:\\d+ [AMP]+')[0];
-      var timestamp = $('#timelisting_header').data('timestamp').split('-');
-      var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      var _full_timestamp = timerange +" on "+months[parseInt(timestamp[0]-1)]+" "+timestamp[1]+", "+timestamp[2];
-      var _the_html = `
-      <div class='container'>
-          <div class='row'>
-            <div class='col-md-auto'>
-              <div class='timeslot_preference' data-preference='1'>This is an optimal timerange for me</div>
-            </div>
-            <div class='col-md-auto preference_check' id='preference_check_1'>
-              <i class="fas fa-check-circle" style='margin-top:14px;font-size:2.3em;color:#22CA9F'></i>
-            </div>
-          </div>
-          <div style='height:10px'></div>
-          <div class='row'>
-            <div class='col-md-auto'>
-              <div class='timeslot_preference' data-preference='2'>I am available but would rather not meet now</div>
-            </div>
-            <div class='col-md-auto preference_check' id='preference_check_2'>
-
-            </div>
-          </div>
-          <div style='height:10px'></div>
-          <div class='row'>
-            <div class='col-md-auto'>
-              <div class='timeslot_preference' data-preference='3'>I am available only if absolutely necessary</div>
-            </div>
-            <div class='col-md-auto preference_check' id='preference_check_3'>
-
-            </div>
-          </div>
-        </div>
-      `;
-      $('.timeslot_preference_wrapper').html(_the_html);
-      $("#optional_timeslot_message").val('');
-      $('#timeslot_time_range').text(_full_timestamp);
-      $("#create_timeslot_date").modal('toggle');
-    });
-    $('.timeslot_preference_wrapper').on('click', '.timeslot_preference', function(){
-      var ref = $(this);
-      $('.preference_check').each(function(){
-        $(this).html('');
       });
-      $('#preference_check_'+ref.data('preference')).html("<i class='fas fa-check-circle' style='margin-top:14px;font-size:2.3em;color:#22CA9F'></i>");
-    });
-    $('#create_timeslot_date').on('click', '.create_timeslot_final', function(){
+      $('.timerange_listing_wrapper').on('click', '.add_your_available', function(event){
+        event.stopPropagation();
+        var _id = $("#timelisting_header").data('eventid');
+        var _timestamp = $("#timelisting_header").data('timestamp');
 
-      var preference;
-      $(".preference_check").each(function(){
-        if ($(this).html() != ''){
-          preference = parseInt($(this).prop('id').match('\\d+')[0]);
-        }
+        $.ajax({
+          url: "/add_user_availability",
+          type: "get",
+          data: {payload: JSON.stringify({'id':_id, 'timestamp':_timestamp})},
+          success: function(response) {
+            $(".timerange_listing_wrapper").html(response.html);
+            add_time_blocks();
+            add_timestamps();
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+
+
       });
-      var message = $("#optional_timeslot_message").val();
-      var _payload = JSON.stringify({'preference':preference, 'message':message, 'timestamp':$("#timelisting_header").data('timestamp'), 'id':parseInt($("#timelisting_header").data('eventid')), 'timerange':$("#timeslot_time_range").text()});
-      //alert(_payload);
-      $("#create_timeslot_date").modal('toggle');
-      $.ajax({
-        url: "/add_timeslot",
-        type: "get",
-        data: {payload: _payload},
-        success: function(response) {
-          //pass
-        },
-        error: function(xhr) {
-          //Do Something to handle error
-        }
-      });
-
     });
-    $('.timerange_listing_wrapper').on('click', '.add_your_available', function(event){
-      event.stopPropagation();
-      var _id = $("#timelisting_header").data('eventid');
-      var _timestamp = $("#timelisting_header").data('timestamp');
 
-      $.ajax({
-        url: "/add_user_availability",
-        type: "get",
-        data: {payload: JSON.stringify({'id':_id, 'timestamp':_timestamp})},
-        success: function(response) {
-          $(".timerange_listing_wrapper").html(response.html);
-        },
-        error: function(xhr) {
-          //Do Something to handle error
-        }
-      });
-
-
-    });
   </script>
 </html>
