@@ -1,11 +1,12 @@
 import typing, re, itertools
 import tigerSqlite, chronos_users, user_groups
-import datetime, calendar
+import datetime, calendar, json
 
 
 class _last_updated:
-    def __init__(self, _user:int, _datetime:datetime.datetime) -> None:
-        self._user, self._datetime = _user, _datetime
+    def __init__(self, *args) -> None:
+        print('args here', args)
+        [self._user, self._datetime], _timestamp = args
     @property
     def user(self):
         return chronos_users.Users.get_user(id=self._user)
@@ -16,30 +17,41 @@ class _last_updated:
         return 'Updated just now' if not _new_result else f'Last updated {_new_result[0][-1]} {_new_result[0][0]}{"s" if _new_result[0][-1] != 1 else ""}'
     
     @classmethod
-    def max_timestamps(cls, _timelistings:typing.List[typing.Tuple[int, typing.List[int]]]) -> typing.Callable:
-        return  cls(*max([[a, datetime.datetime(*b)] for a, b in _timelistings], key=lambda x:x[-1]))
+    def max_timestamps(cls, _timelistings, _timestamp) -> typing.Callable:
+        return  cls(min([[a, datetime.datetime(*(lambda x:[x[-1], x[0], x[1]])(list(map(int, _timestamp.split('-')))), *b['timerange'][0])] for a, b in _timelistings], key=lambda x:x[-1]), _timestamp)
 
-    def __repr__(self):
-        return f'{self.last_updated} by <a href="/user/{self.user.id}" style="color:black"><strong>@{self.user.condensed_name}</strong></a>'
+    @property
+    def full_message(self):
+        return f'Last updated by <a href="/user/{self.user.id}" style="color:black"><strong>@{self.user.condensed_name}</strong></a>'
+        
 
 
 class _menu_event:
-    def __init__(self, _logged_in:int, _payload:dict) -> None:
+    def __init__(self, _logged_in:int, _payload:dict, _timestamp) -> None:
         self.logged_in = _logged_in
+        self.default_timestamp = _timestamp
         self.__dict__.update(_payload)
+
 
     @property
     def button_text(self):
-        [_user_obj] = [i for i in self.user_data if i['user'] == self.logged_in]
-        return 'Add availability' if _user_obj['available'] != 'True' else ['Manage availability', 'Add availability'][not bool(_user_obj['timeslots'])]
+        _user_obj = [i for i in self.user_data if i['user'] == self.logged_in]
+        if not _user_obj:
+            return 'Add availability'
+        _user_obj = _user_obj[0]
+        return 'Add availability' if _user_obj['available'] != 'True' else ['View availability', 'Add availability'][not bool(_user_obj['timeslots'])]
 
 
     @property
     def lasted_updated_by(self):
         _timeslots = [[i['user'], c] for i in self.user_data for c in i['timeslots']]
+        print('timeslots display below')
+        print(_timeslots)
         if not _timeslots:
-            return 'Be the first to add your availability'
-        return _last_updated.max_timestamps(_timeslots)
+            class __message:
+                full_message = 'Be the first to add your availability'
+            return __message
+        return _last_updated.max_timestamps(_timeslots, self.default_timestamp)
         
     @property
     def date_title(self):
@@ -92,6 +104,90 @@ class _message_obj:
 
 
 
+class _spacer:
+    def __init__(self, _count:int, width:int=120) -> None:
+        self.count, self.role = _count, 'spacer'
+        self.width = width
+    @property
+    def is_spacer(self):
+        return self == "spacer"
+    def __eq__(self, _val:str) -> bool:
+        return 'spacer' == _val
+
+class _timeslot:
+    def __init__(self, _count:int, _payload:dict) -> None:
+        self.__dict__ = {'count':_count, 'role':'timeslot', **_payload}
+    
+    @property
+    def popover_text(self):
+        return {1:'This is an optimal timerange for me', 2:'I am available but would rather not meet now', 3:'I am available only if absolutely necessary'}[int(self.preference)]
+
+    @property
+    def is_spacer(self):
+        return self == 'spacer'
+    def __eq__(self, _val:str) -> bool:
+        return _val == 'timeslot'
+    @property
+    def timeslot_class(self):
+        return {1:'first_choice', 2:'second_choice', 3:'third_choice'}[int(self.preference)]
+
+
+class _timeslot_row:
+    def __init__(self, _payload:dict, **kwargs:dict) -> None:
+        self.__dict__ = {**_payload, **kwargs}
+        print('in _timeslot_row init')
+        print(self.__dict__)
+    @property
+    def obj_class(self):
+        return 'time_hour_block' if self.logged_in == self.user else '_time_hour_block'
+    
+    @property
+    def is_available(self):
+        return self.available == 'True'
+
+    @property
+    def user_obj(self):
+        return chronos_users.Users.get_user(id=self.user)
+
+    @property
+    def error_bars(self):
+        yield from range(48)
+    
+    @property
+    def is_creator(self):
+        return self.logged_in == self.user
+    def __iter__(self):
+        if self.available != 'True':
+            raise ValueError(f"User is not available on {self.timestamp}")
+        _count, _start = itertools.count(1), 0    
+        for _slot in sorted(self.timeslots, key=lambda x:x['timerange']):
+            [hour1, minute1], [hour2, minute2] = _slot['timerange']
+            for _ in range(_start, hour1-1):
+                yield _spacer(next(_count))
+                _start += 1
+            _t = _timeslot(next(_count), _slot)
+            print(_slot['timerange'])
+            _factor = (hour2 if not minute2 else hour2+1) - hour1
+            _t.main_width = _factor*120
+            _start += _factor
+            print(_start)
+            _t.width = ((120*hour2)+round((minute2/float(60))*120))-((120*hour1)+round((minute1/float(60))*120))-3
+            _t.offset = round((minute1/float(60))*120)
+            yield _t
+        print('start before trailing', _start)
+        for _ in range(_start, 24):
+            print('in trailing')
+            yield _spacer(next(_count))
+    @classmethod
+    def test_feature(cls) -> None:
+        _d = d = {'user': 1, 'timeslots': [], 'lasted_added': [], 'available': 'True'}
+        for i in cls(_d):
+            print(i.role)
+            if not i.is_spacer:
+                print([getattr(i, c) for c in ['main_width', 'width', 'offset']])
+
+        
+            
 class Event:
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -105,6 +201,7 @@ class Event:
     @property
     def can_view_event(self):
         return self.visibility == 'public' or self.logged_in in self.all_users
+
 
     @property
     def next_timestamp(self):
@@ -128,6 +225,12 @@ class Event:
     
     def basic_tags(self, _id:int) -> typing.List[_tag_obj]:
         return [_tag_obj('you' if _id == self.logged_in else 'owner', '#FABC09')] if self.logged_in == _id or _id == self.creator else []
+
+    @property
+    def all_timeslots(self):
+        [_full_day] = [i for i in self.days if i['date'] == self.default_timestamp]
+        _day_dict = {i['user']:i for i in _full_day['user_data']}
+        return [_timeslot_row(_day_dict[i],  logged_in = self.logged_in, timestamp=self.default_timestamp) for i in self.all_users]
 
     @property
     def user_roster(self):
@@ -157,7 +260,7 @@ class Event:
     def __iter__(self):
         _sorted_result = sorted(self.days, key=lambda x:datetime.date(*(lambda c:[c[-1], c[0], c[1]])(list(map(int, re.findall('\d+', x['date']))))))
         for i in _sorted_result:
-            yield _menu_event(self.logged_in, i)
+            yield _menu_event(self.logged_in, i, self.default_timestamp)
     @property
     def message_num(self):
         return len(self.messages)
@@ -241,11 +344,70 @@ class Events:
         _events = [b for _,b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events')]
         return any(int(i['id']) == int(_id) for c in _events for i in c)
 
+    @classmethod
+    def add_user_availability(cls, _user:int, _payload:dict) -> Event:
+        _owner, _event_data = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(c['id']) == int(_payload['id']) for c in b)][0]
+        [_event] = [c for c in _event_data if int(c['id']) == int(_payload['id'])]
+        _new_payload = {**_event, 'people':_event['people']+([] if _user in _event['people'] else [_user]), 'all_users':_event['all_users']+([] if _user in _event['all_users'] else [_user]), 'days':[{**h, 'user_data':[*h['user_data'], {'user': _user, 'timeslots': [], 'lasted_added': [], 'available': 'True'}]} for h in _event['days']]}
+        new_listing = [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _event_data]
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', new_listing)], [('id', _owner)])
+        return cls.get_event(int(_payload['id']), _user, _set_timestamp=_payload['timestamp'])
+
+    @classmethod
+    def add_timeslot(cls, _poster:int, _payload:dict) -> typing.Callable:
+        print('got payload here for update', _payload)
+        _hour1, _minutes1, meridian1, _hour2, _minutes2, meridian2 = re.findall('\d+(?=:)|(?<=:)\d+|(?<=\d\s)[AMP]+', _payload['timerange'])
+        hour1, hour2 = int(_hour1) + (0 if meridian1 == 'AM' else 12), int(_hour2) + (0 if meridian2 == 'AM' else 12) 
+        minutes1, minutes2 = int(_minutes1), int(_minutes2)
+        _d = datetime.datetime.now()
+        posted_date = [getattr(_d, i) for i in ['year', 'month', 'day', 'hour', 'minute', 'second']]
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _current_event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_current_event, 'days':[i if i['date'] != _payload['timestamp'] else {**i, 'user_data':[c if int(c['user']) != int(_poster) else {**c, 'timeslots':[*c['timeslots'], {'timerange':[[hour1, minutes1], [hour2, minutes2]], 'message':_payload['message'], 'preference':_payload['preference']}], 'lasted_added':[*c['lasted_added'], {'user':_poster, 'timestamp':posted_date}]} for c in i['user_data']]} for i in _current_event['days']]}
+        print(json.dumps(_new_payload, indent=4))
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        return cls.get_event(int(_payload['id']), _poster, _set_timestamp=_payload['timestamp'])
+
+    @classmethod
+    def mark_unavailable(cls, _poster:int, _payload:dict) -> Event:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _current_event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_current_event, 'days':[i if i['date'] != _payload['timestamp'] else {**i, 'user_data':[c if int(c['user']) != int(_poster) else {**c, 'available':'False'} for c in i['user_data']]} for i in _current_event['days']]}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        print(json.dumps(_new_payload, indent=4))
+        return cls.get_event(int(_payload['id']), _poster, _set_timestamp=_payload['timestamp'])
     
+    @classmethod
+    def mark_available(cls, _poster:int, _payload:dict) -> Event:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _current_event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_current_event, 'days':[i if i['date'] != _payload['timestamp'] else {**i, 'user_data':[c if int(c['user']) != int(_poster) else {**c, 'available':'True'} for c in i['user_data']]} for i in _current_event['days']]}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        print(json.dumps(_new_payload, indent=4))
+        return cls.get_event(int(_payload['id']), _poster, _set_timestamp=_payload['timestamp'])
+
+    @classmethod
+    def remove_timeslot(cls, _poster:int, _payload:dict) -> None:
+        _hour1, _minutes1, meridian1, _hour2, _minutes2, meridian2 = re.findall('\d+(?=:)|(?<=:)\d+|(?<=\d\s)[AMP]+', _payload['timerange'])
+        hour1, hour2 = int(_hour1) + (0 if meridian1 == 'AM' else 12), int(_hour2) + (0 if meridian2 == 'AM' else 12) 
+        minutes1, minutes2 = int(_minutes1), int(_minutes2)
+        _timerange = [[hour1, minutes1], [hour2, minutes2]]
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _current_event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_current_event, 'days':[i if i['date'] != _payload['timestamp'] else {**i, 'user_data':[c if int(c['user']) != int(_poster) else {**c, 'timeslots':[h for h in c['timeslots'] if h['timerange'] != _timerange]} for c in i['user_data']]} for i in _current_event['days']]}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        return cls.get_event(int(_payload['id']), _poster, _set_timestamp=_payload['timestamp'])
+
+
 class About:
     def __init__(self, _user:int, _event:int, _date:str, _day_data:dict) -> None:
         self.user, self.event_id, self.day_data= chronos_users.Users.get_user(id=_user), _event, _day_data
         self.timestamp = _date
+
+    @property
+    def is_available(self):
+        return self.day_data['available'] == 'True'
+
     @property
     def button_message(self):
         return 'Add availability' if self.day_data["available"] != 'True' else 'I am not available today'
