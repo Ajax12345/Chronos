@@ -49,9 +49,22 @@ def register_user():
             flask.session[i] = getattr(_user_obj, i)
     return flask.jsonify(_result)
 
+@app.route("/navigate_timeslot_listing")
+def navigate_timeslot_listing():
+    _payload = json.loads(flask.request.args.get('payload'))
+    return flask.jsonify({'html':flask.render_template('event_timeslot_stub.html', event=user_events.Events.get_event(int(_payload['id']), flask.session['id'], _set_timestamp = _payload['timestamp']))})
 
 
+@app.route('/add_timeslot')
+def add_timeslot():
+    
+    return flask.jsonify({'html':flask.render_template('event_timeslot_stub.html', event=user_events.Events.add_timeslot(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
+    #return flask.jsonify({'html':flask.render_template('event_timeslot_snippet.html', event=user_events.Events.add_timeslot(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
 
+
+@app.route('/add_user_availability')
+def add_user_availability():
+    return flask.jsonify({'html':flask.render_template('event_timeslot_stub.html', user=_user.Users.get_user(id=flask.session['id']), event = user_events.Events.add_user_availability(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
 
 @app.route('/user/<id>', methods=['GET'])
 @isloggedin
@@ -95,6 +108,10 @@ def update_timelisting_timestmap():
     flask.session[f'event_timeslot_{flask.request.args.get("id")}'] = flask.request.args.get('timestamp')
     return flask.jsonify({'success':'True'})
 
+@app.route("/mark_as_unavailable")
+def mark_as_unavailable():
+    return flask.jsonify({'html':flask.render_template('event_timeslot_stub.html', event=user_events.Events.mark_unavailable(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
+
 @app.route('/user_timelisting_about')
 def user_timelisting_about():
     _payload = json.loads(flask.request.args.get('payload'))
@@ -102,6 +119,14 @@ def user_timelisting_about():
         return flask.jsonify({'html':flask.render_template('more_about_user_current.html', about=user_events.About.get_about_current(_payload))})
     return flask.jsonify({"html":flask.render_template('')})
 
+
+@app.route('/mark_as_available')
+def mark_as_available():
+    return flask.jsonify({'html':flask.render_template('event_timeslot_stub.html', event=user_events.Events.mark_available(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
+
+@app.route('/remove_set_timeslot')
+def remove_set_timeslot():
+    return flask.jsonify({'html':flask.render_template('event_timeslot_stub.html', event=user_events.Events.remove_timeslot(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
 
 @app.route('/event/timeslots/<id>', methods=['GET'])
 @isloggedin
