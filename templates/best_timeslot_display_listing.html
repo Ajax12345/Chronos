@@ -315,6 +315,16 @@
     border-right-color:#B6B6B6;
     height:69px;
   }
+  .unavailable_bar{
+    min-width: 60;
+    /*
+    border-right:solid;
+    border-right-width:1px;
+    border-right-color:#B6B6B6;
+    */
+    background-color: #F5F5F5;
+    height:69px;
+  }
   .detail_input{
     width:350px;
     height:40px;
@@ -344,6 +354,7 @@
   .timeslot_timestamp_created{
 
   }
+
   .create_final_event_timeslot{
     font-family: 'Noto Sans TC', sans-serif;
     color:white;
@@ -431,6 +442,19 @@
 
   }
   .not_available_today:hover{
+    cursor:pointer;
+  }
+  .is_available_today{
+    background: none;
+    border:solid;
+    border-radius:5px;
+    border-width:2px;
+    border-color:#21DCAC;
+    font-family: 'Noto Sans TC', sans-serif;
+    color:#21DCAC;
+    padding:5px;
+  }
+  .is_available_today:hover{
     cursor:pointer;
   }
   u{
@@ -608,7 +632,17 @@
                       </tr>
                     </table>
                     {%for slots in event.all_timeslots%}
+
                     <table>
+                      {%if not slots.is_available%}
+                        <tr class='user_availability_row user_unavailable_row' id='availability_for_{{slots.user}}' data-toggle="popover" data-placement="top" data-content="<p><strong>@{{slots.user_obj.condensed_name}}</strong> is not available today</p>" data-html="true">
+                          {%for _ in slots.error_bars%}
+                            <td class='unavailable_bar' data-userid='{{slots.user}}'>
+
+                            </td>
+                          {%endfor%}
+                        </tr>
+                      {%else%}
                       <tr class='user_availability_row' id='availability_for_{{slots.user}}'>
                         {%for slot in slots%}
                           {%if slot.is_spacer%}
@@ -628,6 +662,8 @@
 
                         {%endfor%}
                       </tr>
+                      {%endif%}
+
                     </table>
                     {%endfor%}
 
@@ -760,6 +796,19 @@
             }
           }
       }, ".timeslot");
+      $(document).on({
+          mouseenter: function () {
+              var _user = $(this).data('userid');
+              $('#availability_for_'+_user).popover();
+              $('#availability_for_'+_user).popover("show");
+
+          },
+          mouseleave: function () {
+              var _user = $(this).data('userid');
+              $('#availability_for_'+_user).popover("hide");
+
+          }
+      }, ".unavailable_bar");
       function display_warning(count){
         $('.event_upcomming_warning').fadeOut(500);
 	       $('.event_upcomming_warning').fadeIn(500);
@@ -1304,10 +1353,33 @@
       }
       $('.timerange_listing_wrapper').on('click', '.remove_timeslot', function(event){
         event.stopPropagation();
-        var _id = $(this).prop('id').match('\\d+_\\d+');
-        //alert(_id);
-        remove_timeslot(_id[0]);
-        $("#timeslot_"+_id).remove();
+        if ($(this).prop('class').match('remove_timeslot_created$')){
+          var _id = $(this).prop('id').match('\\d+_\\d+');
+          var _timerange = $("#timestamp_for_"+_id).text();
+          var _payload = {'timestamp':$("#timelisting_header").data('timestamp'),'timerange':_timerange ,'id':parseInt($("#timelisting_header").data('eventid'))};
+          $("#timeslot_"+_id).popover('hide');
+          $.ajax({
+            url: "/remove_set_timeslot",
+            type: "get",
+            data: {payload: JSON.stringify(_payload)},
+            success: function(response) {
+              $(".timerange_listing_wrapper").html(response.html);
+              //add_time_blocks();
+              add_timestamps();
+            },
+            error: function(xhr) {
+              //Do Something to handle error
+            }
+          });
+
+        }
+        else{
+          var _id = $(this).prop('id').match('\\d+_\\d+');
+          //alert(_id);
+          remove_timeslot(_id[0]);
+          $("#timeslot_"+_id).remove();
+        }
+
       });
       $('.timerange_listing_wrapper').on('click', '.timeslot', function(event){
         event.stopPropagation();
@@ -1462,13 +1534,34 @@
           type: "get",
           data: {payload: JSON.stringify(_payload)},
           success: function(response) {
-            $("#place_for_suggestions").html(response);
+
+            $(".timerange_listing_wrapper").html(response.html);
+            //add_time_blocks();
+            add_timestamps();
           },
           error: function(xhr) {
             //Do Something to handle error
           }
         });
       });
+      $("#modal_content_about_user").on('click', '.is_available_today', function(){
+        $("#more_about_user").modal('toggle');
+        var _payload = {'timestamp':$("#timelisting_header").data('timestamp'), 'id':parseInt($("#timelisting_header").data('eventid'))};
+        $.ajax({
+          url: "/mark_as_available",
+          type: "get",
+          data: {payload: JSON.stringify(_payload)},
+          success: function(response) {
+            $(".timerange_listing_wrapper").html(response.html);
+            //add_time_blocks();
+            add_timestamps();
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      });
+
     });
 
   </script>
