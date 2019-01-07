@@ -1,0 +1,147 @@
+
+  <div style='height:20px;'></div>
+  <div class='container'>
+    <div class='row'>
+      <div class='col'>
+        <a href='/event/{{event.id}}' style='color:#21DCAC'><i class="fas fa-bars" style='font-size:1.6em;color:#21DCAC'></i></a>
+
+      </div>
+      <div class='col-md-auto'><p style="text-align:center;font-size:30px;" id ='timelisting_header' data-timestamp='{{event.default_timestamp}}' data-eventid='{{event.id}}'>Timelistings for <strong style='color:#FABC09'>{{event.name}}</strong></p></div>
+      <div class='col'>
+        {%if event.logged_in_is_creator%}
+          <i class="fas fa-cog" style='float:right;font-size:1.6em;color:#21DCAC'></i>
+        {%endif%}
+      </div>
+    </div>
+  </div>
+
+  <div class='timelisting_container'>
+
+    <div class='availability_wrapper'>
+      <div style='height:20px;'></div>
+      <table style='margin:0 auto;'>
+        <tr>
+          <td class='col-md-auto'>
+            {%if event.has_previous%}
+              <button class='timeslot_event_day_nav' data-timestamp='{{event.previous_timestamp}}'><i class="fas fa-angle-left" style="font-size:2em;color: #FABC09;"></i></button>
+            {%endif%}
+          </td>
+          <td><p style='text-align:center;font-size:22px;padding-left:15px;padding-right:15px;margin-top:10px;'><strong>{{event.current_timestamp_header}}</strong></p></td>
+          <td class='col-md-auto'>
+            {%if event.has_next%}
+              <button class='timeslot_event_day_nav' data-timestamp='{{event.next_timestamp}}'><i class="fas fa-angle-right" style="font-size:2em;color: #FABC09;"></i></button>
+            {%endif%}
+          </td>
+        </tr>
+
+      </table>
+
+      <div class='container'>
+        <div class='row'>
+          <div class='col-md-auto'>
+            <div class='user_block_widget' style='width:220px;background:none;'>
+              <div class='container' style='margin-left:-15px;'>
+                <div class='row'>
+                  {%if event.can_add_availability%}
+                    <div class='col-md-auto'><i class="fas fa-plus-circle" style='font-size:1.5em;color:#FABC09;margin-top:30px;'></i></div>
+                    <div class='col-md-auto'><p style='font-size:15px;margin-top:1px;margin-left:-15px;color:#FABC09;margin-top:5px;' class='add_your_available'><u>add your availability</u></p></div>
+                  {%endif%}
+                </div>
+              </div>
+            </div>
+            {%for user in event.user_roster%}
+            <div class='user_block_widget {{user.row_class}}' data-blockid='{{user.user.id}}'>
+              <div class='container'>
+                <div class='row'>
+                  <div class='col-md-auto'>
+                    <a href='/user/{{user.user.id}}' class='dashboard_username' style='color:white'>{{user.user.condensed_name}}</a>
+                  </div>
+                  {%for tag in user.tags%}
+                  <div class='col-md-auto'>
+                    <span class='it_is_you'>{{tag.name}}</span>
+                  </div>
+                  {%endfor%}
+                </div>
+              </div>
+            </div>
+            {%endfor%}
+
+
+
+          </div>
+          <div class='col all_time_slot_displays'>
+
+
+            <div class='datetime_display_listing'>
+              <div class="timeslot-display">
+
+                <table>
+                  <tr class='timestamp_display_row' style='border-bottom:solid;border-width:1px;border-color:#B6B6B6'>
+
+                  </tr>
+                </table>
+                {%for slots in event.all_timeslots%}
+
+                <table>
+                  {%if not slots.is_available%}
+                    <tr class='user_availability_row' id='availability_for_{{slots.user}}' data-toggle="popover" data-placement="top" data-content="<p><strong>@{{slots.user_obj.condensed_name}}</strong> is not available today</p>" data-html="true">
+                      {%for _ in slots.error_bars%}
+                        <td class='unavailable_bar' data-userid='{{slots.user}}'>
+                          <div class='angled_bar_div'></div>
+                        </td>
+                      {%endfor%}
+                    </tr>
+                  {%else%}
+                  <tr class='user_availability_row' id='availability_for_{{slots.user}}'>
+                    {%for slot in slots%}
+                      {%if slot.is_spacer%}
+                        <td class='{{slots.obj_class}}' id='hour_block_{{slot.count}}_{{slots.user}}' data-storingslot='False'>
+                        </td>
+                      {%else%}
+                      <td class='{{slots.obj_class}}' id='hour_block_{{slot.count}}_{{slots.user}}' style='min-width:{{slot.main_width}}px' data-storingslot='True'>
+                        <div class="timeslot {{slot.timeslot_class}}" id="timeslot_{{slot.count}}_{{slots.user}}" data-created="True" style='width:{{slot.width}}px;left:{{slot.offset}}px;margin-left:{{slot.offset}}px' data-toggle="popover" data-placement="top" data-content="<p>{{slot.popover_text}}</p>" data-html="true">
+                          {%if slots.is_creator%}
+                            <button id="remove_timeslot_{{slot.count}}_{{slots.user}}" class="remove_timeslot remove_timeslot_created"><i class="fas fa-times {{slot.timeslot_class}}_text" style="font-size:1em"></i></button>
+                          {%endif%}
+                          <p class="timeslot_timestamp timeslot_timestamp_created" id="timestamp_for_{{slot.count}}_{{slots.user}}"></p>
+                        </div>
+
+                      </td>
+                      {%endif%}
+
+                    {%endfor%}
+                  </tr>
+                  {%endif%}
+
+                </table>
+                {%endfor%}
+
+
+
+
+
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+        <div style='height:20px;'></div>
+        {%if event.logged_in_is_creator%}
+        <table>
+          <tr>
+            <td>
+              <button class='create_final_event_timeslot' id='manual_select'>Manually choose times</button>
+            </td>
+            <td>
+              <button class='create_final_event_timeslot' id='auto_select' style='margin-left:20px;'>View time overlaps</button>
+            </td>
+          </tr>
+        </table>
+        {%endif%}
+      </div>
+
+    </div>
+
+  </div>
