@@ -201,7 +201,9 @@
       border:none;
 
     }
-
+    .remove_timeslot:hover{
+      cursor:pointer;
+    }
     .create_timeslot{
       background: none;
       border:none;
@@ -259,9 +261,7 @@
     color:white;
 
   }
-  .timeslot:hover{
-    cursor:pointer;
-  }
+
   .first_choice{
     background-color: #9BECD8;
     color:#18A66C;
@@ -351,17 +351,27 @@
     font-size:12px;
     margin-left:5px;
   }
+  .previous_created_event_text{
+    font-size:14px;
+    margin-left:5px;
+  }
   .timeslot_timestamp_created{
 
   }
-
+  .calendar_timeslot{
+    color:white;
+    border-radius:4px;
+    border:solid;
+    border-width:1.5px;
+    opacity:0.8;
+  }
   .create_final_event_timeslot{
     font-family: 'Noto Sans TC', sans-serif;
     color:white;
     font-size:18px;
     padding:5px;
-    padding-left:10px;
-    padding-right:10px;
+    padding-left:15px;
+    padding-right:15px;
     border-radius:20px;
     border:none;
     background-color: #FABC09;
@@ -646,9 +656,9 @@
                       <tr class='user_availability_row' id='availability_for_{{slots.user}}'>
                         {%for slot in slots%}
                           {%if slot.is_spacer%}
-                            <td class='{{slots.obj_class}}' id='hour_block_{{slot.count}}_{{slots.user}}' data-storingslot='False'>
+                            <td class='{{slots.obj_class}}' id='hour_block_{{slot.count}}_{{slots.user}}' data-storingslot='False' data-canpostslot='{{slots.can_add_timeslots}}'>
                             </td>
-                          {%else%}
+                          {%elif slot.is_timeslot%}
                           <td class='{{slots.obj_class}}' id='hour_block_{{slot.count}}_{{slots.user}}' style='min-width:{{slot.main_width}}px' data-storingslot='True'>
                             <div class="timeslot {{slot.timeslot_class}}" id="timeslot_{{slot.count}}_{{slots.user}}" data-created="True" style='width:{{slot.width}}px;left:{{slot.offset}}px;margin-left:{{slot.offset}}px' data-toggle="popover" data-placement="top" data-content="<p>{{slot.popover_text}}</p>" data-html="true">
                               {%if slots.is_creator%}
@@ -658,6 +668,13 @@
                             </div>
 
                           </td>
+                          {%else%}
+                            <td class='{{slots.obj_class}}' id='hour_block_{{slot.count}}_{{slots.user}}' style='min-width:{{slot.main_width}}px' data-storingslot='True'>
+                              <div class='timeslot calendar_timeslot' id="timeslot_{{slot.count}}_{{slots.user}}" data-created="True" style='width:{{slot.width}}px;left:{{slot.offset}}px;margin-left:{{slot.offset}}px;background-color:{{slot.background_color}};border-color:{{slot.border_color}}' data-toggle="popover" data-placement="top" data-content="<p><strong>{{slot.title}}</strong> is already scheduled in this timerange</p>" data-html="true" data-fulltitle='{{slot.title}}'>
+                                <p class='previous_created_event_text' id='previous_event_{{slot.count}}_{{slots.user}}'>{{slot.condensed_title}}</p>
+                                <p class="timeslot_timestamp timeslot_timestamp_created" id="timestamp_for_{{slot.count}}_{{slots.user}}" style='margin-top:-10px;'></p>
+                              </div>
+                            </td>
                           {%endif%}
 
                         {%endfor%}
@@ -679,7 +696,7 @@
             <div style='height:20px;'></div>
 
             {%if event.logged_in_is_creator%}
-              <button class='create_final_event_timeslot' id='manual_select'>Manually choose times</button>
+              <button class='create_final_event_timeslot' id='manual_select'>Choose final times</button>
             {%endif%}
 
           </div>
@@ -769,6 +786,21 @@
   </body>
   <script>
     $(document).ready(function(){
+      //calendar_timeslot
+      $(document).on({
+          mouseenter: function () {
+
+              $(this).popover();
+              $(this).popover("show");
+
+
+          },
+          mouseleave: function () {
+
+              $(this).popover("hide");
+
+          }
+      }, ".calendar_timeslot");
       $(document).on({
           mouseenter: function () {
 
@@ -966,8 +998,14 @@
                 _grouped.push([start_end_timestamps(_current_queue), 0]);
                 _current_queue= [];
               }
+              var _trailing_class = $('#'+_full_slots[i]).prop('class').match('\\w+$')[0];
+              if (_trailing_class === 'calendar_timeslot'){
+                _grouped.push([start_end_timestamps([_full_slots[i]]), 2, _trailing_class, $('#'+_full_slots[i]).data('fulltitle'), $('#'+_full_slots[i]).css('background-color'), $('#'+_full_slots[i]).css('border-color')]);
+              }
+              else{
+                _grouped.push([start_end_timestamps([_full_slots[i]]), 1, _trailing_class]);
+              }
 
-              _grouped.push([start_end_timestamps([_full_slots[i]]), 1, $('#'+_full_slots[i]).prop('class').match('\\w+$')[0]]);
             }
             else{
               _current_queue.push(_full_slots[i]);
@@ -999,7 +1037,7 @@
         for (var i = 0; i < _grouped.length; i++){
           if (_grouped[i].length === 0){
             var _the_html = `
-            <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' data-storingslot='False'>
+            <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' data-storingslot='False' data-canpostslot='True'>
 
 
             </td>
@@ -1057,7 +1095,7 @@
               $("#availability_for_"+_user_id).append(new_html);
               $('#timeslot_'+counter.toString()+'_'+_user_id).resizable({handles:"e,w", minWidth:0, maxWidth:main_width-3});
             }
-            else{
+            else if (_payload_stuff[1] === 1){
               var _popover_text = {'first_choice':'This is an optimal timerange for me', 'second_choice':'I am available but would rather not meet now', 'third_choice':'I am available only if absolutely necessary'}
               _type_class = _payload_stuff[2];
               var new_html = `
@@ -1073,7 +1111,22 @@
               `
               $("#availability_for_"+_user_id).append(new_html);
             }
-
+            else{
+              //  _grouped.push([start_end_timestamps([_full_slots[i]]), 2, _trailing_class, $('#'+_full_slots[i]).data('fulltitle'), $('#'+_full_slots[i]).css('background-color'), $('#'+_full_slots[i]).css('border-color')]);
+              var _condensed_name = _payload_stuff[3];
+              if (_condensed_name.length > 8){
+                _condensed_name = _condensed_name.substring(8)+'...';
+              }
+              var new_html = `
+              <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='min-width:${main_width}px' data-storingslot='True'>
+                <div class='timeslot calendar_timeslot' id="timeslot_${counter}_${_user_id}" data-created="True" style='width:${timeslot_width}px;left:${_from_left}px;margin-left:${_from_left}px;background-color:${_payload_stuff[4]};border-color:${_payload_stuff[5]}' data-toggle="popover" data-placement="top" data-content="<p><strong>${_payload_stuff[3]}</strong> is already scheduled in this timerange</p>" data-html="true" data-fulltitle='${_payload_stuff[3]}'>
+                  <p class='previous_created_event_text'>${_condensed_name}</p>
+                  <p class="timeslot_timestamp timeslot_timestamp_created" id="timestamp_for_${counter}_${_user_id}" style='margin-top:-10px;'></p>
+                </div>
+              </td>
+              `;
+              $("#availability_for_"+_user_id).append(new_html);
+            }
 
 
             counter++;
@@ -1259,23 +1312,28 @@
       var test_count = 0;
       $('.timerange_listing_wrapper').on('click', '.time_hour_block', function(){
         //alert('here on click');
-        if ($(this).data('storingslot') === 'False'){
-          var _id = $(this).prop('id').match('\\d+_\\d+');
-          var info_id = _id[0].split("_");
-          var _html = `
-          <div class="timeslot" id="timeslot_${_id}" data-created="False">
+        if ($(this).data('canpostslot') === 'True'){
+          if ($(this).data('storingslot') === 'False'){
 
-            <button id="remove_timeslot_${_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
-            <button id='create_timeslot_${_id}' class='create_timeslot'><i class="fas fa-plus" style='color:white;font-size:1em'></i></button>
-            <p class="timeslot_timestamp" id="timestamp_for_${_id}"></p>
-          </div>
-          `;
-          $(this).html(_html);
-          $('#timeslot_'+_id).resizable({handles:"e,w", minWidth:0, maxWidth:118});
+            var _id = $(this).prop('id').match('\\d+_\\d+');
+            var info_id = _id[0].split("_");
+
+            var _html = `
+            <div class="timeslot" id="timeslot_${_id}" data-created="False">
+
+              <button id="remove_timeslot_${_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
+              <button id='create_timeslot_${_id}' class='create_timeslot'><i class="fas fa-plus" style='color:white;font-size:1em'></i></button>
+              <p class="timeslot_timestamp" id="timestamp_for_${_id}"></p>
+            </div>
+            `;
+            $(this).html(_html);
+            $('#timeslot_'+_id).resizable({handles:"e,w", minWidth:0, maxWidth:118});
 
 
-          group_row(info_id[1]);
+            group_row(info_id[1]);
+          }
         }
+
 
       });
       function remove_timeslot(_id){
@@ -1473,7 +1531,7 @@
         });
         var message = $("#optional_timeslot_message").val();
         var _payload = JSON.stringify({'preference':preference, 'message':message, 'timestamp':$("#timelisting_header").data('timestamp'), 'id':parseInt($("#timelisting_header").data('eventid')), 'timerange':$("#timeslot_time_range").text()});
-        alert(_payload);
+        //alert(_payload);
         $("#create_timeslot_date").modal('toggle');
         $.ajax({
           url: "/add_timeslot",
@@ -1560,6 +1618,9 @@
             //Do Something to handle error
           }
         });
+      });
+      $('.timerange_listing_wrapper').on('click', '.create_final_event_timeslot', function(){
+        window.location.replace('/finalize/'+$("#timelisting_header").data('eventid'));
       });
 
     });
