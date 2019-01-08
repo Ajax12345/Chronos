@@ -1,0 +1,1621 @@
+<html>
+  <style>
+    .top_header{
+      height:60px;
+      background-color:#37176A;
+    }
+    .logo{
+      padding-left: 140px;
+      color:white;
+    }
+    p{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    a{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .avatar{
+      font-family: 'Noto Sans TC', sans-serif;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: blue;
+    color: white;
+    font-size: 18px;
+    }
+    .dashboard_username{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:18px;
+    }
+    .tab_pannel{
+      height:110px;
+      background-color: #37176A;
+    }
+    .nav_tab{
+      color:white;
+      font-size:16px;
+    }
+    #full_selected{
+      height:3px;
+      width:auto;
+      background-color: red;
+      margin-top:-10px;
+
+    }
+
+    .create_event{
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background-color: #FABC09;
+      border:none;
+      -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+    }
+    .create_event:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+    }
+    .create_event:focus{
+      outline:none;
+    }
+    .datetime_display{
+      height:55px;
+      background-color: #21DCAC;
+      width:68%;
+      border-bottom-right-radius: 80px;
+    }
+    .datetime_info{
+      margin-left:20px;
+      color:white;
+    }
+    .datetime_text{
+      color:white;
+      margin-top:10px;
+      font-size:19px;
+      margin-left:50px;
+    }
+    #all_messages{
+      height:500px;
+      border-left:solid;
+      border-left-width:1px;
+      border-left-color:#C6C6C6;
+    }
+    .feed_type{
+      font-size:20px;
+    }
+    .quantity_display{
+      padding-top:2px;
+      padding-bottom:2px;
+      padding-left:8px;
+      padding-right:8px;
+      background-color: #FABC09;
+      border-radius:50%;
+
+    }
+    .actions{
+      padding-right: 150px;
+    }
+    .upcomming_event{
+      -webkit-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      font-family: 'Noto Sans TC', sans-serif;
+
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    .event_occurs{
+      color:white;
+      font-size:25px;
+    }
+    .event_time_display{
+      background-color: #21DCAC;
+      /*for pressing events: #FF354D */
+    }
+    ._time_data{
+      color:white;
+
+    }
+    .event_name{
+      font-size:24px;
+    }
+    .event_description{
+      font-size:18px;
+    }
+    .event_upcomming_warning{
+      color:white;
+      font-size:19px;
+      margin-top:10px;
+      padding-left:150px;
+    }
+
+    .timerange_listing_wrapper{
+      -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      width:1200px;
+
+      padding-bottom:50px;
+      border-radius:10px;
+      background-color: white;
+      margin: 0 auto;
+    }
+    .timelisting_container{
+      width:1200px;
+      height:auto;
+      margin:0 auto;
+    }
+    .datetime_display_listing{
+
+
+      width:auto;
+
+      overflow-x: scroll;
+      margin-top:30px;
+      margin-left:1px;
+    }
+    .user_block_widget{
+      width:220px;
+      height:70px;
+      background-color: #21DCAC;
+
+      text-align: center;
+      line-height: 70px;
+      border-bottom:solid;
+      border-bottom-color:white;
+      border-bottom-width:1px;
+    }
+    .widget_top{
+      border-top-left-radius: 20px;
+      border-top:solid;
+      border-top-width:1px;
+      border-top-color:#21DCAC;
+      height:71px;
+    }
+    .user_timeslot_action{
+      border-radius:20px;
+      color:white;
+      font-size:18px;
+      font-family: 'Noto Sans TC', sans-serif;
+      padding-top:5px;
+      padding-bottom:5px;
+      padding-left:10px;
+      padding-right:10px;
+      border:none;
+
+
+    }
+    .time_filler{
+      width:45px;
+    }
+    .widget_bottom{
+      border-bottom-left-radius: 20px;
+      border-bottom:none;
+    }
+    .remove_timeslot{
+      background: none;
+      border:none;
+
+    }
+
+    .create_timeslot{
+      background: none;
+      border:none;
+      float:right;
+    }
+    .is_logged_in{
+      background-color: #21DCAC;
+    }
+    .it_is_you{
+    padding-left:7px;
+    padding-right:7px;
+    height:20px;
+    padding-top:3px;
+    padding-bottom:3px;
+    border-radius: 4px;
+    color: white;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 12px;
+    margin-top: 20px;
+    background-color: #FABC09;
+    margin-left:-13px;
+
+
+  }
+  .all_time_slot_displays{
+    width:700px;
+
+
+    overflow-y: hidden;
+    overflow-x:scroll;
+    margin-left:-30px;
+
+  }
+  .timestamp_display{
+    max-width:900px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+
+  }
+  .timeslot-display .singleton_timestamp{
+    min-width: 120px;
+
+
+  }
+  .timeslot-display table{
+
+  }
+  .timeslot{
+    height:67px;
+    width:119px;
+    background-color: #C8C8C7;
+    border-radius:4px;
+    border:none;
+    color:white;
+
+  }
+  .timeslot:hover{
+    cursor:pointer;
+  }
+  .first_choice{
+    background-color: #9BECD8;
+    color:#18A66C;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-left:solid;
+    border-left-width:4px;
+    border-left-color:#21DCAC;
+
+  }
+
+  .first_choice_text{
+    color:#18A66C;
+  }
+  .third_choice{
+    background-color: #FC9FAA;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-left:solid;
+    border-left-width:4px;
+    border-left-color:#FF354D;
+    color:#FF354D;
+  }
+  .third_choice_text{
+    color:#FF354D;
+  }
+  .second_choice{
+    background-color: #FFE28F;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-left:solid;
+    border-left-width:4px;
+    border-left-color:#FABC09;
+    color:#D69F00;
+  }
+  .second_choice_text{
+    color:#D69F00;
+  }
+  .user_availability_row .time_hour_block{
+    min-width: 120;
+    border-right:none;
+    border-right-width:1px;
+    border-right-color:#B6B6B6;
+    height:69px;
+
+  }
+  .user_availability_row ._time_hour_block{
+    min-width: 120;
+    border-right:none;
+    border-right-width:1px;
+    border-right-color:#B6B6B6;
+    height:69px;
+  }
+  .unavailable_bar{
+    min-width: 60;
+    /*
+    border-right:solid;
+    border-right-width:1px;
+    border-right-color:#B6B6B6;
+    */
+    background-color: #F5F5F5;
+    height:69px;
+  }
+  .detail_input{
+    width:350px;
+    height:40px;
+    font-size:20px;
+    border:none;
+    border-bottom:solid;
+    font-family: 'Noto Sans TC', sans-serif;
+    border-bottom-color: #21DCAC;
+  }
+  .detail_input:focus{
+    outline:none;
+    border-bottom-color: #FABC09;
+  }
+  .user_availability_row{
+    border-bottom:solid;
+    border-bottom-width:1px;
+    border-color:#B6B6B6;
+    border-right:solid;
+    border-right-width:1px;
+    border-right-color:#B6B6B6;
+  }
+  .timeslot_timestamp{
+
+    font-size:12px;
+    margin-left:5px;
+  }
+  .previous_created_event_text{
+    font-size:14px;
+    margin-left:5px;
+  }
+  .timeslot_timestamp_created{
+
+  }
+  .calendar_timeslot{
+    color:white;
+    border-radius:4px;
+    border:solid;
+    border-width:1.5px;
+    opacity:0.8;
+  }
+  .create_final_event_timeslot{
+    font-family: 'Noto Sans TC', sans-serif;
+    color:white;
+    font-size:18px;
+    padding:5px;
+    padding-left:10px;
+    padding-right:10px;
+    border-radius:20px;
+    border:none;
+    background-color: #FABC09;
+  }
+  .create_final_event_timeslot:hover{
+    cursor:pointer;
+  }
+  .timeslot_preference_wrapper{
+    width:500px;
+    height:260px;
+    margin-left:90px;
+  }
+  .timeslot_event_day_nav{
+    border:none;
+    background: none;
+
+  }
+  .timeslot_event_day_nav:hover{
+    cursor:pointer;
+  }
+  .timeslot_event_day_nav:focus{
+    outline:none;
+  }
+  .user_block_widget:hover{
+    cursor:pointer;
+    background-color: #22CA9F;
+    -webkit-transition:0.2s;
+  }
+  .round_both{
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    height:72px;
+  }
+  .timeslot_preference{
+    width:250px;
+    padding:10px;
+    color:white;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:15px;
+    text-align: center;
+    border-radius:5px;
+    background-color: #FABC09;
+    border:solid;
+    border-width:1px;
+    border-color:#E9B213;
+
+
+  }
+  .timeslot_preference:hover{
+    cursor:pointer;
+  }
+  .create_timeslot_final{
+    float:right;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:12px;
+    padding-right:12px;
+    border-radius:20px;
+    font-size:20px;
+    color:white;
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #FABC09;
+    border:none;
+    margin-right:50px;
+  }
+  .create_timeslot_final:hover{
+    cursor:pointer;
+  }
+  .not_available_today{
+    background: none;
+    border:solid;
+    border-radius:5px;
+    border-width:2px;
+    border-color:#FF354D;
+    font-family: 'Noto Sans TC', sans-serif;
+    color:#FF354D;
+    padding:5px;
+
+  }
+  .not_available_today:hover{
+    cursor:pointer;
+  }
+  .is_available_today{
+    background: none;
+    border:solid;
+    border-radius:5px;
+    border-width:2px;
+    border-color:#21DCAC;
+    font-family: 'Noto Sans TC', sans-serif;
+    color:#21DCAC;
+    padding:5px;
+  }
+  .is_available_today:hover{
+    cursor:pointer;
+  }
+  u{
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  </style>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+
+
+  </head>
+  <body style='background-color: #E4E4E4;'>
+    <nav class="navbar top_header">
+      <p class="navbar-brand logo" style='font-size:30px;'>Chronos</p>
+      <div class='actions'>
+        <table>
+          <tr>
+            <td>
+            <div class='user_avatar'>
+              <div class='avatar' style='background-color:{{user.avatar_color}}'>{{user.initials}}</div>
+
+            </div>
+          </td>
+            <td><a href='/user/{{user.id}}' class='dashboard_username' style='color:white' data-loggedinid='{{user.id}}' id='dashboard_user_display'>{{user.condensed_name}}</a></td>
+          </tr>
+        </table>
+
+      </div>
+    </nav>
+    <div class='tab_pannel'>
+      <div style='height:65px;'></div>
+      <div class='container'>
+        <div class='row no-gutters'>
+          <div class='col'>
+            <a href='/dashboard' style='color:white;text-decoration:none' class='nav_tab'>Dashboard</a>
+          </div>
+
+          <div class='col'>
+            <a href='/calendar' style='color:white;text-decoration:none' class='nav_tab'>Calendar</a>
+
+          </div>
+          <div class='col'>
+            <a href='/groups' style='color:white;text-decoration:none' class='nav_tab'>Groups</a>
+
+
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>My events</p>
+            <div id='full_selected' style='width:75px;'></div>
+
+          </div>
+          <div class='col'>
+            <a href='/profile' style='color:white;text-decoration:none' class='nav_tab'>Profile</a>
+
+          </div>
+
+          <div class='col'>
+            <button class='create_event'>
+              <i class="fas fa-plus" style='font-size:2em;color:white;'></i>
+            </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='datetime_display'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'>
+            <p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>
+          </div>
+
+          <div class='col'><p class='datetime_text'><strong><span class='hour_min'></span> on <span class='day_of_week'></span>, <span class='month'></span> <span class='day'></span>, <span class='year'></span></strong></p></div>
+
+        </div>
+      </div>
+      <!--
+      <p class='datetime_info'>Saturday, November 17, 2018</p>
+      <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
+    -->
+    </div>
+    <div style='height:100px;'></div>
+
+    <div class='timerange_listing_wrapper'>
+      <div style='height:20px;'></div>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'>
+            <a href='/event/{{event.id}}' style='color:#21DCAC'><i class="fas fa-bars" style='font-size:1.6em;color:#21DCAC'></i></a>
+
+          </div>
+          <div class='col-md-auto'><p style="text-align:center;font-size:30px;" id ='timelisting_header' data-timestamp='{{event.default_timestamp}}' data-eventid='{{event.id}}'>Timelistings for <strong style='color:#FABC09'>{{event.name}}</strong></p></div>
+          <div class='col'>
+            {%if event.logged_in_is_creator%}
+              <i class="fas fa-cog" style='float:right;font-size:1.6em;color:#21DCAC'></i>
+            {%endif%}
+          </div>
+        </div>
+      </div>
+
+      <div class='timelisting_container'>
+
+        <div class='availability_wrapper'>
+          <div style='height:20px;'></div>
+          <table style='margin:0 auto;'>
+            <tr>
+              <td class='col-md-auto'>
+                {%if event.has_previous%}
+                  <button class='timeslot_event_day_nav' data-timestamp='{{event.previous_timestamp}}'><i class="fas fa-angle-left" style="font-size:2em;color: #FABC09;"></i></button>
+                {%endif%}
+              </td>
+              <td><p style='text-align:center;font-size:22px;padding-left:15px;padding-right:15px;margin-top:10px;'><strong>{{event.current_timestamp_header}}</strong></p></td>
+              <td class='col-md-auto'>
+                {%if event.has_next%}
+                  <button class='timeslot_event_day_nav' data-timestamp='{{event.next_timestamp}}'><i class="fas fa-angle-right" style="font-size:2em;color: #FABC09;"></i></button>
+                {%endif%}
+              </td>
+            </tr>
+
+          </table>
+
+          <div class='container'>
+            <div class='row'>
+              <div class='col-md-auto'>
+                <div class='user_block_widget' style='width:220px;background:none;'>
+                  <div class='container' style='margin-left:-15px;'>
+                    <div class='row'>
+                      {%if event.can_add_availability%}
+                        <div class='col-md-auto'><i class="fas fa-plus-circle" style='font-size:1.5em;color:#FABC09;margin-top:30px;'></i></div>
+                        <div class='col-md-auto'><p style='font-size:15px;margin-top:1px;margin-left:-15px;color:#FABC09;margin-top:5px;' class='add_your_available'><u>add your availability</u></p></div>
+                      {%endif%}
+                    </div>
+                  </div>
+                </div>
+                {%for user in event.user_roster%}
+                <div class='user_block_widget {{user.row_class}}' data-blockid='{{user.user.id}}'>
+                  <div class='container'>
+                    <div class='row'>
+                      <div class='col-md-auto'>
+                        <a href='/user/{{user.user.id}}' class='dashboard_username' style='color:white'>{{user.user.condensed_name}}</a>
+                      </div>
+                      {%for tag in user.tags%}
+                      <div class='col-md-auto'>
+                        <span class='it_is_you'>{{tag.name}}</span>
+                      </div>
+                      {%endfor%}
+                    </div>
+                  </div>
+                </div>
+                {%endfor%}
+
+
+
+              </div>
+              <div class='col all_time_slot_displays'>
+
+
+                <div class='datetime_display_listing'>
+                  <div class="timeslot-display">
+
+                    <table>
+                      <tr class='timestamp_display_row' style='border-bottom:solid;border-width:1px;border-color:#B6B6B6'>
+
+                      </tr>
+                    </table>
+                    {%for slots in event.all_timeslots%}
+
+                    <table>
+                      {%if not slots.is_available%}
+                        <tr class='user_availability_row user_unavailable_row' id='availability_for_{{slots.user}}' data-toggle="popover" data-placement="top" data-content="<p><strong>@{{slots.user_obj.condensed_name}}</strong> is not available today</p>" data-html="true">
+                          {%for _ in slots.error_bars%}
+                            <td class='unavailable_bar' data-userid='{{slots.user}}'>
+
+                            </td>
+                          {%endfor%}
+                        </tr>
+                      {%else%}
+                      <tr class='user_availability_row' id='availability_for_{{slots.user}}'>
+                        {%for slot in slots%}
+                          {%if slot.is_spacer%}
+                            <td class='{{slots.obj_class}}' id='hour_block_{{slot.count}}_{{slots.user}}' data-storingslot='False'>
+                            </td>
+                          {%elif slot.is_timeslot%}
+                          <td class='{{slots.obj_class}}' id='hour_block_{{slot.count}}_{{slots.user}}' style='min-width:{{slot.main_width}}px' data-storingslot='True'>
+                            <div class="timeslot {{slot.timeslot_class}}" id="timeslot_{{slot.count}}_{{slots.user}}" data-created="True" style='width:{{slot.width}}px;left:{{slot.offset}}px;margin-left:{{slot.offset}}px' data-toggle="popover" data-placement="top" data-content="<p>{{slot.popover_text}}</p>" data-html="true">
+                              {%if slots.is_creator%}
+                                <button id="remove_timeslot_{{slot.count}}_{{slots.user}}" class="remove_timeslot remove_timeslot_created"><i class="fas fa-times {{slot.timeslot_class}}_text" style="font-size:1em"></i></button>
+                              {%endif%}
+                              <p class="timeslot_timestamp timeslot_timestamp_created" id="timestamp_for_{{slot.count}}_{{slots.user}}"></p>
+                            </div>
+
+                          </td>
+                          {%else%}
+                            <td class='{{slots.obj_class}}' id='hour_block_{{slot.count}}_{{slots.user}}' style='min-width:{{slot.main_width}}px' data-storingslot='True'>
+                              <div class='timeslot calendar_timeslot' id="timeslot_{{slot.count}}_{{slots.user}}" data-created="True" style='width:{{slot.width}}px;left:{{slot.offset}}px;margin-left:{{slot.offset}}px;background-color:{{slot.background_color}};border-color:{{slot.border_color}}' data-toggle="popover" data-placement="top" data-content="<p><strong>{{slot.title}}</strong> is already scheduled in this timerange</p>" data-html="true" data-fulltitle='{{slot.title}}'>
+                                <p class='previous_created_event_text' id='previous_event_{{slot.count}}_{{slots.user}}'>{{slot.condensed_title}}</p>
+                                <p class="timeslot_timestamp timeslot_timestamp_created" id="timestamp_for_{{slot.count}}_{{slots.user}}" style='margin-top:-10px;'></p>
+                              </div>
+                            </td>
+                          {%endif%}
+
+                        {%endfor%}
+                      </tr>
+                      {%endif%}
+
+                    </table>
+                    {%endfor%}
+
+
+
+                  </div>
+                </div>
+
+
+
+              </div>
+            </div>
+            <div style='height:20px;'></div>
+
+            {%if event.logged_in_is_creator%}
+              <button class='create_final_event_timeslot' id='manual_select'>Manually choose times</button>
+            {%endif%}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+    <div style='height:100px;'></div>
+    <div class="modal" id="more_about_user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" id='modal_content_about_user'>
+
+      </div>
+    </div>
+  </div>
+  <!---->
+  <div class="modal" id="create_timeslot_date" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"><p>Create timeslot</p></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body create_timeslot_modal_body">
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-auto'><p><strong>When:</strong></p></div>
+            <div class='col-md-auto'><p id='timeslot_time_range'></p></div>
+          </div>
+        </div>
+        <div style='height:20px'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-auto'><p><strong>Your preference for selected timeslot:</strong></p></div>
+            <div class='col-md-auto'>
+              <i class="fas fa-question-circle extra_information" style="margin-top:5px;font-size:1.3em;color:#FABC09" data-toggle="popover" data-placement="right" data-content="<p>Your preference helps calculate an optimal meeting for all attendees.</p>" data-html="true"></i>
+            </div>
+          </div>
+        </div>
+        <div style='height:20px'></div>
+        <div class='timeslot_preference_wrapper'>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <div class='timeslot_preference' data-preference='1'>This is an optimal timerange for me</div>
+            </div>
+            <div class='col-md-auto preference_check' id='preference_check_1' data-selected='True'>
+              <i class="fas fa-check-circle" style='margin-top:14px;font-size:2.3em;color:#22CA9F'></i>
+            </div>
+          </div>
+          <div style='height:10px'></div>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <div class='timeslot_preference' data-preference='2'>I am available but would rather not meet now</div>
+            </div>
+            <div class='col-md-auto preference_check' id='preference_check_2' data-selected='False'>
+
+            </div>
+          </div>
+          <div style='height:10px'></div>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <div class='timeslot_preference' data-preference='3'>I am available only if absolutely necessary</div>
+            </div>
+            <div class='col-md-auto preference_check' id='preference_check_3' data-selected='False'>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+          <p style='margin-left:15px;'><strong>Add message (optional):</strong></p>
+          <div style="height:20px"></div>
+          <input type='text' class='detail_input' id='optional_timeslot_message' placeholder='optional message' style='font-size:16px;margin-left:60px;'>
+      </div>
+      <div class="modal-footer" style='border-top:none'>
+        <button class='create_timeslot_final'>Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!---->
+  </body>
+  <script>
+    $(document).ready(function(){
+      //calendar_timeslot
+      $(document).on({
+          mouseenter: function () {
+
+              $(this).popover();
+              $(this).popover("show");
+
+
+          },
+          mouseleave: function () {
+
+              $(this).popover("hide");
+
+          }
+      }, ".calendar_timeslot");
+      $(document).on({
+          mouseenter: function () {
+
+              $(this).popover();
+              $(this).popover("show");
+
+
+          },
+          mouseleave: function () {
+
+              $(this).popover("hide");
+
+          }
+      }, ".extra_information");
+      $(document).on({
+          mouseenter: function () {
+            if ($(this).data('created') === 'True'){
+              $(this).popover();
+              $(this).popover("show");
+            }
+          },
+          mouseleave: function () {
+            if ($(this).data('created') === 'True'){
+              $(this).popover("hide");
+            }
+          }
+      }, ".timeslot");
+      $(document).on({
+          mouseenter: function () {
+              var _user = $(this).data('userid');
+              $('#availability_for_'+_user).popover();
+              $('#availability_for_'+_user).popover("show");
+
+          },
+          mouseleave: function () {
+              var _user = $(this).data('userid');
+              $('#availability_for_'+_user).popover("hide");
+
+          }
+      }, ".unavailable_bar");
+      function display_warning(count){
+        $('.event_upcomming_warning').fadeOut(500);
+	       $('.event_upcomming_warning').fadeIn(500);
+         if (count < 10){
+           setTimeout(function(){display_warning(count+1)}, 1000);
+         }
+      }
+      //display_warning(0);
+      function hours_min(_hours, _minutes){
+        _meridian = 'AM';
+        if (_hours > 12){
+          _hours = (_hours%12).toString()
+          _meridian = 'PM';
+        }
+        else{
+          _hours = _hours.toString();
+        }
+        if (_minutes < 10){
+          _minutes = '0'+_minutes.toString();
+        }
+        else{
+          _minutes = _minutes.toString();
+        }
+        return _hours+':'+_minutes+' '+_meridian;
+      }
+      function update_datetime(){
+
+        var _date = new Date();
+        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        $('.hour_min').text(hours_min(_date.getHours(), _date.getMinutes()));
+        $('.day_of_week').text(days[_date.getDay()]);
+        $('.day').text(_date.getDate());
+        $('.month').text(months[_date.getMonth()]);
+        $('.year').text(_date.getFullYear());
+        setTimeout(function(){ update_datetime(); }, 1000);
+      }
+      update_datetime();
+      function add_time_blocks(){
+        $('.user_availability_row').each(function(){
+          var ref = $(this);
+          var user_id = $(this).prop('id').match('\\d+');
+          for (var i = 0; i < 24; i++){
+            var _the_html = `
+            <td class='time_hour_block' id='hour_block_${i+1}_${user_id}' data-storingslot='False'>
+
+
+            </td>
+            `
+            ref.append(_the_html);
+          }
+
+        });
+      }
+      //add_time_blocks();
+      function add_timestamps(){
+        for (var i = 1; i < 25; i++){
+          var meridian = 'AM';
+          var _final_hour = i;
+          if (i > 11){
+            meridian = 'PM';
+
+          }
+          if ( i > 12){
+            if (i === 24){
+              _final_hour = 12;
+            }
+            else{
+              _final_hour = i%12;
+            }
+
+          }
+          var _html = `
+          <td class='singleton_timestamp'>
+
+              <p style='color:#B6B6B6;font-size:18px;'><small>${_final_hour} ${meridian}</small></p>
+          </td>
+          `;
+          $('.timestamp_display_row').append(_html);
+        }
+        var _html = `
+        <td class='singleton_timestamp'>
+
+            <p style='color:#B6B6B6;font-size:18px;'><small>1 AM</small></p>
+        </td>
+        `;
+
+      }
+      add_timestamps();
+      function start_end_timestamps(start){
+
+        var time1 = start[0];
+        //console.log('times below')
+        //console.log(time1);
+        var time2 = start[start.length-1];
+        //console.log(time2);
+        var timestamp1 = get_timestamp(time1.substring(9)).split(' - ');
+        var timestamp2 = get_timestamp(time2.substring(9)).split(' - ');
+        //console.log('returned timestamps below');
+        //console.log(timestamp1);
+        //console.log(timestamp2);
+        //console.log('++++++++++++++++');
+        var starting1 = time_conversion(timestamp1[0]);
+        var ending1 = time_conversion(timestamp2[1]);
+        //console.log(starting1);
+        //console.log(ending1);
+        //console.log('+++++++++++');
+        return [starting1, ending1];
+      }
+      var time_divisor = 120;
+      function group_row(_user_id){
+        //console.log('user id here '+_user_id)
+        var _starting = [];
+        var _full_slots = [];
+        var _final = [];
+        $('.time_hour_block').each(function(){
+          if ($(this).prop('id').match('^dummy_hour_block')){
+              _full_slots.push([]);
+          }
+          else{
+            var _id = $(this).prop('id').match("\\d+_\\d+");
+            var _id_info = _id[0].split('_');
+            if (parseInt(_user_id) === parseInt(_id_info[1])){
+              if ($(this).html().match('^\\s+$')){
+                _full_slots.push([]);
+
+              }
+              else{
+                _full_slots.push($($(this).html()).prop('id'));
+              }
+            }
+          }
+
+        });
+
+        //console.log('_full_slots here');
+        //console.log(_full_slots);
+        var _grouped = [];
+        var _current_queue = [];
+        for (var i = 0; i < _full_slots.length; i++){
+          if (_full_slots[i].length === 0){
+            if (_current_queue.length > 0){
+
+              _grouped.push([start_end_timestamps(_current_queue), 0]);
+              _current_queue= [];
+              _grouped.push(_full_slots[i]);
+            }
+            else{
+              _grouped.push(_full_slots[i])
+            }
+          }
+          else{
+            if ($("#"+_full_slots[i]).data('created') === 'True'){
+              if (_current_queue.length > 0){
+                _grouped.push([start_end_timestamps(_current_queue), 0]);
+                _current_queue= [];
+              }
+              var _trailing_class = $('#'+_full_slots[i]).prop('class').match('\\w+$')[0];
+              if (_trailing_class === 'calendar_timeslot'){
+                _grouped.push([start_end_timestamps([_full_slots[i]]), 2, _trailing_class, $('#'+_full_slots[i]).data('fulltitle'), $('#'+_full_slots[i]).css('background-color'), $('#'+_full_slots[i]).css('border-color')]);
+              }
+              else{
+                _grouped.push([start_end_timestamps([_full_slots[i]]), 1, _trailing_class]);
+              }
+
+            }
+            else{
+              _current_queue.push(_full_slots[i]);
+            }
+
+          }
+        }
+        if (_current_queue.length > 0){
+          _grouped.push([start_end_timestamps(_current_queue), 0]);
+        }
+        console.log(_grouped);
+
+        $('.time_hour_block').each(function(){
+          if ($(this).prop('id').match('^dummy_hour_block')){
+            $(this).remove();
+          }
+          else{
+            var _id = $(this).prop('id').match("\\d+_\\d+");
+            var _id_info = _id[0].split('_');
+            if (parseInt(_user_id) === parseInt(_id_info[1])){
+              $(this).remove();
+            }
+          }
+
+        });
+
+        var counter = 1;
+        var seen_timeslot = false;
+        for (var i = 0; i < _grouped.length; i++){
+          if (_grouped[i].length === 0){
+            var _the_html = `
+            <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' data-storingslot='False'>
+
+
+            </td>
+            `
+            $("#availability_for_"+_user_id).append(_the_html);
+            counter++;
+          }
+          else{
+            var _payload_stuff = _grouped[i]
+            //alert(JSON.stringify(_payload_stuff));
+            var start = _payload_stuff[0][0];
+            var end = _payload_stuff[0][1];
+
+
+            var _from_left = Math.round(time_divisor*(start[1]/60));
+            var _from_right = Math.round(time_divisor*(end[1]/60));
+            if (_from_left < 3){
+              _from_left = 0;
+            }
+            if (_from_right < 3){
+              _from_right = 0;
+            }
+            console.log(start)
+            console.log(end);
+            console.log(end[0]);
+            console.log(start[0]);
+            console.log(_from_right-_from_left);
+            console.log('-------------');
+
+            var timeslot_width = ((end[0]*time_divisor)-(start[0]*time_divisor))+(_from_right-_from_left)-1
+
+            var main_width;
+            if (end[1] === 0){
+              main_width = time_divisor*(end[0]-start[0]);
+            }
+            else{
+              main_width = time_divisor*(end[0]+1-start[0]);
+            }
+
+
+            var _factor_off = main_width%120;
+            //alert(timeslot_width);
+            if (!_payload_stuff[1]){
+              var new_html = `
+              <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='min-width:${main_width}px' data-storingslot='True'>
+                <div class="timeslot" id="timeslot_${counter}_${_user_id}" data-created="False" style='width:${timeslot_width}px;left:${_from_left}px;margin-left:${_from_left}px;'>
+
+                  <button id="remove_timeslot_${counter}_${_user_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
+                  <button id='create_timeslot_${counter}_${_user_id}' class='create_timeslot'><i class="fas fa-plus" style='color:white;font-size:1em'></i></button>
+                  <p class="timeslot_timestamp" id="timestamp_for_${counter}_${_user_id}"></p>
+                </div>
+
+              </td>
+              `
+              $("#availability_for_"+_user_id).append(new_html);
+              $('#timeslot_'+counter.toString()+'_'+_user_id).resizable({handles:"e,w", minWidth:0, maxWidth:main_width-3});
+            }
+            else if (_payload_stuff[1] === 1){
+              var _popover_text = {'first_choice':'This is an optimal timerange for me', 'second_choice':'I am available but would rather not meet now', 'third_choice':'I am available only if absolutely necessary'}
+              _type_class = _payload_stuff[2];
+              var new_html = `
+              <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='min-width:${main_width}px' data-storingslot='True'>
+                <div class="timeslot ${_type_class}" id="timeslot_${counter}_${_user_id}" data-created="True" style='width:${timeslot_width}px;left:${_from_left}px;margin-left:${_from_left}px' data-toggle="popover" data-placement="top" data-content="<p>${_popover_text[_type_class]}</p>" data-html="true">
+
+                  <button id="remove_timeslot_${counter}_${_user_id}" class="remove_timeslot"><i class="fas fa-times ${_type_class}_text" style="font-size:1em"></i></button>
+
+                  <p class="timeslot_timestamp" id="timestamp_for_${counter}_${_user_id}"></p>
+                </div>
+
+              </td>
+              `
+              $("#availability_for_"+_user_id).append(new_html);
+            }
+            else{
+              //  _grouped.push([start_end_timestamps([_full_slots[i]]), 2, _trailing_class, $('#'+_full_slots[i]).data('fulltitle'), $('#'+_full_slots[i]).css('background-color'), $('#'+_full_slots[i]).css('border-color')]);
+              var _condensed_name = _payload_stuff[3];
+              if (_condensed_name.length > 8){
+                _condensed_name = _condensed_name.substring(8)+'...';
+              }
+              var new_html = `
+              <td class='time_hour_block' id='hour_block_${counter}_${_user_id}' style='min-width:${main_width}px' data-storingslot='True'>
+                <div class='timeslot calendar_timeslot' id="timeslot_${counter}_${_user_id}" data-created="True" style='width:${timeslot_width}px;left:${_from_left}px;margin-left:${_from_left}px;background-color:${_payload_stuff[4]};border-color:${_payload_stuff[5]}' data-toggle="popover" data-placement="top" data-content="<p><strong>${_payload_stuff[3]}</strong> is already scheduled in this timerange</p>" data-html="true" data-fulltitle='${_payload_stuff[3]}'>
+                  <p class='previous_created_event_text'>${_condensed_name}</p>
+                  <p class="timeslot_timestamp timeslot_timestamp_created" id="timestamp_for_${counter}_${_user_id}" style='margin-top:-10px;'></p>
+                </div>
+              </td>
+              `;
+              $("#availability_for_"+_user_id).append(new_html);
+            }
+
+
+            counter++;
+          }
+
+        }
+
+      }
+      function time_conversion(stamp){
+        //console.log('timestamp'+stamp)
+        var _hour1 = parseInt(stamp.match('^\\d+'));
+        var _minutes1 = parseInt(stamp.match(':\\d+')[0].substring(1));
+        var meridian1 = stamp.match('[AMP]+');
+        if (meridian1[0] === 'PM'){
+          _hour1 += 12;
+        }
+
+        return [_hour1, _minutes1];
+      }
+      function get_timestamp(_id){
+        var _id_info = _id.split('_');
+        var _unit = parseInt(_id_info[0]);
+        var _user_id = _id_info[1];
+        var previous_space = find_previous_space(_id);
+        var ref = $("#timeslot_"+_id);
+
+        var _from_left = parseInt(ref.css('left').match('\\d+'));
+        var _width = parseInt(ref.css('width').match('\\d+'));
+        //alert(_width);
+        /*
+        if (_width%118 != 0){
+          if (_width != 119){
+            _width ++;
+          }
+
+        }
+        */
+        var _start = previous_space + _from_left;
+
+        var _end = previous_space + _from_left + _width;
+
+        var hour1 = Math.floor(_start/time_divisor);
+        var minutes1 = Math.floor(((_start%time_divisor)/time_divisor)*60);
+        var hour2 = Math.floor(_end/time_divisor);
+        var minutes2 =  Math.floor(((_end%time_divisor)/time_divisor)*60);
+        if (minutes2 + 2 >= 59 && minutes2 < 59){
+          minutes2 = 59;
+        }
+        else if (minutes2 < 59){
+          minutes2++;
+        }
+
+        var meridian1 = 'AM';
+        var meridian2 = 'AM';
+        var pad1 = '0';
+        var pad2 = '0';
+        if (hour1 > 12){
+
+          meridian1 = 'PM';
+          if (hour1 === 24){
+            hour1 = 12;
+          }
+          else{
+            hour1 = hour1%12;
+          }
+
+        }
+        if (hour2 > 12){
+          if (hour2 === 24){
+            hour2 = 12;
+          }
+          else{
+            hour2 = hour2 %12;
+          }
+          meridian2 = 'PM';
+        }
+        if (minutes1 > 9){
+          pad1 = '';
+        }
+        if (minutes2 > 9){
+          pad2 = '';
+        }
+        var timestamp = `${hour1}:${pad1}${minutes1} ${meridian1} - ${hour2}:${pad2}${minutes2} ${meridian2}`;
+        return timestamp;
+
+      }
+      function find_previous_space(_id){
+        var _split = _id.split('_');
+        var _previous = time_divisor;
+        $('.time_hour_block').each(function(){
+          if ($(this).prop('id').match('^dummy_hour_block_')){
+            _previous += 120;
+          }
+          else{
+            var _info = $(this).prop('id').match("\\d+_\\d+")[0].split('_');
+            if (parseInt(_info[1]) === parseInt(_split[1]) && parseInt(_info[0]) < parseInt(_split[0])){
+
+              _previous += parseInt($(this).css('width').match('\\d+'));
+            }
+          }
+
+        });
+        return _previous;
+      }
+      function update_timestamps(){
+        $('.timeslot').each(function(){
+          var _id = $(this).prop('id').match("\\d+_\\d+");
+          var _id_info = _id[0].split('_');
+          var _unit = parseInt(_id_info[0]);
+          var _user_id = _id_info[1];
+          var previous_space = find_previous_space(_id[0]);
+          var ref = $(this);
+
+
+          var _from_left = parseInt(ref.css('left').match('\\d+'));
+          var _width = parseInt(ref.css('width').match('\\d+'));
+          if (_width === 118){
+            _width = time_divisor;
+          }
+          var _start = previous_space + _from_left;
+
+          var _end = previous_space + _from_left + _width;
+
+          var hour1 = Math.floor(_start/time_divisor);
+          var minutes1 = Math.floor(((_start%time_divisor)/time_divisor)*60);
+          var hour2 = Math.floor(_end/time_divisor);
+          var minutes2 =  Math.floor(((_end%time_divisor)/time_divisor)*60);
+          if (minutes2 + 2 >= 60){
+            minutes2 = 0;
+            hour2 ++;
+          }
+          var meridian1 = 'AM';
+          var meridian2 = 'AM';
+          var pad1 = '0';
+          var pad2 = '0';
+          if (hour1 > 12){
+
+            if (hour1 === 24){
+              hour1 = 12;
+              meridian1 = 'PM';
+            }
+            else if (hour1 === 25){
+              meridian1 = 'AM';
+              hour1 = 1;
+            }
+            else{
+              hour1 = hour1%12;
+              meridian1 = 'PM';
+            }
+
+          }
+          if (hour2 > 12){
+            if (hour2 === 24){
+              hour2 = 12;
+              meridian2 = 'PM';
+            }
+            else if (hour2 === 25){
+              meridian2 = 'AM';
+              hour2 = 1;
+            }
+            else{
+              hour2 = hour2 %12;
+              meridian2 = 'PM';
+            }
+
+          }
+          if (minutes1 > 9){
+            pad1 = '';
+          }
+          if (minutes2 > 9){
+            pad2 = '';
+          }
+          var timestamp = `
+            ${hour1}:${pad1}${minutes1} ${meridian1} - ${hour2}:${pad2}${minutes2} ${meridian2}
+          `;
+          $("#timestamp_for_"+_id).html(timestamp);
+        });
+        setTimeout(function(){
+          update_timestamps()
+        }, 50);
+      }
+      update_timestamps()
+      var test_count = 0;
+      $('.timerange_listing_wrapper').on('click', '.time_hour_block', function(){
+        //alert('here on click');
+        if ($(this).data('storingslot') === 'False'){
+          var _id = $(this).prop('id').match('\\d+_\\d+');
+          var info_id = _id[0].split("_");
+          var _html = `
+          <div class="timeslot" id="timeslot_${_id}" data-created="False">
+
+            <button id="remove_timeslot_${_id}" class="remove_timeslot"><i class="fas fa-times" style="color:white;font-size:1em"></i></button>
+            <button id='create_timeslot_${_id}' class='create_timeslot'><i class="fas fa-plus" style='color:white;font-size:1em'></i></button>
+            <p class="timeslot_timestamp" id="timestamp_for_${_id}"></p>
+          </div>
+          `;
+          $(this).html(_html);
+          $('#timeslot_'+_id).resizable({handles:"e,w", minWidth:0, maxWidth:118});
+
+
+          group_row(info_id[1]);
+        }
+
+      });
+      function remove_timeslot(_id){
+        var _block_width = parseInt($('#hour_block_'+_id).css('width').match('\\d+'));
+        var _range = Math.floor(_block_width/120);
+
+        var _user_id = parseInt(_id.split('_')[1]);
+        var _hour_id = parseInt(_id.split('_')[0]);
+        var _has_next = false;
+        var _has_previous = false;
+        $('.time_hour_block').each(function(){
+          var _this_id = $(this).prop('id').match('\\d+_\\d+')[0].split('_');
+          if (parseInt(_this_id[1]) === _user_id && parseInt(_this_id[0]) > _hour_id){
+            _has_next = true;
+          }
+        });
+        $('.time_hour_block').each(function(){
+          var _this_id = $(this).prop('id').match('\\d+_\\d+')[0].split('_');
+          if (parseInt(_this_id[1]) === _user_id && parseInt(_this_id[0]) < _hour_id){
+            _has_previous = true;
+          }
+        });
+        $("#hour_block_"+_id).remove();
+        if (_has_next){
+          var _next_id = _hour_id+1;
+          var _counter = _range;
+          var _the_html = `
+          <td class='time_hour_block' id='dummy_hour_block_${_counter}' data-storingslot='False'>
+          </td>
+          `
+          $(_the_html).insertBefore('#hour_block_'+_next_id.toString()+'_'+_user_id.toString());
+          for (var i = 0; i < _range-1; i++){
+            var _the_html = `
+            <td class='time_hour_block' id='dummy_hour_block_${_counter-1}' data-storingslot='False'>
+            </td>
+            `
+            $(_the_html).insertBefore('#dummy_hour_block_'+_counter.toString());
+            _counter -= 1;
+          }
+          group_row(_user_id.toString());
+        }
+        else{
+          if (_has_previous){
+            var _next_id = _hour_id-1;
+            var _counter = _range;
+            var _the_html = `
+            <td class='time_hour_block' id='dummy_hour_block_${_counter}' data-storingslot='False'>
+            </td>
+            `
+            $(_the_html).insertAfter('#hour_block_'+_next_id.toString()+'_'+_user_id.toString());
+            for (var i = 0; i < _range-1; i++){
+              var _the_html = `
+              <td class='time_hour_block' id='dummy_hour_block_${_counter-1}' data-storingslot='False'>
+              </td>
+              `
+              $(_the_html).insertAfter('#dummy_hour_block_'+_counter.toString());
+              _counter -= 1;
+            }
+            group_row(_user_id.toString());
+          }
+          else{
+            //availability_for_
+            for (var i = 0; i < 24; i++){
+              var _the_html = `
+              <td class='time_hour_block' id='dummy_hour_block_${i+1}' data-storingslot='False'>
+              </td>
+              `
+              $("#availability_for_"+_user_id.toString()).append(_the_html);
+            }
+            group_row(_user_id.toString());
+
+          }
+        }
+
+      }
+      $('.timerange_listing_wrapper').on('click', '.remove_timeslot', function(event){
+        event.stopPropagation();
+        if ($(this).prop('class').match('remove_timeslot_created$')){
+          var _id = $(this).prop('id').match('\\d+_\\d+');
+          var _timerange = $("#timestamp_for_"+_id).text();
+          var _payload = {'timestamp':$("#timelisting_header").data('timestamp'),'timerange':_timerange ,'id':parseInt($("#timelisting_header").data('eventid'))};
+          $("#timeslot_"+_id).popover('hide');
+          $.ajax({
+            url: "/remove_set_timeslot",
+            type: "get",
+            data: {payload: JSON.stringify(_payload)},
+            success: function(response) {
+              $(".timerange_listing_wrapper").html(response.html);
+              //add_time_blocks();
+              add_timestamps();
+            },
+            error: function(xhr) {
+              //Do Something to handle error
+            }
+          });
+
+        }
+        else{
+          var _id = $(this).prop('id').match('\\d+_\\d+');
+          //alert(_id);
+          remove_timeslot(_id[0]);
+          $("#timeslot_"+_id).remove();
+        }
+
+      });
+      $('.timerange_listing_wrapper').on('click', '.timeslot', function(event){
+        event.stopPropagation();
+      });
+
+      $('.timerange_listing_wrapper').on('click', '.user_block_widget', function(){
+
+        var _user_id = parseInt($(this).data('blockid'));
+        if (_user_id === parseInt($('#dashboard_user_display').data('loggedinid'))){
+          $.ajax({
+            url: "/user_timelisting_about",
+            type: "get",
+            data: {payload: JSON.stringify({'user_id':_user_id, 'event_id':parseInt($("#timelisting_header").data('eventid')), 'timestamp':$("#timelisting_header").data('timestamp'), 'flag':1})},
+            success: function(response) {
+              $("#modal_content_about_user").html(response.html);
+              $("#more_about_user").modal('toggle');
+            },
+            error: function(xhr) {
+              //Do Something to handle error
+            }
+          });
+
+        }
+
+
+      });
+      $('.timerange_listing_wrapper').on('click', '.dashboard_username', function(event){
+        event.stopPropagation();
+      });
+      $('.timerange_listing_wrapper').on('click', '.create_timeslot', function(){
+        var _trailing_id = $(this).prop('id').match('\\d+_\\d+$')[0];
+        var _timerange = $("#timestamp_for_"+_trailing_id).text();
+        var timerange = _timerange.match('\\d+:\\d+ [AMP]+ \\- \\d+:\\d+ [AMP]+')[0];
+        var timestamp = $('#timelisting_header').data('timestamp').split('-');
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var _full_timestamp = timerange +" on "+months[parseInt(timestamp[0]-1)]+" "+timestamp[1]+", "+timestamp[2];
+        var _the_html = `
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <div class='timeslot_preference' data-preference='1'>This is an optimal timerange for me</div>
+            </div>
+            <div class='col-md-auto preference_check' id='preference_check_1' data-selected='True'>
+              <i class="fas fa-check-circle" style='margin-top:14px;font-size:2.3em;color:#22CA9F'></i>
+            </div>
+          </div>
+          <div style='height:10px'></div>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <div class='timeslot_preference' data-preference='2'>I am available but would rather not meet now</div>
+            </div>
+            <div class='col-md-auto preference_check' id='preference_check_2' data-selected='False'>
+
+            </div>
+          </div>
+          <div style='height:10px'></div>
+          <div class='row'>
+            <div class='col-md-auto'>
+              <div class='timeslot_preference' data-preference='3'>I am available only if absolutely necessary</div>
+            </div>
+            <div class='col-md-auto preference_check' id='preference_check_3' data-selected='False'>
+
+            </div>
+          </div>
+        </div>
+        `;
+        $('.timeslot_preference_wrapper').html(_the_html);
+        $("#optional_timeslot_message").val('');
+        $('#timeslot_time_range').text(_full_timestamp);
+        $("#create_timeslot_date").modal('toggle');
+      });
+      $('.timeslot_preference_wrapper').on('click', '.timeslot_preference', function(){
+        //alert('hi here')
+        var ref_id = $(this).data('preference');
+        $('.preference_check').each(function(){
+          $(this).html('');
+          $(this).data('selected', 'False');
+        });
+
+        $('#preference_check_'+ref_id).data('selected', 'True');
+        $('#preference_check_'+ref_id).html("<i class='fas fa-check-circle' style='margin-top:14px;font-size:2.3em;color:#22CA9F'></i>");
+      });
+      $('#create_timeslot_date').on('click', '.create_timeslot_final', function(){
+
+        var preference;
+        $(".preference_check").each(function(){
+
+          if ($(this).data('selected') === 'True'){
+            preference = parseInt($(this).prop('id').match('\\d+')[0]);
+          }
+        });
+        var message = $("#optional_timeslot_message").val();
+        var _payload = JSON.stringify({'preference':preference, 'message':message, 'timestamp':$("#timelisting_header").data('timestamp'), 'id':parseInt($("#timelisting_header").data('eventid')), 'timerange':$("#timeslot_time_range").text()});
+        //alert(_payload);
+        $("#create_timeslot_date").modal('toggle');
+        $.ajax({
+          url: "/add_timeslot",
+          type: "get",
+          data: {payload: _payload},
+          success: function(response) {
+            $(".timerange_listing_wrapper").html(response.html);
+            add_timestamps();
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+
+      });
+      $('.timerange_listing_wrapper').on('click', '.add_your_available', function(event){
+        event.stopPropagation();
+        var _id = $("#timelisting_header").data('eventid');
+        var _timestamp = $("#timelisting_header").data('timestamp');
+
+        $.ajax({
+          url: "/add_user_availability",
+          type: "get",
+          data: {payload: JSON.stringify({'id':_id, 'timestamp':_timestamp})},
+          success: function(response) {
+            $(".timerange_listing_wrapper").html(response.html);
+            //add_time_blocks();
+            add_timestamps();
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+
+
+      });
+      $('.timerange_listing_wrapper').on('click', '.timeslot_event_day_nav', function(){
+        var _timestamp = $(this).data('timestamp');
+        $.ajax({
+          url: "/navigate_timeslot_listing",
+          type: "get",
+          data: {payload: JSON.stringify({'id':$("#timelisting_header").data('eventid'), 'timestamp':_timestamp})},
+          success: function(response) {
+            $(".timerange_listing_wrapper").html(response.html);
+            //add_time_blocks();
+            add_timestamps();
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      });
+      $("#modal_content_about_user").on('click', '.not_available_today', function(){
+        $("#more_about_user").modal('toggle');
+        var _payload = {'timestamp':$("#timelisting_header").data('timestamp'), 'id':parseInt($("#timelisting_header").data('eventid'))};
+        $.ajax({
+          url: "/mark_as_unavailable",
+          type: "get",
+          data: {payload: JSON.stringify(_payload)},
+          success: function(response) {
+
+            $(".timerange_listing_wrapper").html(response.html);
+            //add_time_blocks();
+            add_timestamps();
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      });
+      $("#modal_content_about_user").on('click', '.is_available_today', function(){
+        $("#more_about_user").modal('toggle');
+        var _payload = {'timestamp':$("#timelisting_header").data('timestamp'), 'id':parseInt($("#timelisting_header").data('eventid'))};
+        $.ajax({
+          url: "/mark_as_available",
+          type: "get",
+          data: {payload: JSON.stringify(_payload)},
+          success: function(response) {
+            $(".timerange_listing_wrapper").html(response.html);
+            //add_time_blocks();
+            add_timestamps();
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      });
+
+    });
+
+  </script>
+</html>
