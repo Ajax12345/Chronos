@@ -1,0 +1,45 @@
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel"><p>Overlap for <strong style='color:#21DCAC'>{{overlap.datetime}}</strong>:  <strong style='color:#FABC09;margin-left:5px;'>{{overlap.timerange}}</strong></p></h5>
+    </div>
+    <div class="modal-body">
+      <div class="container">
+        <p><strong>Users with selections in this range:</strong></p>
+        <div style="height:15px"></div>
+        {%for result in overlap%}
+          <div class="row">
+              <div class="col-md-auto">
+                <div class="user_avatar">
+                  <div class="avatar" style="background-color:{{result.user.avatar_color}};width:35px;height:35px;"><p style="line-height:35px;">{{result.user.initials}}</p></div>
+
+                </div>
+              </div>
+              <div class="col-md-auto" style="margin-top:3px;"><a href="/user/{{result.user.id}}" style="color:black;margin-left:-20px;font-size:18px;"><strong>{{result.user.name}}</strong></a></div>
+            <div class='col'></div>
+            <div class='col-md-auto'>
+              <div class='user_timeslot_overlap' style='background-color:{{result.background_color}}'>
+                <p style='font-size:14px;color:{{result.color}}'>{{result.timestamp}}</p>
+              </div>
+            </div>
+          </div>
+          <div style="height:15px"></div>
+          {%endfor%}
+
+        </div>
+        <div style='height:20px'></div>
+        <table>
+          <tr>
+            <td><p style='margin-left:20px;'><strong>Availability score:</strong></p></td>
+            <td><strong><p class='availability_score_placement' style='margin-left:5px;'></p></strong></td>
+            <td>
+              <i class="fas fa-question-circle extra_information" style="margin-left:15px;margin-top:-10px;font-size:1.3em;color:#FABC09" data-toggle="popover" data-placement="right" data-content="<p>The availability score calculates the overall preference level for the selected timeslot by each user on a scale of <strong>0</strong> to <strong>1</strong>.</p>" data-html="true" data-original-title="" title=""></i>
+            </td>
+          </tr>
+        </table>
+    </div>
+    <div class="modal-footer" style='border-top:none'>
+      <button class='select_this_timeslot'>Select this timeslot</button>
+    </div>
+  </div>
+</div>
