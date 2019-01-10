@@ -1,4 +1,4 @@
-\import typing, tigerSqlite, datetime
+import typing, tigerSqlite, datetime
 import re, calendar, chronos_utilities
 import itertools
 
