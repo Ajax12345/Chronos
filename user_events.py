@@ -1,6 +1,7 @@
 import typing, re, itertools
 import tigerSqlite, chronos_users, user_groups
 import datetime, calendar, json
+import user_calendar, functools, chronos_utilities
 
 
 class _last_updated:
@@ -103,18 +104,26 @@ class _message_obj:
         return f'{_preced} at {12 if _posted.hour == 24 else _posted.hour%12 if _posted.hour > 12 else _posted.hour}:{"" if _posted.minute > 9 else "0"}{_posted.minute} {"PM" if _posted.hour > 12 else "AM"}'
 
 
+class _event_role:
+    @property
+    def is_spacer(self):
+        return self.role == 'spacer'
+    @property
+    def is_timeslot(self):
+        return self.role == 'timeslot'
+    @property
+    def is_previous_event(self):
+        return self.role == 'previous_event'
 
-class _spacer:
+class _spacer(_event_role):
     def __init__(self, _count:int, width:int=120) -> None:
         self.count, self.role = _count, 'spacer'
         self.width = width
-    @property
-    def is_spacer(self):
-        return self == "spacer"
+
     def __eq__(self, _val:str) -> bool:
         return 'spacer' == _val
 
-class _timeslot:
+class _timeslot(_event_role):
     def __init__(self, _count:int, _payload:dict) -> None:
         self.__dict__ = {'count':_count, 'role':'timeslot', **_payload}
     
@@ -123,13 +132,23 @@ class _timeslot:
         return {1:'This is an optimal timerange for me', 2:'I am available but would rather not meet now', 3:'I am available only if absolutely necessary'}[int(self.preference)]
 
     @property
-    def is_spacer(self):
-        return self == 'spacer'
-    def __eq__(self, _val:str) -> bool:
-        return _val == 'timeslot'
-    @property
     def timeslot_class(self):
         return {1:'first_choice', 2:'second_choice', 3:'third_choice'}[int(self.preference)]
+
+class _calendar_event(_event_role):
+    def __init__(self, _count:int, _user:int, _payload:dict) -> None:
+        self.user = _user
+        self.role = 'previous_event'
+        self.__dict__.update(_payload)
+        self.count = _count
+
+    def __getattr__(self, _val:str) -> typing.Any:
+        return getattr(self.obj, _val)
+
+    @property
+    def condensed_title(self):
+        return self.title[:8]+'...' if len(self.title) > 8 else self.title  
+
 
 
 class _timeslot_row:
@@ -139,8 +158,12 @@ class _timeslot_row:
         print(self.__dict__)
     @property
     def obj_class(self):
-        return 'time_hour_block' if self.logged_in == self.user else '_time_hour_block'
+        return 'time_hour_block' if self.logged_in == self.user else 'time_hour_block'
     
+    @property
+    def can_add_timeslots(self):
+        return 'True' if self.logged_in == self.user else 'False'
+
     @property
     def is_available(self):
         return self.available == 'True'
@@ -156,16 +179,28 @@ class _timeslot_row:
     @property
     def is_creator(self):
         return self.logged_in == self.user
+
+    def calc_timerange(self, _timerange:str) -> typing.List:
+        _hour1, _minutes1, _meridian1, _hour2, _minutes2, _meridian2 = re.findall('\d+|[AMP]+', _timerange)
+        return [[int(_hour1)+(0 if _meridian1 == 'AM' else 12), int(_minutes1)], [int(_hour2)+(0 if _meridian2 == 'AM' else 12), int(_minutes2)]]
+
+    @property
+    def user_calendar_events(self):
+        _m, _d, _y = map(int, re.findall('\d+', self.timestamp))
+        c = user_calendar.Calendar.events_by_day(self.logged_in, datetime.date(_y, _m, _d))
+        return [{'timerange':self.calc_timerange(i.timerange), 'obj':i} for i in c]
+    
     def __iter__(self):
         if self.available != 'True':
             raise ValueError(f"User is not available on {self.timestamp}")
         _count, _start = itertools.count(1), 0    
-        for _slot in sorted(self.timeslots, key=lambda x:x['timerange']):
+        for _slot in sorted(self.timeslots+(self.user_calendar_events if self.is_creator else []), key=lambda x:x['timerange']):
             [hour1, minute1], [hour2, minute2] = _slot['timerange']
             for _ in range(_start, hour1-1):
                 yield _spacer(next(_count))
                 _start += 1
-            _t = _timeslot(next(_count), _slot)
+            _current_count = next(_count)
+            _t = _timeslot(_current_count, _slot) if 'obj' not in _slot else _calendar_event(_current_count, self.logged_in, {'obj':_slot['obj']})
             print(_slot['timerange'])
             _factor = (hour2 if not minute2 else hour2+1) - hour1
             _t.main_width = _factor*120
@@ -186,8 +221,149 @@ class _timeslot_row:
             if not i.is_spacer:
                 print([getattr(i, c) for c in ['main_width', 'width', 'offset']])
 
+
+class overlap_parent:
+    def __getattr__(self, _val:str) -> bool:
+        return self.role == _val[3:]    
+
+class _option_timeslots(overlap_parent):
+    def __init__(self, _data:typing.List[dict]) -> None:
+        self.data = _data
+    def __contains__(self, _user:int) -> bool:
+        return any(i['user'] == _user for i in self.data)
+    @property
+    def opacity(self):
+        _scale = {1:3, 2:2, 3:1}
+        return sum(_scale[i['preference']] for i in self.data)/float(len(self.data)*3)  
+    def __repr__(self):
+        return f'Overlap(users={len(self.data)})'
+    def __bool__(self):
+        return bool(self.data)
+    @property
+    def role(self):
+        return 'overlap_timeslot'
+
+class _no_overlap_found(overlap_parent):
+    def __init__(self, _ind:int) -> None:
+        self.role, self.ind = 'no_overlap', _ind
+    
+class _overlap_spacer(overlap_parent):
+    def __init__(self, _ind:int) -> None:
+        self.role, self.ind = 'spacer', _ind
+
+
+class _finalized_day:
+    def __init__(self, _logged_in:int, _payload:dict, _all_users:typing.List[int], _iter:int, _day_len:int) -> None:
+        self.__dict__ = {"logged_in":_logged_in, **_payload, 'all_users':_all_users, 'ind':_iter, 'day_len':_day_len}
+    @property
+    def timestamp(self):
+        _m, _d, _y = map(int, re.findall('\d+', self.date))
+        return f'{Event.months[_m-1]} {_d}, {_y}'
+
+    @property
+    def day_class(self):
+        #return 'widget_top' if not self.ind else 'widget_bottom' if self.ind == self.day_len-1 else 'round_both' if 
+        return 'round_both' if self.day_len == 1 else 'widget_top' if not self.ind else 'widget_bottom' if self.ind == self.day_len-1 else 'is_logged_in'
+
+    @property
+    def filtered_listings(self):
+        return [i for i in self.user_data if i["timeslots"]]
+    
+    @property
+    def missing_users(self):
+        return len(self.user_data) - len(self.filtered_listings)
+
+    @staticmethod
+    def _can_call(_stamp:typing.List, _val:int) -> bool:
+        return True if len(_stamp) < 2 else _val >= _stamp[[1, 0][len(_stamp) == 2]]
+
+    @classmethod
+    def timestamp_combos(cls, d, _current=[]):
+        if len(_current) == 4:
+            yield _current
+        else:
+            for i in d[0]:
+                if cls._can_call(_current, i):
+                    yield from cls.timestamp_combos(d[1:], _current+[i])
+    
+
+    def is_overlap(self, _a:datetime.datetime, _b:datetime.datetime, stamp:functools.partial, _payload:dict) -> bool:
+        [h1, m1], [h2, m2] = _payload['timerange']
+        _d1, _d2 = stamp(h1-1 if h1 == 24 else h1, m1), stamp(h2-1 if h2 == 24 else h2, m2)
+        return _a >= _d1 and _b <= _d2
+
+
+    @staticmethod
+    def max_timestamp_key(_vals:list) -> int:
+        [a, b], _ = _vals
+        return (b.hour*60+b.minute)-(a.hour*60+a.minute)
+
+    def _overlap(self) -> typing.Any:
+        _filtered = self.filtered_listings
+        _m, _d, _y = map(int, re.findall('\d+', self.date))
+        _stamp = functools.partial(datetime.datetime, _y, _m, _d)
+        _groupings = [[_stamp(a, b), _stamp(*c)] for a, b, *c in self.__class__.timestamp_combos([range(1, 24), range(0, 60), range(1, 24), range(0, 60)])]
+        _flattened_timeslots = [{'user':b['user'], **i} for b in self.user_data for i in b['timeslots']]
+        _final_time_ranges = [[[a, b], _option_timeslots([i for i in _flattened_timeslots if self.is_overlap(a, b, _stamp, i)])] for a, b in _groupings]
+        _new_ranges = [[a, b] for a, b in _final_time_ranges if all(c in b for c in self.all_users)]
+        return _new_ranges if not _new_ranges else max(_new_ranges, key=self.__class__.max_timestamp_key)
+
+    def overlap(self) -> list:
+        _m, _d, _y = map(int, re.findall('\d+', self.date))
+        _stamp = functools.partial(datetime.datetime, _y, _m, _d)
+        _flattened_timeslots = [{'user':b['user'], **i} for b in self.user_data for i in b['timeslots']]
+        #_start, _end = zip(*[[a, b] for a, b in map(lambda x:x['timerange'], _flattened_timeslots)])
+        t = list(zip(*[[a, b] for a, b in map(lambda x:x['timerange'], _flattened_timeslots)]))
+        print(t)
+        if not t:
+            return t
+        _start, _end = t
+        _start, _end = [[a-1 if a == 24 else a, b] for a, b in _start],[[a-1 if a == 24 else a, b] for a, b in _end] 
+        print(_start, _end)
+        groupings = [[_stamp(*a), _stamp(*b)] for a in _start for b in _end]
+        new_groups = [[[a, b], _option_timeslots([i for i in _flattened_timeslots if self.is_overlap(a, b, _stamp, i)])] for a, b in groupings]
+        _new_ranges = [[a, b] for a, b in new_groups if all(c in b for c in self.all_users)]
+        return _new_ranges if not _new_ranges else max(_new_ranges, key=self.__class__.max_timestamp_key)
+
+    def __iter__(self):
+        _count, _start = itertools.count(1), 0    
+        _r = self.overlap()
+        if not _r:
+            for _ in range(24):
+                yield _no_overlap_found(self.ind)
+        else:
+            [a, b], _t = _r
+            for _ in range(0, a.hour-1):
+                yield _overlap_spacer(next(_count))
+                _start += 1
         
-            
+            _factor = (b.hour if not b.minute else b.hour+1) - a.hour
+            _t.main_width = _factor*120
+            _start += _factor
+            _t.timestamp = f'{a.hour if a.hour < 13 else 12 if a.hour == 24 else a.hour%12}:{"" if a.minute > 9 else "0"}{a.minute} {"AM" if a.hour < 12 else "PM"} - {b.hour if b.hour < 13 else 12 if b.hour == 24 else b.hour%12}:{"" if b.minute > 9 else "0"}{b.minute} {"AM" if b.hour < 12 else "PM"}'
+            _t.width = ((120*b.hour)+round((b.minute/float(60))*120))-((120*a.hour)+round((a.minute/float(60))*120))-3
+            _t.offset = round((a.minute/float(60))*120)
+            _t.ind = next(_count)
+            yield _t
+            for _ in range(_start, 24):
+                yield _overlap_spacer(next(_count))
+
+
+
+    @property
+    def is_today(self):
+        d = datetime.datetime.now()
+        _m, _d, _y = map(int, re.findall('\d+', self.date))
+        return datetime.date(_y, _m, _d) == datetime.date(*[getattr(d, i) for i in ['year', 'month', 'day']])
+
+    @property
+    def blocks(self):
+        yield from range(24)
+
+    @property
+    def triangle_class(self):
+        return ['triangle_today', 'triangle_other_day'][not self.is_today]
+
 class Event:
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -201,6 +377,10 @@ class Event:
     @property
     def can_view_event(self):
         return self.visibility == 'public' or self.logged_in in self.all_users
+
+    @property
+    def finalized_days(self):
+        return [_finalized_day(self.logged_in, a, self.all_users, i, len(self.days)) for i, a in enumerate(self.days)]
 
 
     @property
@@ -304,6 +484,39 @@ class Event:
 
 
 
+class _user_overlap_results:
+    class overlap:
+        def __init__(self, _payload:dict) -> None:
+            self._payload = _payload
+        @property
+        def user(self):
+            return chronos_users.Users.get_user(id=self._payload['user'])
+        @property
+        def timestamp(self):
+            [_hour1, _minutes1], [_hour2, _minutes2] = self._payload['timerange']
+            return f'{_hour1 if _hour1 < 13 else 12 if _hour1 == 24 else _hour1%12}:{"" if _minutes1 > 9 else "0"}{_minutes1} {"AM" if _hour1 < 12 else "PM"} - {_hour2 if _hour2 < 13 else 12 if _hour2 == 24 else _hour2%12}:{"" if _minutes2 > 9 else "0"}{_minutes2} {"AM" if _hour2 < 12 else "PM"}'
+    
+        @property
+        def color(self):
+            return {1:'#18A66C', 2:'#D69F00', 3:'#FF354D'}[self._payload['preference']]
+
+        @property
+        def background_color(self):
+            return {1:'#9BECD8', 2:'#FFE28F', 3:'#FC9FAA'}[self._payload['preference']]
+        
+
+    def __init__(self, _listing:typing.List[dict], _date:datetime.date, timerange:str) -> None:
+        self.listing, self.timerange, self._date = _listing, timerange, _date
+    @property
+    def datetime(self):
+        return f'{Event.months[self._date.month-1]} {self._date.day}, {self._date.year}'
+
+    def __iter__(self):
+        yield from map(self.__class__.overlap, self.listing)
+    
+
+    
+
 class Events:
     """
     filename: user_events.db
@@ -312,10 +525,12 @@ class Events:
     """
     @staticmethod
     def create_event_payload(_creator_id:int, _id:int, _payload:dict) -> dict:
-        print(_payload)
+        print('payload in create event', _payload)
         _basic, _dates, _people, _groups, _visibility = _payload
         _d = datetime.datetime.now()
-        _all_users = list(set([*_people, *[i for b in _groups for i in user_groups.all_users_in_group(_id, b)], _creator_id]))
+        print('here, before issue: ', _groups)
+        print('id passed here', _id)
+        _all_users = list(set([*_people, *[i for b in _groups for i in user_groups.all_users_in_group(_creator_id, b)], _creator_id]))
         return {'id':_id, 'basic':{**_basic, 'creator':_creator_id, 'visibility':['private', 'public'][_visibility], 'created_on':[getattr(_d, i) for i in ['year', 'month', 'day']]}, 'status':1, 'avoid_users':[], 'groups':_groups, 'people':[*_people, _creator_id], 'all_users':_all_users, 'days':[{"date":i, 'user_data':[{'user':c, 'timeslots':[], 'lasted_added':[], 'available':'True'} for c in _all_users]} for i in _dates], 'messages':[], 'finalized':[]}
 
     @classmethod
@@ -397,6 +612,22 @@ class Events:
         _new_payload = {**_current_event, 'days':[i if i['date'] != _payload['timestamp'] else {**i, 'user_data':[c if int(c['user']) != int(_poster) else {**c, 'timeslots':[h for h in c['timeslots'] if h['timerange'] != _timerange]} for c in i['user_data']]} for i in _current_event['days']]}
         tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
         return cls.get_event(int(_payload['id']), _poster, _set_timestamp=_payload['timestamp'])
+
+    @staticmethod
+    def is_overlap(start:datetime.datetime, end:datetime.datetime, stamp:functools.partial, _a:list, _b:list) -> bool:
+        a, b = stamp(*[_a[0]-1 if _a[0] == 24 else _a[0], _a[-1]]), stamp(*[_b[0]-1 if _b[0] == 24 else _b[0], _b[-1]])
+        return start <= a and b <= end
+
+    @classmethod
+    def about_overlap(cls, _user:int, _payload:dict) -> typing.Any:
+        _e = cls.get_event(int(_payload['id']), int(_user), _set_timestamp = _payload['date'])
+        _day = [i for i in _e.days if i['date'] == _payload['date']][0]
+        _new_grouped = [{'user':a['user'], **i} for a in _day['user_data'] for i in a['timeslots']]
+        _m, _d, _y = map(int, re.findall('\d+', _payload['date']))
+        _stamp = functools.partial(datetime.datetime, _y, _m, _d)
+        _hour1, _minutes1, _meridian1, _hour2, _minutes2, _meridian2 = re.findall('\d+|[AMP]+', _payload['timerange'])
+        _start, _end = _stamp(int(_hour1)+(0 if _meridian1 == 'AM' else 12), int(_minutes1)), _stamp(int(_hour2)+(0 if _meridian2 == 'AM' else 12), int(_minutes2))
+        return _user_overlap_results([i for i in _new_grouped if cls.is_overlap(_start, _end, _stamp, *i['timerange'])], datetime.date(_y, _m, _d), _payload['timerange'])
 
 
 class About:
