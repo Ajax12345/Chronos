@@ -630,6 +630,13 @@ class Events:
         return _user_overlap_results([i for i in _new_grouped if cls.is_overlap(_start, _end, _stamp, *i['timerange'])], datetime.date(_y, _m, _d), _payload['timerange'])
 
 
+    @classmethod
+    def finalize_event(cls, _poster:int, _payload:dict) -> None:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        new_event = {**_event, 'status':3, "finalized":[{'date':i['date'], 'timerange':[i['timerange']], 'people':[_poster]} for i in _payload['day_data']]}
+        print(json.dumps(new_event, indent=4))
+    
 class About:
     def __init__(self, _user:int, _event:int, _date:str, _day_data:dict) -> None:
         self.user, self.event_id, self.day_data= chronos_users.Users.get_user(id=_user), _event, _day_data
