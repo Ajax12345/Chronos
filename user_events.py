@@ -19,7 +19,9 @@ class _last_updated:
     
     @classmethod
     def max_timestamps(cls, _timelistings, _timestamp) -> typing.Callable:
-        return  cls(min([[a, datetime.datetime(*(lambda x:[x[-1], x[0], x[1]])(list(map(int, _timestamp.split('-')))), *b['timerange'][0])] for a, b in _timelistings], key=lambda x:x[-1]), _timestamp)
+        print('failed timelistings here', _timelistings)
+    
+        return cls(sorted([[a['user'], datetime.datetime(*a['timestamp'])] for a in _timelistings], key=lambda x:x[-1])[-1], _timestamp)
 
     @property
     def full_message(self):
@@ -45,7 +47,7 @@ class _menu_event:
 
     @property
     def lasted_updated_by(self):
-        _timeslots = [[i['user'], c] for i in self.user_data for c in i['timeslots']]
+        _timeslots = [i for b in self.user_data for i in b['lasted_added']]
         print('timeslots display below')
         print(_timeslots)
         if not _timeslots:
@@ -340,7 +342,7 @@ class _finalized_day:
             _factor = (b.hour if not b.minute else b.hour+1) - a.hour
             _t.main_width = _factor*120
             _start += _factor
-            _t.timestamp = f'{a.hour if a.hour < 13 else 12 if a.hour == 24 else a.hour%12}:{"" if a.minute > 9 else "0"}{a.minute} {"AM" if a.hour < 12 else "PM"} - {b.hour if b.hour < 13 else 12 if b.hour == 24 else b.hour%12}:{"" if b.minute > 9 else "0"}{b.minute} {"AM" if b.hour < 12 else "PM"}'
+            _t.timestamp = f'{a.hour if a.hour < 13 else 12 if a.hour == 24 else a.hour%12}:{"" if a.minute > 9 else "0"}{a.minute} {"AM" if a.hour <= 12 else "PM"} - {b.hour if b.hour < 13 else 12 if b.hour == 24 else b.hour%12}:{"" if b.minute > 9 else "0"}{b.minute} {"AM" if b.hour <= 12 else "PM"}'
             _t.width = ((120*b.hour)+round((b.minute/float(60))*120))-((120*a.hour)+round((a.minute/float(60))*120))-3
             _t.offset = round((a.minute/float(60))*120)
             _t.ind = next(_count)
@@ -364,6 +366,78 @@ class _finalized_day:
     def triangle_class(self):
         return ['triangle_today', 'triangle_other_day'][not self.is_today]
 
+class FinalizedSlot:
+    def __init__(self, _logged_in:int, _payload:dict) -> None:
+        self.logged_in = _logged_in
+        self.__dict__.update(_payload)
+
+    @property
+    def is_creator(self):
+        #return self.people[0] == self.logged_in
+        raise Exception
+
+    @property
+    def joined_users(self):
+        return ','.join(map(str, self.people))
+
+    @property
+    def needs_to_rsvp(self):
+        return self.logged_in not in self.people
+
+    
+    @property
+    def rsvp_text(self):
+        return 'Send RSVP' if self.needs_to_rsvp else 'RSVP Sent'
+    
+    @property
+    def rsvp_color(self):
+        return ['#21DCAC', '#FABC09'][self.needs_to_rsvp]
+
+
+    
+    @property
+    def full_day(self):
+        _m, _d, _y = map(int, re.findall('\d+', self.date))
+        _today = datetime.datetime.now()
+        if datetime.date(_y, _m, _d) == datetime.date(*[getattr(_today, i) for i in ['year', 'month', 'day']]):
+            return "Today"
+        if datetime.date(_y, _m, _d) == datetime.date(*[getattr(_today, i) for i in ['year', 'month', 'day']]) + datetime.timedelta(1):
+            return 'Tomorrow'
+        _calendar = list(calendar.Calendar().monthdatescalendar(_y, _m))
+        _week = [i for i in _calendar if any(c == datetime.date(_y, _m, _d) for c in i)][0]
+        _day = Event.days[[i for i, a in enumerate(_week) if a == datetime.date(_y, _m, _d)][0]]
+        return f'{_day}, {Event.months[_m-1]} {_d}, {_y}'
+
+
+class StatusBanner:
+    def __init__(self, *args:typing.List[str]) -> None:
+        self.__dict__ = dict(zip(['text', 'color'], args))
+
+class LastMessage:
+    def __init__(self, _data:dict) -> None:
+        self.__dict__ = _data
+    @property
+    def condensed_message(self):
+        return self.message if len(self.message) < 30 else self.message[:30]+'...'
+    @property
+    def poster_obj(self):
+        return chronos_users.Users.get_user(id=self.poster)
+
+class Visibility:
+    def __init__(self, _status:str) -> None:
+        self.status = _status
+    @property
+    def icon(self):
+        return 'fa-users' if self.status == 'public' else 'fa-key'
+        
+    @property
+    def visibility_message(self):
+        return f'This event is <strong>{"public" if self.status == "public" else "private"}</strong>'
+
+    @property
+    def color(self):
+        return ['#FABC09', '#21DCAC'][self.status == 'public']
+
 class Event:
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -374,6 +448,56 @@ class Event:
         self.__dict__.update(_payload)
         self.default_timestamp = _timestamp if _timestamp is not None else self.days[0]['date']
         print('default timestamp here', self.default_timestamp)
+    @property
+    def has_banner(self):
+        return self.status > 1
+
+    @property
+    def status_banner(self):
+        return StatusBanner(*({1:['not finalized', '#FABC09'], 3:['finalized', '#21DCAC'], 2:['canced', '#FF354D']}[self.status]))
+
+    @property
+    def possible_dates(self):
+        _dates = [i['date'] for i in getattr(self, 'finalized' if self.finalized else 'days')] 
+        return f'{len(_dates)} {"possible " if not self.finalized else ""}date{"s" if len(_dates) != 1 else ""}'
+    @property
+    def member_message(self):
+        return f'{len(self.all_users)} member{"s" if len(self.all_users) != 1 else ""}'
+    
+    @property
+    def has_last_message(self):
+        return bool(self.messages)
+
+    @property
+    def last_message(self):
+        return LastMessage(self.messages[-1])
+
+    @property
+    def banner_message(self):
+        if not self.has_banner:
+            raise AttributeError('class "Event" has no attribute "banner_message"')
+        return f'<strong><u>{self.name}</u></strong> has been finalized! See below for more.' if self.status == 3 else f'<strong><u>{self.name}</u></strong> has been canceled'
+    
+    @property
+    def banner_class(self):
+        if not self.has_banner:
+            raise AttributeError('class "Event" has no attribute "banner_message"')
+        return ['event_cancled', 'not_set_scheduled'][self.status == 3]
+    
+    @property
+    def is_finalized(self):
+        return bool(self.finalized)
+
+    
+    @property
+    def finalized_day_slots(self):
+        return [FinalizedSlot(self.logged_in, i) for i in self.finalized]
+
+
+    @property
+    def visibility_token(self):
+        return Visibility(self.visibility)
+
     @property
     def can_view_event(self):
         return self.visibility == 'public' or self.logged_in in self.all_users
@@ -415,6 +539,32 @@ class Event:
     @property
     def user_roster(self):
         return [_added_user(a, self.basic_tags(a), _row_id=i, _end=len(self.all_users)) for i, a in enumerate(self.all_users)]
+
+    @property
+    def plain_people(self):
+        return [chronos_users.Users.get_user(id=i) for i in self.all_users]
+    
+    @property
+    def has_added_people(self):
+        return bool(self.people)
+    
+    @property
+    def added_groups(self):
+        return [i for i in user_groups.Groups.user_groups(self.logged_in) if i.id in self.groups]
+
+    @property
+    def has_added_groups(self):
+        return bool(self.groups)
+
+    
+    @property
+    def created_owned_groups(self):
+        return [i for i in user_groups.Groups.user_groups(self.logged_in) if i.id not in self.groups]
+
+    @property
+    def has_created_groups(self):
+        return bool(self.created_owned_groups)
+
 
     @property
     def has_previous(self):
@@ -515,7 +665,29 @@ class _user_overlap_results:
         yield from map(self.__class__.overlap, self.listing)
     
 
+class EventAttendees:
+    def __init__(self, _date:str, _users:str) -> None:
+        self.date, self._users = _date, str(_users) if isinstance(_users, int) else _users
+        self._full_user_list = list(chronos_users.Users.user_listing_display(list(map(int, re.findall('\d+', self._users)))))
     
+    @property
+    def has_attendees(self):
+        return len(self._full_user_list) > 0
+
+    def __iter__(self):
+        yield from self._full_user_list
+    @property
+    def full_date(self):
+        _m, _d, _y = map(int, re.findall('\d+', self.date))
+        _today = datetime.datetime.now()
+        if datetime.date(_y, _m, _d) == datetime.date(*[getattr(_today, i) for i in ['year', 'month', 'day']]):
+            return "Today"
+        if datetime.date(_y, _m, _d) == datetime.date(*[getattr(_today, i) for i in ['year', 'month', 'day']]) + datetime.timedelta(1):
+            return 'Tomorrow'
+        _calendar = list(calendar.Calendar().monthdatescalendar(_y, _m))
+        _week = [i for i in _calendar if any(c == datetime.date(_y, _m, _d) for c in i)][0]
+        _day = Event.days[[i for i, a in enumerate(_week) if a == datetime.date(_y, _m, _d)][0]]
+        return f'{_day}, {Event.months[_m-1]} {_d}, {_y}'
 
 class Events:
     """
@@ -558,6 +730,31 @@ class Events:
     def event_exists(cls, _id:int) -> bool:
         _events = [b for _,b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events')]
         return any(int(i['id']) == int(_id) for c in _events for i in c)
+
+    @classmethod
+    def _event_sort_key(cls, _event:dict) -> typing.Tuple[int, int]:
+        '''
+        hour1, minutes1, meridian1, hour2, minutes2, meridian2 = re.findall('\d+(?=:)|(?<=:)\d+|[APM]+', _event['timerange'])
+        return (int(hour1)+(0 if meridian1 == 'AM' else 12)+int(minutes1), int(hour2)+(0 if meridian2 == 'AM' else 12)+int(minutes2))
+        '''
+        hour1, minutes1, meridian1, hour2, minutes2, meridian2 = re.findall('\d+(?=:)|(?<=:)\d+|[APM]+', _event['timerange'])
+        return [(int(hour1)+(0 if meridian1 == 'AM' else 12), int(minutes1)), (int(hour2)+(0 if meridian2 == 'PM' else 12), int(minutes2))]
+    
+    @classmethod
+    def respond_rsvp(cls, _user:int, _payload:dict) -> None:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _current_event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_current_event, 'finalized':[i if i['date'] != _payload['date'] else {**i, 'people':i['people']+[_user]} for i in _current_event['finalized']]}
+        _m, _d, _y = re.findall('\d+', _payload['date'])
+        print(json.dumps(_new_payload, indent=4))
+
+        for _timerange in _payload['timeranges']:
+            _event_creation_payload = {'timestamp':f'{_y}-{_m}-{_d}', 'created_on':str(datetime.datetime.now()), 'title':_new_payload['basic']['name'], 'description':_new_payload['basic']['description'], 'category': 'default', 'background_color': 'rgb(255, 53, 77)', 'border_color': 'rgb(255, 0, 0)', 'month':Event.months[int(_m)-1], 'year':_y, 'timerange':_timerange}
+            current_events = [b for a, b in tigerSqlite.Sqlite('user_calendars.db').get_id_events('calendars') if a == _user][-1]
+            tigerSqlite.Sqlite('user_calendars.db').update('calendars', [['events', sorted(current_events+[_event_creation_payload ], key=cls._event_sort_key)]], [['id', _user]])
+        
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        
 
     @classmethod
     def add_user_availability(cls, _user:int, _payload:dict) -> Event:
@@ -626,17 +823,25 @@ class Events:
         _m, _d, _y = map(int, re.findall('\d+', _payload['date']))
         _stamp = functools.partial(datetime.datetime, _y, _m, _d)
         _hour1, _minutes1, _meridian1, _hour2, _minutes2, _meridian2 = re.findall('\d+|[AMP]+', _payload['timerange'])
-        _start, _end = _stamp(int(_hour1)+(0 if _meridian1 == 'AM' else 12), int(_minutes1)), _stamp(int(_hour2)+(0 if _meridian2 == 'AM' else 12), int(_minutes2))
+        print('issue presented here', _payload['timerange'])
+        _start, _end = _stamp((lambda x:x-1 if x == 24 else x)(int(_hour1)+(0 if _meridian1 == 'AM' else 12)), int(_minutes1)), _stamp((lambda x:x-1 if x == 24 else x)(int(_hour2)+(0 if _meridian2 == 'AM' else 12)), int(_minutes2))
         return _user_overlap_results([i for i in _new_grouped if cls.is_overlap(_start, _end, _stamp, *i['timerange'])], datetime.date(_y, _m, _d), _payload['timerange'])
 
+    @classmethod
+    def event_attendees(cls, _payload:dict) -> None:
+        print('got payload in here', _payload)
+        return EventAttendees(_payload['date'], _payload['users'])
 
     @classmethod
     def finalize_event(cls, _poster:int, _payload:dict) -> None:
         _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
         _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
-        new_event = {**_event, 'status':3, "finalized":[{'date':i['date'], 'timerange':[i['timerange']], 'people':[_poster]} for i in _payload['day_data']]}
-        print(json.dumps(new_event, indent=4))
-    
+        _new_payload = {**_event, 'status':3, "finalized":[{'date':i['date'], 'timerange':[i['timerange']], 'people':[]} for i in _payload['day_data']]}
+        print(json.dumps(_new_payload, indent=4))
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        _c = cls.get_event(_payload['id'], _poster)
+        return {i:getattr(_c, i) for i in ['name', 'id']}
+
 class About:
     def __init__(self, _user:int, _event:int, _date:str, _day_data:dict) -> None:
         self.user, self.event_id, self.day_data= chronos_users.Users.get_user(id=_user), _event, _day_data
@@ -672,3 +877,46 @@ class About:
     def get_about_current(cls, _payload:dict) -> typing.Callable:
         _event = Events.get_event(int(_payload['event_id']), int(_payload['user_id']))
         return cls(int(_payload['user_id']), int(_payload['event_id']), _payload['timestamp'], (lambda x:[c for c in x['user_data'] if c['user'] == int(_payload['user_id'])][0])([i for i in _event.days if i['date'] == _payload['timestamp']][0]))
+
+    
+class belongsEvents:
+    def __init__(self, _listing:typing.List[int], _user:int, _page:int = 0) -> None:
+        self.listing, self.user, self.page = _listing, _user, _page
+        print(self.listing, self.user, self.page)
+        print('init belongsEvents')
+        self.groups = [self.listing[i:i+5] for i in range(0, len(self.listing), 5)]
+    
+    @property
+    def has_previous(self):
+        return bool(self.page)
+
+    @property
+    def previous_page(self):
+        if not self.has_previous:
+            raise Exception
+        return self.page - 1
+    
+    @property
+    def has_next(self):
+        return self.page+1 < len(self.groups)
+    
+    @property
+    def next_page(self):
+        if not self.has_next:
+            raise Exception
+        return self.page + 1
+
+    def __iter__(self):
+        for i in self.groups[self.page]:
+            yield Events.get_event(i, self.user)
+
+    @property
+    def has_groups(self):
+        return bool(self.listing)
+
+    @classmethod
+    def user_belongs_events(cls, _user:int, _page:int):
+        return cls([i['id'] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') for i in b if _user in i['all_users']], _user, _page)
+
+
+    
