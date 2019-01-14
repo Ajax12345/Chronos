@@ -40,6 +40,21 @@ def signup_render():
 def dashboard():
     return flask.render_template('dashboard.html', user = _user.Users.get_user(id=int(flask.session['id'])))
 
+
+@app.route('/attendee_list')
+def attendee_list():
+    return flask.jsonify({'html':flask.render_template('event_rsvp_attendee_list.html', users = user_events.Events.event_attendees(json.loads(flask.request.args.get('payload'))))})
+
+@app.route('/respond_with_rsvp')
+def respond_with_rsvp():
+    user_events.Events.respond_rsvp(flask.session['id'], json.loads(flask.request.args.get('payload')))
+    return flask.jsonify({'success':'True'})
+
+@app.route('/finalize_event')
+def finalize_event():
+    
+    return flask.jsonify(user_events.Events.finalize_event(flask.session['id'], json.loads(flask.request.args.get('payload'))))
+
 @app.route('/register_user')
 def register_user():
     _payload = json.loads(flask.request.args.get('info'))
@@ -141,6 +156,17 @@ def event_timeslot_display(id):
 @app.route('/event/<id>', methods=['GET'])
 @isloggedin
 def display_event(id):
+    if not user_events.Events.event_exists(int(id)):
+        return "<h1>Well, we thought we created a great 404 page. We failed.</h1>"
+    event=user_events.Events.get_event(int(id), flask.session['id'])
+    if not event.can_view_event:
+        return flask.redirect('/')
+
+    return flask.render_template('event_home_display.html', event=event, user=_user.Users.get_user(id=flask.session['id']))
+
+
+@app.route('/event/settings/<id>', methods=['GET'])
+def display_event_settings_pannel(id):
     if not user_events.Events.event_exists(int(id)):
         return "<h1>Well, we thought we created a great 404 page. We failed.</h1>"
     event=user_events.Events.get_event(int(id), flask.session['id'])
@@ -253,6 +279,25 @@ def group_checklist_listing_creation():
 def create_group():
     return flask.render_template('group_create_group.html', user=_user.Users.get_user(id=flask.session['id']), categories =  _group_categories.GroupCategories.group_categories(flask.session['id']), groups=user_groups.Groups.user_groups(flask.session['id']))
 
+
+
+@app.route('/event/<id>/settings', methods=['GET'])
+@isloggedin
+def event_settings(id):
+    event = user_events.Events.get_event(int(id), flask.session['id'])
+    if not event.logged_in_is_creator:
+        return "<h1>Well, we thought we created a great 404 page. We failed.</h1>"
+    return flask.render_template('group_event_settings.html', event=event, user=_user.Users.get_user(id=flask.session['id']))
+
+@app.route('/event/<id>/visibility', methods=['GET'])
+@isloggedin
+def event_visibility(id):
+    event = user_events.Events.get_event(int(id), flask.session['id'])
+    if not event.logged_in_is_creator:
+        return "<h1>Well, we thought we created a great 404 page. We failed.</h1>"
+    return flask.render_template('group_event_visibility_settings.html', event=event, user=_user.Users.get_user(id=flask.session['id']))
+
+
 @app.route('/update_profile')
 def update_profile():
     _vals = json.loads(flask.request.args.get('info'))
@@ -297,6 +342,10 @@ def render_mini_calendar():
 def user_personal_event_listings():
     return flask.jsonify({'html':flask.render_template('user_personal_event_listing.html', user =  _user.Users.personal_events_pagination(int(flask.session['id']), int(flask.request.args.get('page'))))})
 
+@app.route('/user_group_belong_listings')
+def user_group_belong_listings():
+    return flask.jsonify({'html':flask.render_template('user_group_event_listing.html', events =  user_events.belongsEvents.user_belongs_events(int(flask.session['id']), int(flask.request.args.get('page'))))})
+
 @app.route('/create_category')
 def create_category():
     name = flask.request.args.get('name')
@@ -313,6 +362,19 @@ def create_calendar_event():
 @app.route('/by_month_event_listing')
 def by_month_event_listing():
     return flask.jsonify({'success':'True', 'html':flask.render_template('by_month_calendar_pannel.html', event=user_calendar.Calendar.events_by_day(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
+
+
+@app.route('/overlap_more_info')
+def overlap_more_info():
+    return flask.jsonify({'html':flask.render_template('overlap_popup_pannel.html', overlap=user_events.Events.about_overlap(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
+
+@app.route('/finalize/<id>', methods=['GET'])
+@isloggedin
+def finalize_timeslots(id):
+    event = user_events.Events.get_event(int(id), flask.session['id'])
+    if not event.logged_in_is_creator:
+        return "<h1>Well, we thought we created a great 404 page. We failed.</h1>"
+    return flask.render_template('event_select_final_timeslots.html', event=event, user=_user.Users.get_user(id=flask.session['id']))
 
 @app.route('/delete_event')
 def delete_event():
@@ -341,6 +403,9 @@ def render_categories():
 def dynamic_calendar_display():
     return flask.jsonify({"success":'True', 'html':flask.render_template('by_week_calendar.html', calendar=user_calendar.Calendar.by_week(user = int(flask.session['id']), expedient=True))})
 
+@app.route('/select_filtered_group_listing')
+def select_filtered_group_listing():
+    return flask.jsonify({'html':flask.render_template('add_groups_modal_body.html', event=user_events.Events.get_event(int(flask.request.args.get('id')), flask.session['id']))})
 
 @app.route('/update_pannel_event_listing')
 def update_pannel_event_listing():
