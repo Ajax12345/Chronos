@@ -842,6 +842,47 @@ class Events:
         _c = cls.get_event(_payload['id'], _poster)
         return {i:getattr(_c, i) for i in ['name', 'id']}
 
+    @staticmethod
+    def update_event_name(_payload:dict) -> None:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_event, 'basic':{**_event['basic'], 'name':_payload['name']}}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+
+    @staticmethod
+    def update_event_description(_payload:dict) -> None:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_event, 'basic':{**_event['basic'], 'description':_payload['description']}}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+
+    @staticmethod
+    def update_event_location(_payload:dict) -> None:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_event, 'basic':{**_event['basic'], 'location':_payload['location']}}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+
+    @classmethod
+    def update_all_users(cls, _user:int, _payload:dict) -> Event:
+        print('got stuff here')
+        print(_payload)
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_event, 'people':[*_event['people'], *map(int, _payload['people'])], 'all_users':[*_event['all_users'], *map(int, _payload['people'])], 'days':[{**i, 'user_data':[*i['user_data'], *[{'user':int(c), 'timeslots':[], 'lasted_added':[], 'available':'True'} for c in _payload['people']]]} for i in _event['days']]}
+        #print(json.dumps(_new_payload, indent=4))
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        return cls.get_event(int(_payload['id']), _user)
+
+    @classmethod
+    def remove_user_from_all_users(cls, _user:dict, _payload:dict) -> Event:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_event, 'people':[i for i in _event['people'] if i != int(_payload['user'])], 'all_users':[i for i in _event['all_users'] if i != int(_payload['user'])], 'days':[{**i, 'user_data':[h for h in i['user_data'] if int(h['user']) != int(_payload['user'])]} for i in _event['days']]}
+        #print(json.dumps(_new_payload, indent=4))
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        return cls.get_event(int(_payload['id']), _user)
+
 class About:
     def __init__(self, _user:int, _event:int, _date:str, _day_data:dict) -> None:
         self.user, self.event_id, self.day_data= chronos_users.Users.get_user(id=_user), _event, _day_data
@@ -919,4 +960,3 @@ class belongsEvents:
         return cls([i['id'] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') for i in b if _user in i['all_users']], _user, _page)
 
 
-    
