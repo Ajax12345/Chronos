@@ -231,6 +231,7 @@ class overlap_parent:
 class _option_timeslots(overlap_parent):
     def __init__(self, _data:typing.List[dict]) -> None:
         self.data = _data
+        print('data in option_timeslot', self.data)
     def __contains__(self, _user:int) -> bool:
         return any(i['user'] == _user for i in self.data)
     @property
@@ -311,9 +312,11 @@ class _finalized_day:
         return _new_ranges if not _new_ranges else max(_new_ranges, key=self.__class__.max_timestamp_key)
 
     def overlap(self) -> list:
+        print('in overlap calc method')
         _m, _d, _y = map(int, re.findall('\d+', self.date))
         _stamp = functools.partial(datetime.datetime, _y, _m, _d)
         _flattened_timeslots = [{'user':b['user'], **i} for b in self.user_data for i in b['timeslots']]
+        print('flattened_timeslots', _flattened_timeslots)
         #_start, _end = zip(*[[a, b] for a, b in map(lambda x:x['timerange'], _flattened_timeslots)])
         t = list(zip(*[[a, b] for a, b in map(lambda x:x['timerange'], _flattened_timeslots)]))
         print(t)
@@ -324,12 +327,15 @@ class _finalized_day:
         print(_start, _end)
         groupings = [[_stamp(*a), _stamp(*b)] for a in _start for b in _end]
         new_groups = [[[a, b], _option_timeslots([i for i in _flattened_timeslots if self.is_overlap(a, b, _stamp, i)])] for a, b in groupings]
+        print('new group results here', new_groups)
         _new_ranges = [[a, b] for a, b in new_groups if all(c in b for c in self.all_users)]
+        print('final ranges', _new_ranges)
         return _new_ranges if not _new_ranges else max(_new_ranges, key=self.__class__.max_timestamp_key)
 
     def __iter__(self):
         _count, _start = itertools.count(1), 0    
         _r = self.overlap()
+        print('r in iter method', _r)
         if not _r:
             for _ in range(24):
                 yield _no_overlap_found(self.ind)
