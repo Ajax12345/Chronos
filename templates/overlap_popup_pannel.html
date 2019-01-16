@@ -25,7 +25,31 @@
           </div>
           <div style="height:15px"></div>
           {%endfor%}
+          <div style='height:30px'></div>
+          <p><strong>Users who are unavailable:</strong></p>
+          <div style="height:15px"></div>
+          {%if overlap.has_unavailable_users%}
+            {%for result in overlap.all_unavailable_users%}
+              <div class="row">
+                  <div class="col-md-auto">
+                    <div class="user_avatar">
+                      <div class="avatar" style="background-color:{{result.user.avatar_color}};width:35px;height:35px;"><p style="line-height:35px;">{{result.user.initials}}</p></div>
 
+                    </div>
+                  </div>
+                  <div class="col-md-auto" style="margin-top:3px;"><a href="/user/{{result.user.id}}" style="color:black;margin-left:-20px;font-size:18px;"><strong>{{result.user.name}}</strong></a></div>
+                <div class='col'></div>
+                <div class='col-md-auto'>
+                  <div class='user_timeslot_overlap' style='background-color:{{result.status.background_color}}'>
+                    <p style='font-size:14px;color:{{result.status.color}}'>{{result.status.text}}</p>
+                  </div>
+                </div>
+              </div>
+              <div style="height:15px"></div>
+            {%endfor%}
+          {%else%}
+            <p><i>All users are available today</i></p>
+          {%endif%}
         </div>
         <div style='height:20px'></div>
         <table>
