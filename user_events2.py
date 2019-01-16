@@ -695,7 +695,8 @@ class _user_overlap_results:
         return bool(self.unavailable_users)
     @property
     def all_unavailable_users(self):
-        yield from map(self.__class__.overlap, self.unavailable_users)    
+        _sorted_users = sorted(self.unavailable_users, key=lambda x:x['user'])
+        yield from map(self.__class__.overlap, [a for i, a in enumerate(_sorted_users) if not any(c['user'] == a['user'] for c in _sorted_users[:i])])    
 
 class EventAttendees:
     def __init__(self, _date:str, _users:str) -> None:
