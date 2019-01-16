@@ -647,10 +647,10 @@ class _status_obj:
         return 'No response' if self.flag == 'True' else 'Not available'
     @property
     def background_color(self):
-        return ['#F5F5F5', '#FC9FAA'][self.flag != 'True']
+        return ['#E9E9E9', '#FC9FAA'][self.flag != 'True']
     @property
     def color(self):
-        return ['#929292', '#FF354D'][self.flag != 'True']
+        return ['#767676', '#FF354D'][self.flag != 'True']
 
 
 class _user_overlap_results:
@@ -862,7 +862,7 @@ class Events:
         print('issue presented here', _payload['timerange'])
         hour1, minute1, hour2, minute2 = int(_hour1)+(0 if _meridian1 == 'AM' else 12), int(_minutes1), int(_hour2)+(0 if _meridian2 == 'AM' else 12), int(_minutes2)
         _start, _end = _stamp(hour1 - 1 if hour1 == 24 else hour1, 59 if hour1 == 24 else minute1), _stamp(hour2 - 1 if hour2 == 24 else hour2, 59 if hour2 == 24 else minute2)
-        return _user_overlap_results([i for i in _new_grouped if cls.is_overlap(_start, _end, _stamp, *i['timerange'])], datetime.date(_y, _m, _d), _payload['timerange'], _new_grouped)
+        return _user_overlap_results([i for i in _new_grouped if cls.is_overlap(_start, _end, _stamp, *i['timerange'])], datetime.date(_y, _m, _d), _payload['timerange'], _new_grouped+[{'user':i, 'available':'True'} for i in _e.all_users if not any(c['user'] == i for c in _new_grouped)])
 
     @classmethod
     def event_attendees(cls, _payload:dict) -> None:
