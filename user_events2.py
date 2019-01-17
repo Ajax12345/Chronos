@@ -311,6 +311,10 @@ class _finalized_day:
         _new_ranges = [[a, b] for a, b in _final_time_ranges if all(c in b for c in self.all_users)]
         return _new_ranges if not _new_ranges else max(_new_ranges, key=self.__class__.max_timestamp_key)
 
+    @staticmethod
+    def not_overlap(_a:typing.List[datetime.datetime], _b:typing.List[datetime.datetime]) -> bool:
+        return _a[-1] <= _b[0]
+
     def overlap(self) -> list:
         print('in overlap calc method')
         _m, _d, _y = map(int, re.findall('\d+', self.date))
@@ -327,10 +331,24 @@ class _finalized_day:
         print(_start, _end)
         groupings = [[_stamp(*a), _stamp(*b)] for a in _start for b in _end]
         new_groups = [[[a, b], _option_timeslots([i for i in _flattened_timeslots if self.is_overlap(a, b, _stamp, i)])] for a, b in groupings]
-        print('new group results here', new_groups)
-        _new_ranges = [[[h, k], b] for [h, k], b in new_groups if all(c['user'] in b for c in _flattened_timeslots) and h <= k]
-        print('final ranges', _new_ranges)
-        return _new_ranges if not _new_ranges else max(_new_ranges, key=self.__class__.max_timestamp_key)
+        _new_ranges = sorted([[[h, k], b] for [h, k], b in new_groups if all(c['user'] in b for c in _flattened_timeslots) and h <= k], key=lambda x:x[0])
+        _new_ranges = [a for i, a in enumerate(_new_ranges) if all(a[0] != c[0] for c in _new_ranges[:i])]
+        '''
+        print('plain old new_groups', new_groups)
+        class _groupby_wrapper:
+            def __init__(self, _obj) -> None:
+                self._obj = _obj
+            def __eq__(self, _obj1) -> bool:
+                return _finalized_day.not_overlap(self._obj[0], _obj1._obj[0])
+
+        _new_ranges = sorted([[[h, k], b] for [h, k], b in new_groups if all(c['user'] in b for c in _flattened_timeslots) and h <= k], key=lambda x:x[0])
+        print('new sorted ranges here', _new_ranges)
+        _new_ranges = [a for i, a in enumerate(_new_ranges) if all(a[0] != c[0] for c in _new_ranges[:i])]
+        _new_vals = [[h._obj for h in b] for _, b in itertools.groupby(list(map(_groupby_wrapper, _new_ranges)))]
+        print('this is the newval listing here', _new_vals)
+        return [max(i, key=self.__class__.max_timestamp_key) for i in _new_vals]
+        '''
+        return [[[a, b], c] for [a, b], c in _new_ranges if 60*(b.hour-a.hour)+(b.minute-a.minute)]
 
     def __iter__(self):
         _count, _start = itertools.count(1), 0    
@@ -340,19 +358,19 @@ class _finalized_day:
             for _ in range(24):
                 yield _no_overlap_found(self.ind)
         else:
-            [a, b], _t = _r
-            for _ in range(0, a.hour-1):
-                yield _overlap_spacer(next(_count))
-                _start += 1
-        
-            _factor = (b.hour if not b.minute else b.hour+1) - a.hour
-            _t.main_width = _factor*120
-            _start += _factor
-            _t.timestamp = f'{a.hour if a.hour < 13 else 12 if a.hour == 24 else a.hour%12}:{"" if a.minute > 9 else "0"}{a.minute} {"AM" if a.hour <= 12 else "PM"} - {b.hour if b.hour < 13 else 12 if b.hour == 24 else b.hour%12}:{"" if b.minute > 9 else "0"}{b.minute} {"AM" if b.hour <= 12 else "PM"}'
-            _t.width = ((120*b.hour)+round((b.minute/float(60))*120))-((120*a.hour)+round((a.minute/float(60))*120))-3
-            _t.offset = round((a.minute/float(60))*120)
-            _t.ind = next(_count)
-            yield _t
+            for [a, b], _t in _r:
+                for _ in range(_start, a.hour-1):
+                    yield _overlap_spacer(next(_count))
+                    _start += 1
+            
+                _factor = (b.hour if not b.minute else b.hour+1) - a.hour
+                _t.main_width = _factor*120
+                _start += _factor
+                _t.timestamp = f'{a.hour if a.hour < 13 else 12 if a.hour == 24 else a.hour%12}:{"" if a.minute > 9 else "0"}{a.minute} {"AM" if a.hour <= 12 else "PM"} - {b.hour if b.hour < 13 else 12 if b.hour == 24 else b.hour%12}:{"" if b.minute > 9 else "0"}{b.minute} {"AM" if b.hour <= 12 else "PM"}'
+                _t.width = ((120*b.hour)+round((b.minute/float(60))*120))-((120*a.hour)+round((a.minute/float(60))*120))-3
+                _t.offset = round((a.minute/float(60))*120)
+                _t.ind = next(_count)
+                yield _t
             for _ in range(_start, 24):
                 yield _overlap_spacer(next(_count))
 
@@ -494,10 +512,14 @@ class Event:
     def is_finalized(self):
         return bool(self.finalized)
 
+    @staticmethod
+    def sorted_datetime_obj(_payload:dict) -> datetime.date:
+        _m, _d, _y = map(int, re.findall('\d+', _payload['date']))
+        return datetime.date(_y, _m, _d)
     
     @property
     def finalized_day_slots(self):
-        return [FinalizedSlot(self.logged_in, i) for i in self.finalized]
+        return [FinalizedSlot(self.logged_in, i) for i in sorted(self.finalized, key=self.__class__.sorted_datetime_obj)]
 
 
     @property
@@ -849,6 +871,7 @@ class Events:
         a, b = stamp(*[_a[0]-1 if _a[0] == 24 else _a[0], _a[-1] if _a[0] != 24 else 59]), stamp(*[_b[0]-1 if _b[0] == 24 else _b[0], _b[-1] if _b[0] != 24 else 59])
         return a <= start and end <= b
 
+
     @classmethod
     def about_overlap(cls, _user:int, _payload:dict) -> typing.Any:
         _e = cls.get_event(int(_payload['id']), int(_user), _set_timestamp = _payload['date'])
@@ -871,10 +894,13 @@ class Events:
 
     @classmethod
     def finalize_event(cls, _poster:int, _payload:dict) -> None:
+        print('payload in finalize_event', _payload)
         _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
         _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
-        _new_payload = {**_event, 'status':3, "finalized":[{'date':i['date'], 'timerange':[i['timerange']], 'people':[]} for i in _payload['day_data']]}
+        _grouped_timeslots = [{'date':a, 'timerange':[i['timerange'] for i in b]} for a, b in itertools.groupby(sorted(_payload['day_data'], key=lambda x:x['date']), key=lambda x:x['date'])]
+        _new_payload = {**_event, 'status':3, "finalized":[{**i, 'people':[]} for i in _grouped_timeslots]}
         print(json.dumps(_new_payload, indent=4))
+        
         tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
         _c = cls.get_event(_payload['id'], _poster)
         return {i:getattr(_c, i) for i in ['name', 'id']}
@@ -917,6 +943,29 @@ class Events:
         _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
         _new_payload = {**_event, 'people':[i for i in _event['people'] if i != int(_payload['user'])], 'all_users':[i for i in _event['all_users'] if i != int(_payload['user'])], 'days':[{**i, 'user_data':[h for h in i['user_data'] if int(h['user']) != int(_payload['user'])]} for i in _event['days']]}
         #print(json.dumps(_new_payload, indent=4))
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        return cls.get_event(int(_payload['id']), _user)
+
+
+    @classmethod
+    def add_groups_to_event(cls, _user:int, _payload:dict) -> Event:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_users = [int(i) for b in _payload['groups'] for i in user_groups.all_users_in_group(_user, b) if int(i) not in _event['all_users']]
+        _new_payload = {**_event, 'groups':[*_event['groups'], *_payload['groups']], 'all_users':[*_event['all_users'], *_new_users], 'days':[{**i, 'user_data':[*i['user_data'], *[{'user':int(c), 'timeslots':[], 'lasted_added':[], 'available':'True'} for c in _new_users]]} for i in _event['days']]}
+        print(json.dumps(_new_payload, indent=4))
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        return cls.get_event(int(_payload['id']), _user)
+
+
+    @classmethod
+    def remove_group_from_event(cls, _user:int, _payload:dict) -> Event:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _group_users = list(user_groups.all_users_in_group(_user, _payload['group']))
+        _new_payload = {**_event, 'groups':[i for i in _event['groups'] if int(i) != int(_payload['group'])], 'all_users':[i for i in _event['all_users'] if i not in _group_users], 'days':[{**i, 'user_data':[h for h in i['user_data'] if int(h['user']) not in _group_users]} for i in _event['days']]}
+        print('just removed groups from event: ')
+        print(json.dumps(_new_payload, indent=4))
         tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
         return cls.get_event(int(_payload['id']), _user)
 
