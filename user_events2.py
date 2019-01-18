@@ -472,9 +472,20 @@ class Event:
         self.__dict__.update(_payload)
         self.default_timestamp = _timestamp if _timestamp is not None else self.days[0]['date']
         print('default timestamp here', self.default_timestamp)
+    
+    
     @property
     def has_banner(self):
         return self.status > 1
+
+
+    @property
+    def is_public(self):
+        return self.visibility == 'public'
+    
+    @property
+    def is_canceled(self):
+        return self.status == 2
 
     @property
     def status_banner(self):
@@ -968,6 +979,66 @@ class Events:
         print(json.dumps(_new_payload, indent=4))
         tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
         return cls.get_event(int(_payload['id']), _user)
+
+    @classmethod
+    def reopen_event(cls, _payload:dict) -> None:
+        print('got payload in reopen_event', _payload)
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        for _block in _event['finalized']:
+            _m, _d, _y = _block['date'].split('-')
+            for _timerange in _block['timerange']:
+                _event_creation_payload = {'timestamp':f'{_y}-{_m}-{_d}', 'created_on':str(datetime.datetime.now()), 'title':_event['basic']['name'], 'description':_event['basic']['description'], 'category': 'default', 'background_color': 'rgb(255, 53, 77)', 'border_color': 'rgb(255, 0, 0)', 'month':Event.months[int(_m)-1], 'year':_y, 'timerange':_timerange}
+                for _user in _event['all_users']:
+                    _ = user_calendar.Calendar.remove_event(_user, _event_creation_payload)
+        
+        _new_payload = {**_event, "finalized":[], 'status':1}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+        
+    @classmethod
+    def make_event_private(cls, _user:int, _payload:dict) -> None:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_event, "basic":{**_event['basic'], 'visibility':'private'}}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+
+    @classmethod
+    def make_event_public(cls, _user:int, _payload:dict) -> None:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_event, "basic":{**_event['basic'], 'visibility':'public'}}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+
+
+
+    @classmethod
+    def cancel_event(cls, _user:int, _payload:dict) -> None:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_event, 'status':2}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+
+    @classmethod
+    def reopen_event_flag(cls, _user:int, _payload:dict) -> None:
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        _new_payload = {**_event, 'status':1}
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i if int(i['id']) != int(_payload['id']) else _new_payload for i in _listing])], [('id', _owner)])
+
+    @classmethod
+    def delete_group_event(cls, _user:int, _payload:dict) -> None:
+        print('recieved payload in delete_group_event', _payload)
+        _owner, _listing = [[a, b] for a, b in tigerSqlite.Sqlite('user_events.db').get_id_listing('events') if any(int(i['id']) == int(_payload['id']) for i in b)][0]
+        _event = [i for i in _listing if int(i['id']) == int(_payload['id'])][0]
+        for _block in _event['finalized']:
+            _m, _d, _y = _block['date'].split('-')
+            for _timerange in _block['timerange']:
+                _event_creation_payload = {'timestamp':f'{_y}-{_m}-{_d}', 'created_on':str(datetime.datetime.now()), 'title':_event['basic']['name'], 'description':_event['basic']['description'], 'category': 'default', 'background_color': 'rgb(255, 53, 77)', 'border_color': 'rgb(255, 0, 0)', 'month':Event.months[int(_m)-1], 'year':_y, 'timerange':_timerange}
+                for _user in _event['all_users']:
+                    _ = user_calendar.Calendar.remove_event(_user, _event_creation_payload)
+        
+        print([i for i in _listing if int(i['id']) != int(_payload['id'])])
+        tigerSqlite.Sqlite('user_events.db').update('events', [('listing', [i for i in _listing if int(i['id']) != int(_payload['id'])])], [('id', _owner)])
 
 class About:
     def __init__(self, _user:int, _event:int, _date:str, _day_data:dict) -> None:
