@@ -58,6 +58,7 @@
     .create_event:hover{
       -webkit-transition:0.2s;
       background-color: #E7AF0F;
+      cursor:pointer;
     }
     .create_event:focus{
       outline:none;
@@ -278,6 +279,10 @@
 
 
   }
+  .event_cancled{
+    color:white;
+    background-color: #FF354D
+  }
   .external_entities_select:hover{
     cursor: pointer;
   }
@@ -353,11 +358,30 @@
   .add_availability_button:hover{
     cursor:pointer
   }
+  .send_rsvp{
+
+    color:white;
+    background-color: #FABC09;
+    border-radius:25px;
+    border:none;
+    font-size:13px;
+    padding:5px;
+    font-family: 'Noto Sans TC', sans-serif;
+    float:right;
+    margin-top:10px;
+    width:90px;
+  }
+  .send_rsvp:hover{
+    cursor:pointer;
+  }
   .message_info_wrapper{
     width:580px;
     height:300px;
     margin:0 auto;
 
+  }
+  .view_rspved_users:hover{
+    cursor:pointer;
   }
   .about_info_wrapper{
     width:580px;
@@ -536,7 +560,7 @@
       <div class='container'>
         <div class='row'>
           <div class='col'>
-            <p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>
+            <!--<p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>-->
           </div>
 
           <div class='col'><p class='datetime_text'><strong><span class='hour_min'></span> on <span class='day_of_week'></span>, <span class='month'></span> <span class='day'></span>, <span class='year'></span></strong></p></div>
@@ -559,7 +583,7 @@
 
           <div class='col'>
             {%if event.logged_in_is_creator%}
-              <i class="fas fa-cog" style='float:right;font-size:1.6em;color:#21DCAC'></i>
+              <a href='/event/{{event.id}}/settings' style='color:#21DCAC'><i class="fas fa-cog" style='float:right;font-size:1.6em;color:#21DCAC'></i></a>
             {%endif%}
           </div>
 
@@ -602,6 +626,11 @@
         <strong><u>Test</u></strong> has not yet been scheduled. You can add your availability below and view other attendees' listings.
       </div>
     -->
+      {%if event.has_banner%}
+        <div class='info_banner {{event.banner_class}}'>
+          {{event.banner_message|safe}}
+        </div>
+      {%endif%}
       <div style='height:30px;'></div>
       <div class="nav_tabs" style="width:570px;margin:0 auto;text-align:center;">
         <div class="container">
@@ -641,7 +670,59 @@
         <div class='home_content_wrapper'>
 
           <div class='selected_event_times'>
+            {%if event.is_finalized%}
+              {%for date in event.finalized_day_slots%}
+                <div class='datetime_event_select'>
+                  <div style='height:20px;'></div>
+                  <div class='container'>
+                    <div class='row'>
+                      <div class='col' style='text-align:left;margin-left:-15px;'>
+                        <p style='font-size:18px'><strong>{{date.full_day}}</strong></p>
+                        <div style='height:8px;'></div>
+                        <table>
+                          <tr>
+                            <td>
+                              {%if date.needs_to_rsvp%}
+                                <button class='send_rsvp' style='text-decoration:none;color:white;background-color:{{date.rsvp_color}};margin-top:-15px;' data-date='{{date.date}}' data-userid='{{event.logged_in}}'>{{date.rsvp_text}}</button>
+                              {%else%}
+                                <button class='send_rsvp' style='text-decoration:none;color:white;background-color:{{date.rsvp_color}};margin-top:-15px;' disabled>{{date.rsvp_text}}</button>
+                              {%endif%}
+                            </td>
+                            <td>
+                              <p style='font-size:13px;margin-left:10px;' class='view_rspved_users' data-users='{{date.joined_users}}' data-date='{{date.date}}'><u>view attendees</u></p>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                      <div class='col-md-auto'>
+                        {%for stamp in date.timerange%}
 
+                          <p style='color:#21DCAC' class='finalized_timeslot_day' data-date='{{date.date}}'><strong>{{stamp}}</strong></p>
+
+                        {%endfor%}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {%endfor%}
+            {%elif event.is_canceled%}
+            {%for date in event%}
+              <div class='datetime_event_select'>
+                <div style='height:20px;'></div>
+                <div class='container'>
+                  <div class='row'>
+                    <div class='col-md-auto' style='text-align:left;margin-left:-15px;'>
+                      <p style='font-size:18px'><strong>{{date.date_title}}</strong></p>
+                      
+                    </div>
+                    <div class='col'>
+                      <!--<button class='add_availability_button' style='text-decoration:none;color:white;' data-datetime='{{date.date}}'>{{date.button_text}}</button>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {%endfor%}
+            {%else%}
               {%for date in event%}
                 <div class='datetime_event_select'>
                   <div style='height:20px;'></div>
@@ -658,6 +739,7 @@
                   </div>
                 </div>
               {%endfor%}
+            {%endif%}
           </div>
           <div style='height:60px;'></div>
 
@@ -702,7 +784,7 @@
         <div class="modal-body">
           <div class="container">
             {%for user in event.see_all_list%}
-              <div class="row" id="group_user_row_1">
+              <div class="row finalized_group_row_display" id="group_user_row_{{user.user.id}}">
               <div class="col-md-auto">
                 <div class="user_avatar">
                   <div class="avatar" style="background-color:{{user.user.avatar_color}};width:35px;height:35px;"><p style="line-height:35px;">{{user.user.initials}}</p></div>
@@ -732,6 +814,11 @@
       </div>
     </div>
   </div>
+  <!---->
+  <div class="modal" id="all_event_attendees" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+  </div>
+  <!---->
   </body>
   <script>
     $(document).ready(function(){
@@ -889,6 +976,56 @@
           data: {timestamp: $(this).data('datetime'), id:$('#event_header_info').data('eventid')},
           success: function(response) {
             window.location.replace('/event/timeslots/'+$('#event_header_info').data('eventid'));
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+
+      });
+      $('.timerange_listing_wrapper').on('click', '.view_rspved_users', function(){
+        var date = $(this).data('date');
+        var users = $(this).data('users');
+        //all_event_attendees
+        $.ajax({
+          url: "/attendee_list",
+          type: "get",
+          data: {payload: JSON.stringify({'users':users, 'date':date})},
+          success: function(response) {
+            $("#all_event_attendees").html(response.html);
+            $("#all_event_attendees").modal('toggle');
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      });
+      $('.timerange_listing_wrapper').on('click', '.send_rsvp', function(){
+        alert('here');
+        var date = $(this).data('date');
+        var user = $(this).data('userid');
+        $(this).attr('disabled', true);
+        $(this).css('background-color', '#21DCAC');
+        $(this).text('RSVP Sent');
+        $('.view_rspved_users').each(function(){
+          if ($(this).data('date') === date){
+            $(this).data('users', $(this).data('users')+','+user);
+          }
+        });
+        var _timeranges = [];
+        $('.finalized_timeslot_day').each(function(){
+          if ($(this).data('date') === date){
+            _timeranges.push($(this).text());
+          }
+        });
+
+
+        $.ajax({
+          url: "/respond_with_rsvp",
+          type: "get",
+          data: {payload: JSON.stringify({'id':$("#event_header_info").data('eventid'), 'date':date, 'timeranges':_timeranges})},
+          success: function(response) {
+            //pass
           },
           error: function(xhr) {
             //Do Something to handle error
