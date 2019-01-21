@@ -19,7 +19,11 @@ def isloggedin(f:typing.Callable) -> typing.Callable:
 
 @app.route('/', methods=['GET'])
 def home():
-    return flask.render_template('homepage.html')
+    return flask.render_template('new_homepage_1.html', flag=flask.session.get('id', None))
+
+@app.route('/terms', methods=['GET'])
+def terms():
+    return flask.render_template('chronos_terms_of_service.html', flag=flask.session.get('id', None))
 
 @app.route('/login', methods=['GET'])
 def login_render():
@@ -49,6 +53,11 @@ def attendee_list():
 def respond_with_rsvp():
     user_events.Events.respond_rsvp(flask.session['id'], json.loads(flask.request.args.get('payload')))
     return flask.jsonify({'success':'True'})
+
+@app.route('/activity', methods=['GET'])
+@isloggedin
+def stats():
+    return flask.render_template('user_stats_display.html', user=_user.Users.get_user(id=flask.session['id']), stats = _user.UserStats.collect_stats(flask.session['id']))
 
 @app.route('/finalize_event')
 def finalize_event():
@@ -142,6 +151,11 @@ def mark_as_available():
 @app.route('/remove_set_timeslot')
 def remove_set_timeslot():
     return flask.jsonify({'html':flask.render_template('event_timeslot_stub.html', event=user_events.Events.remove_timeslot(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
+
+@app.route('/reopen_event')
+def reopen_event():
+    user_events.Events.reopen_event(json.loads(flask.request.args.get('payload')))
+    return flask.jsonify({'success':'True'})
 
 @app.route('/event/timeslots/<id>', methods=['GET'])
 @isloggedin
@@ -353,6 +367,43 @@ def create_category():
     border = flask.request.args.get('border')
     return flask.jsonify(user_categories.Categories.create_category(int(flask.session['id']), name, color, border))
 
+@app.route('/update_event_name')
+def update_event_name():
+    user_events.Events.update_event_name(json.loads(flask.request.args.get('payload')))
+    return flask.jsonify({'success':'True'})
+
+@app.route('/update_event_description')
+def update_event_description():
+    user_events.Events.update_event_description(json.loads(flask.request.args.get('payload')))
+    return flask.jsonify({'success':'True'})
+
+#remove_user_from_all_users
+
+@app.route('/update_all_users')
+def update_all_users():
+    return flask.jsonify({'html':flask.render_template('display_added_users_results.html',  user=_user.Users.get_user(id=flask.session['id']), event=user_events.Events.update_all_users(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
+
+@app.route('/remove_specific_user')
+def remove_specific_user():
+    return flask.jsonify({'html':flask.render_template('display_added_users_results.html',  user=_user.Users.get_user(id=flask.session['id']), event=user_events.Events.remove_user_from_all_users(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
+
+
+@app.route('/update_event_groups')
+def update_event_groups():
+    return flask.jsonify({'html':flask.render_template('event_settings_group_listing.html', event=user_events.Events.add_groups_to_event(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
+
+
+#remove_group_from_event
+@app.route('/remove_event_groups')
+def remove_event_groups():
+    return flask.jsonify({'html':flask.render_template('event_settings_group_listing.html', event=user_events.Events.remove_group_from_event(flask.session['id'], json.loads(flask.request.args.get('payload'))))})
+
+
+@app.route('/update_event_location')
+def update_event_location():
+    user_events.Events.update_event_location(json.loads(flask.request.args.get('payload')))
+    return flask.jsonify({'success':'True'})
+
 @app.route('/create_calendar_event')
 def create_calendar_event():
     data = json.loads(flask.request.args.get('data'))
@@ -380,11 +431,39 @@ def finalize_timeslots(id):
 def delete_event():
     payload = json.loads(flask.request.args.get('payload'))
     return flask.jsonify({'html':flask.render_template('by_week_calendar.html', calendar=user_calendar.Calendar.remove_event(flask.session['id'], payload))})
+
+@app.route('/delete_group_event')
+def delete_group_event():
+    user_events.Events.delete_group_event(flask.session['id'], json.loads(flask.request.args.get('payload')))
+    return flask.jsonify({'success':'True'})
+
 @app.route('/navigate_calendar_by_week')
 def navigate_calendar_by_week():
     _full_data = json.loads(flask.request.args.get('values'))
 
     return flask.jsonify({'success':"True", 'html':flask.render_template('by_week_calendar.html', calendar=user_calendar.Calendar.navigate_week(int(flask.session['id']), _full_data))})
+
+
+@app.route('/make_event_private')
+def make_event_private():
+    user_events.Events.make_event_private(flask.session['id'], json.loads(flask.request.args.get('payload')))
+    return flask.jsonify({'success':'True'})
+
+@app.route('/make_event_public')
+def make_event_public():
+    user_events.Events.make_event_public(flask.session['id'], json.loads(flask.request.args.get('payload')))
+    return flask.jsonify({'success':'True'})
+   
+@app.route('/cancel_event')
+def cancel_event():
+    user_events.Events.cancel_event(flask.session['id'], json.loads(flask.request.args.get('payload')))
+    return flask.jsonify({'success':'True'})
+
+@app.route('/reopen_event_flag')
+def reopen_event_flag():
+    user_events.Events.reopen_event_flag(flask.session['id'], json.loads(flask.request.args.get('payload')))
+    return flask.jsonify({'success':'True'})
+
 
 @app.route('/display_user_groups')
 def display_user_groups():
@@ -427,6 +506,7 @@ def event_quick_look():
 def display_calendar():
     return flask.render_template('user_calendar_stub.html', user = _user.Users.get_user(id=int(flask.session['id'])))
 
+
 @app.after_request
 def add_header(r):
     """
@@ -438,6 +518,7 @@ def add_header(r):
     r.headers["Expires"] = "0"
     r.headers['Cache-Control'] = 'public, max-age=0'
     return r
+
 
 if __name__ == '__main__':
     app.debug = True
