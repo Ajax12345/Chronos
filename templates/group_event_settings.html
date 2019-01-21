@@ -1,0 +1,1604 @@
+<html>
+  <style>
+    .top_header{
+      height:60px;
+      background-color:#37176A;
+    }
+    .logo{
+      padding-left: 140px;
+      color:white;
+    }
+    p{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    a{
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .avatar{
+        font-family: 'Noto Sans TC', sans-serif;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background-color: blue;
+    color: white;
+    font-size: 18px;
+    }
+    .dashboard_username{
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size:18px;
+    }
+    .tab_pannel{
+      height:110px;
+      background-color: #37176A;
+    }
+    .nav_tab{
+      color:white;
+      font-size:16px;
+    }
+    #full_selected{
+      height:3px;
+      width:auto;
+      background-color: red;
+      margin-top:-10px;
+
+    }
+
+    .create_event{
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background-color: #FABC09;
+      border:none;
+      -webkit-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 2px 4px 15px -5px rgba(0,0,0,0.75);
+    }
+    .create_event:hover{
+      -webkit-transition:0.2s;
+      background-color: #E7AF0F;
+      cursor:pointer;
+    }
+    .create_event:focus{
+      outline:none;
+    }
+    .datetime_display{
+      height:55px;
+      background-color: #21DCAC;
+      width:68%;
+      border-bottom-right-radius: 80px;
+    }
+    .datetime_info{
+      margin-left:20px;
+      color:white;
+    }
+    .datetime_text{
+      color:white;
+      margin-top:10px;
+      font-size:19px;
+      margin-left:50px;
+    }
+    #all_messages{
+      height:500px;
+      border-left:solid;
+      border-left-width:1px;
+      border-left-color:#C6C6C6;
+    }
+    .feed_type{
+      font-size:20px;
+    }
+    .quantity_display{
+      padding-top:2px;
+      padding-bottom:2px;
+      padding-left:8px;
+      padding-right:8px;
+      background-color: #FABC09;
+      border-radius:50%;
+
+    }
+    .actions{
+      padding-right: 150px;
+    }
+    .upcomming_event{
+      -webkit-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      -moz-box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      box-shadow: 3px 5px 15px -5px rgba(0,0,0,0.75);
+      font-family: 'Noto Sans TC', sans-serif;
+
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    .event_occurs{
+      color:white;
+      font-size:25px;
+    }
+    .event_time_display{
+      background-color: #21DCAC;
+      /*for pressing events: #FF354D */
+    }
+    ._time_data{
+      color:white;
+
+    }
+    .event_name{
+      font-size:24px;
+    }
+    .event_description{
+      font-size:18px;
+    }
+    .event_upcomming_warning{
+      color:white;
+      font-size:19px;
+      margin-top:10px;
+      padding-left:150px;
+    }
+
+    .timerange_listing_wrapper{
+      -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+      width:900px;
+
+      padding-bottom:50px;
+      border-radius:10px;
+      background-color: white;
+      margin: 0 auto;
+      text-align: center;
+      height:auto;
+    }
+    .timelisting_container{
+      width:1200px;
+      height:auto;
+      margin:0 auto;
+    }
+    .datetime_display_listing{
+
+
+      width:auto;
+
+      overflow-x: scroll;
+      margin-top:30px;
+      margin-left:1px;
+    }
+    .user_block_widget{
+      width:220px;
+      height:70px;
+      background-color: #21DCAC;
+
+      text-align: center;
+      line-height: 70px;
+      border-bottom:solid;
+      border-bottom-color:white;
+      border-bottom-width:1px;
+    }
+    .widget_top{
+      border-top-left-radius: 20px;
+      border-top:solid;
+      border-top-width:1px;
+      border-top-color:#21DCAC;
+      height:71px;
+    }
+    .time_filler{
+      width:45px;
+    }
+    .widget_bottom{
+      border-bottom-left-radius: 20px;
+      border-bottom:none;
+    }
+    .remove_timeslot{
+      background: none;
+      border:none;
+    }
+    .create_timeslot{
+      background: none;
+      border:none;
+      float:right;
+    }
+    .is_logged_in{
+      background-color: #21DCAC;
+    }
+    .it_is_you{
+    width:30px;
+    height:20px;
+
+    text-align: center;
+    line-height: 20px;
+    border-radius: 4px;
+    color: white;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 12px;
+    margin-top: 20px;
+    background-color:#37176A;
+    margin-left:-13px;
+    text-align: center;
+
+
+  }
+  .all_time_slot_displays{
+    width:700px;
+
+
+    overflow-y: hidden;
+    overflow-x:scroll;
+    margin-left:-30px;
+
+  }
+  .timestamp_display{
+    max-width:900px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+
+  }
+  .timeslot-display .singleton_timestamp{
+    min-width: 120px;
+
+
+  }
+  .timeslot-display table{
+
+  }
+  .timeslot{
+    height:67px;
+    width:119px;
+    background-color: #FF354D;
+    border-radius:5px;
+    border:none;
+  }
+  .user_availability_row .time_hour_block{
+    min-width: 120;
+    border-right:solid;
+    border-right-width:1px;
+    border-right-color:#B6B6B6;
+    height:69px;
+
+  }
+  .menu_underline{
+    height:3px;
+  }
+  .user_availability_row{
+    border-bottom:solid;
+    border-bottom-width:1px;
+    border-color:#B6B6B6;
+    border-right:solid;
+    border-right-width:1px;
+    border-right-color:#B6B6B6;
+  }
+  .timeslot_timestamp{
+    color:white;
+    font-size:12px;
+    margin-left:5px;
+  }
+  .info_banner{
+    padding:10px;
+    border-radius:10px;
+    font-family: 'Noto Sans TC', sans-serif;
+    width:500px;
+    margin:0 auto;
+
+
+  }
+  .external_entities_select:hover{
+    cursor: pointer;
+  }
+  .not_set_scheduled{
+    color:white;
+    background-color:#24D58F;
+    border:solid;
+    border-width:1px;
+    border-color:#13B374
+  }
+  .selected_event_times{
+    width:590px;
+    max-height:400px;
+    margin:0 auto;
+    overflow: scroll;
+
+  }
+  .datetime_event_select{
+    margin:0 auto;
+    width:540px;
+
+    border:none;
+    border-bottom:solid;
+    border-width:1px;
+    border-color:#ADADAD;
+
+
+  }
+  .day_tab_display{
+    background-color: #37176A;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border:solid;
+    border-width:2px;
+    border-color:#37176A;
+    padding:2px;
+    color:white;
+  }
+  .main_event_date_content{
+    padding:2px;
+    width:250px;
+
+
+
+
+  }
+  .user_has_responded_day{
+    margin-top:35px;
+    float:right;
+  }
+  .display_user_responses:hover{
+    cursor:pointer;
+  }
+  .timerange_user_display{
+    /*color:#FABC09;*/
+  }
+  .user_time_range_display{
+
+    margin-left:35px;
+  }
+  .add_availability_button{
+    color:white;
+    background-color: #FABC09;
+    border-radius:25px;
+    border:none;
+    font-size:13px;
+    padding:5px;
+    font-family: 'Noto Sans TC', sans-serif;
+    float:right;
+    margin-top:10px;
+    width:120px;
+  }
+  .add_availability_button:hover{
+    cursor:pointer
+  }
+  .send_rsvp{
+
+    color:white;
+    background-color: #FABC09;
+    border-radius:25px;
+    border:none;
+    font-size:13px;
+    padding:5px;
+    font-family: 'Noto Sans TC', sans-serif;
+    float:right;
+    margin-top:10px;
+    width:90px;
+  }
+  .send_rsvp:hover{
+    cursor:pointer;
+  }
+  .message_info_wrapper{
+    width:580px;
+    height:300px;
+    margin:0 auto;
+
+  }
+  .view_rspved_users:hover{
+    cursor:pointer;
+  }
+  .about_info_wrapper{
+    width:580px;
+    height:300px;
+    margin:0 auto;
+  }
+  .description_display{
+    border:solid;
+    border-radius:10px;
+    border-color:#21DCAC;
+    border-width:1.5px;
+    width:300px;
+    max-height:400px;
+    overflow:scroll;
+    padding:2px;
+    margin-top:22px;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .large_user_avatar{
+    width:70px;
+    height:70px;
+    background-color: blue;
+    border-radius:50%;
+    color:white;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:25px;
+    line-height:70px;
+    text-align: center;
+  }
+  .event_message_display{
+    width:450px;
+    padding:10px;
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #E7E7E7;
+    border-radius: 10px;
+    max-height:300px;
+    overflow: scroll;
+    text-align: left;
+    margin-left:-25px;
+    margin-top:-8px;
+    /*
+    border:solid;
+    border-width:1px;
+    border-color:#D2D2D2;
+    */
+  }
+  .event_messages{
+    height:300px;
+    max-height:400px;
+    overflow:scroll;
+  }
+  .event_messages_wrapper{
+    height:300px;
+    width:auto;
+    text-align: center;
+  }
+  .post_message_event{
+    width:450px;
+    height:50px;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size:17px;
+    border-radius:5px;
+    border:solid;
+    border-width:2px;
+    border-color:#21DCAC;
+    padding-left:5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-right:none;
+
+  }
+  .post_message_event:focus{
+    outline: none;
+    border-color:rgb(250, 188, 9);
+  }
+  .add_message_to_event{
+    width:55px;
+    height:50px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    text-align: center;
+    line-height: 40px;
+    font-size:20px;
+    background-color: rgb(250, 188, 9);
+    border:none;
+    color:white;
+    margin-left:-2px;
+  }
+  .message_num{
+    font-size:18px;
+    margin-top:-10px;
+    color:white;
+    width:27px;
+    height:27px;
+    border-radius: 50%;
+    background-color: rgb(250, 188, 9);
+    text-align: center;
+    line-height: 27px;
+  }
+  .view_users_and_groups_event:hover{
+    cursor:pointer;
+  }
+  .user_settings_examine_pannel{
+  width:900px;
+  padding:20px;
+  margin:0 auto;
+  border-radius:10px;
+  background-color: white;
+  -webkit-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+    box-shadow: 4px 3px 16px -4px rgba(0,0,0,0.75);
+  }
+  .underline{
+    height:1px;
+    width:600px;
+    background-color: #C1C1C1;
+  }
+  .edit_event_name:hover{
+    cursor:pointer;
+  }
+  .edit_event_description:hover{
+    cursor:pointer;
+  }
+  .edit_event_location:hover{
+    cursor:pointer;
+  }
+  .detail_input{
+    width:350px;
+    height:40px;
+    font-size:18px;
+    border:none;
+    border-bottom:solid;
+    border-bottom-color: #21DCAC;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+  .detail_input:focus{
+    outline:none;
+  }
+  .update_event_name{
+    color:white;
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #FABC09;
+    border-radius:20px;
+    padding-top:3px;
+    padding-bottom:3px;
+    padding-left:8px;
+    padding-right:8px;
+    border:none;
+    margin-left:10px;
+  }
+  .update_event_name:hover{
+    cursor:pointer;
+  }
+  .group_description {
+      width: 200px;
+      word-wrap: break-word;
+      max-height: 300px;
+      margin-left: -10px;
+
+      padding: 10px;
+      border: solid;
+      border-radius: 10px;
+      border-color: #21DCAC;
+      font-size: 18px;
+      margin-top: -10px;
+      border-width: 1.5px;
+  }
+  .update_description_name{
+    color:white;
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #FABC09;
+    border-radius:20px;
+    padding-top:3px;
+    padding-bottom:3px;
+    padding-left:8px;
+    padding-right:8px;
+    border:none;
+    margin-left:10px;
+  }
+  .update_description_name:hover{
+    cursor:pointer;
+  }
+  .update_location_name{
+    color:white;
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #FABC09;
+    border-radius:20px;
+    padding-top:3px;
+    padding-bottom:3px;
+    padding-left:8px;
+    padding-right:8px;
+    border:none;
+    margin-left:10px;
+  }
+  .update_location_name:hover{
+    cursor:pointer;
+  }
+  .cancel_event_update_name{
+    color:#FF354D;
+    font-family: 'Noto Sans TC', sans-serif;
+    border:none;
+    background: none;
+    margin-left:10px;
+
+  }
+  .cancel_event_update_name:hover{
+    cursor:pointer;
+  }
+  .cancel_event_update_description{
+    color:#FF354D;
+    font-family: 'Noto Sans TC', sans-serif;
+    border:none;
+    background: none;
+    margin-left:10px;
+
+  }
+  .cancel_event_update_description:hover{
+    cursor:pointer;
+  }
+  .cancel_event_update_location{
+    color:#FF354D;
+    font-family: 'Noto Sans TC', sans-serif;
+    border:none;
+    background: none;
+    margin-left:10px;
+
+  }
+  .cancel_event_update_location:hover{
+    cursor:pointer;
+  }
+  .remove_user_from_search_results{
+    border:none;
+    margin-top:10px;
+
+  }
+  .remove_user_from_search_results:hover{
+    cursor:pointer;
+  }
+  .find_users{
+    background: none;
+    border:solid;
+    border-width:1.5px;
+    border-radius:4px;
+    color:#FABC09;
+    border-color:#FABC09;
+    padding:7px;
+    font-size:18px;
+
+  }
+  .find_users:hover{
+    cursor:pointer;
+  }
+  .find_groups{
+    background: none;
+    border:solid;
+    border-width:1.5px;
+    border-radius:4px;
+    color:#FABC09;
+    border-color:#FABC09;
+    padding:7px;
+    font-size:18px;
+  }
+  .find_groups:hover{
+    cursor:pointer;
+  }
+  .add_user_from_search_results{
+    border:none;
+    margin-top:10px;
+  }
+  .add_user_from_search_results:hover{
+    cursor:pointer;
+  }
+  .all_added_users_here{
+    margin-left:15px;
+  }
+  .spacer_bar{
+    width:450px;
+    height:1px;
+    background-color: #C1C1C1;
+    margin-left:15px;
+
+  }
+  .remove_singleton_user{
+    border:none;
+    margin-top:10px;
+  }
+
+  .remove_singleton_user:hover{
+    cursor:pointer;
+  }
+  .add_groups_button{
+    background: none;
+    border:solid;
+    border-width:1.5px;
+    border-radius:4px;
+    color:#FABC09;
+    border-color:#FABC09;
+    padding:7px;
+    font-size:18px;
+    margin-right:20px;
+  }
+  .add_groups_button:hover{
+    cursor:pointer;
+  }
+  .add_users_button{
+    background: none;
+    border:solid;
+    border-width:1.5px;
+    border-radius:4px;
+    color:#FABC09;
+    border-color:#FABC09;
+    padding:7px;
+    font-size:18px;
+    margin-right:20px;
+  }
+  .add_users_button:hover{
+    cursor:pointer;
+  }
+  .group_category_checkbox:hover{
+    cursor:pointer;
+  }
+  </style>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+
+
+  </head>
+  <body style='background-color: #E4E4E4;'>
+    <nav class="navbar top_header">
+      <p class="navbar-brand logo" style='font-size:30px;'>Chronos</p>
+      <div class='actions'>
+        <table>
+          <tr>
+            <td>
+            <div class='user_avatar'>
+              <div class='avatar' style='background-color:{{user.avatar_color}}'>{{user.initials}}</div>
+
+            </div>
+          </td>
+            <td><a href='/profile' class='dashboard_username' style='color:white'>{{user.condensed_name}}</a></td>
+          </tr>
+        </table>
+
+      </div>
+    </nav>
+    <div class='tab_pannel'>
+      <div style='height:65px;'></div>
+      <div class='container'>
+        <div class='row no-gutters'>
+          <div class='col'>
+            <a href='/dashboard' style='color:white;text-decoration:none' class='nav_tab'>Dashboard</a>
+          </div>
+
+          <div class='col'>
+            <a href='/calendar' style='color:white;text-decoration:none' class='nav_tab'>Calendar</a>
+
+          </div>
+          <div class='col'>
+            <a href='/groups' style='color:white;text-decoration:none' class='nav_tab'>Groups</a>
+
+
+
+          </div>
+          <div class='col'>
+            <p class='nav_tab'>My events</p>
+            <div id='full_selected' style='width:75px;'></div>
+
+          </div>
+          <div class='col'>
+            <a href='/profile' style='color:white;text-decoration:none' class='nav_tab'>Profile</a>
+
+          </div>
+
+          <div class='col'>
+            <button class='create_event'>
+              <i class="fas fa-plus" style='font-size:2em;color:white;'></i>
+            </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='datetime_display'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col'>
+            <!--<p class='event_upcomming_warning'><u>TestEvent</u> is starting shortly!</u></p>-->
+          </div>
+
+          <div class='col'><p class='datetime_text'><strong><span class='hour_min'></span> on <span class='day_of_week'></span>, <span class='month'></span> <span class='day'></span>, <span class='year'></span></strong></p></div>
+
+        </div>
+      </div>
+      <!--
+      <p class='datetime_info'>Saturday, November 17, 2018</p>
+      <p class='datetime_info' style='margin-top:-10px;'>2:54 PM</p>
+    -->
+    </div>
+    <div style='height:100px;'></div>
+    <div class="user_settings_examine_pannel">
+      <a href="/event/{{event.id}}" style="color:#21DCAC;margin-left:15px;"><i class="fas fa-bars" style="font-size:1.6em;color:#21DCAC"></i></a>
+
+
+        <p style="text-align:center;font-size:30px;" data-eventid='{{event.id}}' id='event_header_info'>Settings for <strong style='color:#FABC09' id='main_event_name'>{{event.name}}</strong></p>
+        <div style="height:40px;"></div>
+        <div class="container">
+        <div class="row">
+            <div class="col-md-auto" style="width:200px;border-right:solid;border-right-width:1px;border-right-color:#C1C1C1;">
+              <a href="/event/{{event.id}}/settings" style="font-size:16px;color:#21DCAC;text-decoration: none;" class="group_menu_item"><strong>Main settings</strong></a>
+              <div style="height:35px"></div>
+              <a href="/event/{{event.id}}/visibility" style="font-size:16px;color:#FABC09;text-decoration: none;" class="group_menu_item">Event status</a>
+              <div style="height:35px"></div>
+              <a href="/event/{{event.id}}/message_manage" style="font-size:16px;color:#FABC09;text-decoration: none;" class="group_menu_item">Manage messages</a>
+            </div>
+            <div class="col-md-auto main_data_display" style="width:600px;">
+              <p><strong>Basic</strong></p>
+              <div class="underline"></div>
+              <div style="height:40px"></div>
+              <div class="container" style="margin-left:-15px;">
+                <div class="row">
+                  <div class="col-md-auto"><p style="font-size:18px;">Name:</p></div>
+                  <div class="col-md-auto">
+                    <!--<input type="text" class="detail_input" id="group_name" placeholder="name">-->
+                    <table>
+                      <tr class='event_name_tr'>
+                        <td class='name_display_td'><p style='font-size:18px;' id='event_settings_name'><strong>{{event.name}}</strong></p></td>
+                        <td class='name_edit_td'>
+                          <i class="fas fa-edit edit_event_name" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div style="height:20px"></div>
+              <div class="container" style="margin-left:-15px;">
+                <div class="row">
+                  <div class="col-md-auto"><p style="font-size:18px;">Description:</p></div>
+                  <div class="col-md-auto">
+                    <table>
+                      <tr class='event_description_tr'>
+                        <td class='event_description_td'>
+                          {%if event.has_description%}
+                          <div class="group_description">{{event.description}}</div>
+                          {%else%}
+                            <p><i>No description yet</i></p>
+                          {%endif%}
+
+
+                        </td>
+                        <td><i class="fas fa-edit edit_event_description" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div style="height:20px"></div>
+              <div class="container" style="margin-left:-15px;">
+                <div class="row">
+                  <div class="col-md-auto"><p style="font-size:18px;">Location:</p></div>
+                  <div class="col-md-auto">
+                    <!--<input type="text" class="detail_input" id="group_name" placeholder="name">-->
+                    <table>
+                      <tr class='event_location_tr'>
+                        <td>
+                          {%if event.has_location%}
+                            <p style='font-size:18px;' id='event_settings_location'><strong>{{event.location}}</strong></p>
+                          {%else%}
+                            <p><i>No location yet</i></p>
+                          {%endif%}
+                        </td>
+                        <td><i class="fas fa-edit edit_event_location" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div style="height:20px"></div>
+              <div class="all_user_categories">
+
+            </div>
+            <p><strong>People</strong></p>
+            <div class="underline"></div>
+            <div style="height:40px"></div>
+            <p style="font-size:20px;"><strong>All users:</strong></p>
+            <div class="container display_added_users">
+              {%if event.has_added_people%}
+                {%for user_obj in event.plain_people%}
+                  <div class='row singleton_people' id='added_user_{{user_obj.id}}'>
+
+                    <div class="col-md-auto">
+                      <div class="user_avatar">
+                        <div class="avatar" id="group_event_user_{{user_obj.id}}" style="background-color:{{user_obj.avatar_color}};width:35px;height:35px;"><p style="line-height:35px;">{{user_obj.initials}}</p></div>
+
+                      </div>
+                    </div>
+                    <div class="col-md-auto" style="margin-top:3px;"><a href="/user/{{user_obj.id}}" style="color:black;margin-left:-20px;font-size:18px;"><strong>{{user_obj.name}}</strong></a></div>
+                    {%if user_obj.id == user.id%}
+                      <div class="col-md-auto"><div class="it_is_you" style="margin-top:5px;"><strong>you</strong></div></div>
+                    {%else%}
+                    <div class="col" style="margin-top:3px;">
+                      <button class="remove_singleton_user" id="remove_user_{{user_obj.id}}" style="float:right;" data-parentgroup="4" data-toggle="popover" data-placement="right" data-content="<p>Remove <strong>@{{user_obj.name}}</strong> from <strong>{{event.name}}</strong></p>" data-html="true" data-original-title="" title=""><i class="fas fa-times times_icon" style="font-size:1.2em;color:black"></i></button>
+                    </div>
+                    {%endif%}
+
+                  </div>
+                  <div style="height:15px"></div>
+                {%endfor%}
+
+              {%else%}
+                <p><i>No users added yet</i></p>
+              {%endif%}
+            </div>
+            <div style="height:30px"></div>
+            <button class="find_users">Add users</button>
+            <div style="height:50px"></div>
+            <div class="underline" style="background-color:#E8E8E8"></div>
+            <div style="height:20px"></div>
+            <p style="font-size:20px;"><strong>Groups:</strong></p>
+
+              <div style="height:10px;"></div>
+              <div class="container all_added_groups_listing">
+              {%if event.has_added_groups%}
+                {%for group in event.added_groups%}
+                <div class="row grouping_pannel_display" id="group_group_row_{{group.id}}">
+                    <div class="col-md-auto">
+                      <div class="user_avatar">
+                        <div class="avatar" style="background-color:{{group.background_color}};margin-top:20px;width:15px;height:15px;border-radius:50%">
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-auto" style="margin-top:6px;">
+                    <a id="group_{{group.id}}" href="/group/{{group.id}}" style="color:black;margin-left:-20px;font-size:25px;"><strong>{{group.title}}</strong></a>
+                  </div>
+
+                  <div class="col" style="margin-top:8px;">
+                    <button class="remove_user_from_search_results" id="remove_group_{{group.id}}" style="float:right;"><i class="fas fa-times times_icon" style="font-size:1.2em;color:black"></i></button>
+                  </div>
+
+
+              </div>
+              <div style="height:15px"></div>
+              {%endfor%}
+              {%else%}
+                <p><i>No groups added yet</i></p>
+              {%endif%}
+            </div>
+            <div style="height:30px"></div>
+            <button class="find_groups">Add groups</button>
+
+            <div style="height:50px"></div>
+            <button class="create_group" style="display:none">Create group</button>
+            </div>
+         </div>
+      </div>
+      <div style="height:70px;"></div>
+    </div>
+    <div style="height:100px;"></div>
+    <div class="modal" id="search_for_users" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <p class="create_event_modal_header" id="exampleModalLabel" style='font-size:20px;'><strong>Find users</strong></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="-body">
+          <div class='user_search_result_listings'>
+            <p class='modal_search_text' style='margin-top:10px;margin-left:15px;'><i>Filter users below...</i></p>
+          </div>
+          <div class='user_filter_result_listings'>
+          </div>
+          <div style='height:30px'></div>
+          <div class='container'>
+            <div class='row'>
+              <div class='col-md-auto'><p class='create_event_modal_header modal_search_text' style='font-size:18px;'>Search:</p></div>
+              <div class='col'>
+                <input type="text" class="detail_input" id="user_search_box">
+
+              </div>
+            </div>
+          </div>
+          <div style='height:20px'></div>
+
+        </div>
+        <div class="modal-footer">
+
+          <button type="button" class="add_users_button" style='display:none;'>Add users</button>
+        </div>
+      </div>
+    </div>
+    </div>
+    <!---->
+    <div class="modal" id="add_user_groups" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <p class="create_event_modal_header" id="exampleModalLabel" style='font-size:20px;'><strong>Find groups</strong></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body full_group_listing_display">
+
+        </div>
+        <div class="modal-footer">
+
+          <button type="button" class="add_groups_button" style='display:none;'>Add users</button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </body>
+<script>
+$(document).ready(function(){
+
+  function display_warning(count){
+    $('.event_upcomming_warning').fadeOut(500);
+     $('.event_upcomming_warning').fadeIn(500);
+     if (count < 10){
+       setTimeout(function(){display_warning(count+1)}, 1000);
+     }
+  }
+  //display_warning(0);
+  function hours_min(_hours, _minutes){
+    _meridian = 'AM';
+    if (_hours > 12){
+      _hours = (_hours%12).toString()
+      _meridian = 'PM';
+    }
+    else{
+      _hours = _hours.toString();
+    }
+    if (_minutes < 10){
+      _minutes = '0'+_minutes.toString();
+    }
+    else{
+      _minutes = _minutes.toString();
+    }
+    return _hours+':'+_minutes+' '+_meridian;
+  }
+  //remove_user_from_search_results
+  $(document).on({
+    mouseenter: function () {
+
+      $(this).popover();
+      $(this).popover('show');
+
+
+    },
+    mouseleave: function () {
+        $(this).popover('hide');
+    }
+  }, ".remove_singleton_user");
+  function update_datetime(){
+
+    var _date = new Date();
+    var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    $('.hour_min').text(hours_min(_date.getHours(), _date.getMinutes()));
+    $('.day_of_week').text(days[_date.getDay()]);
+    $('.day').text(_date.getDate());
+    $('.month').text(months[_date.getMonth()]);
+    $('.year').text(_date.getFullYear());
+    setTimeout(function(){ update_datetime(); }, 1000);
+  }
+  update_datetime();
+  var original_name;
+  $('.user_settings_examine_pannel').on('click', '.edit_event_name', function(){
+    var _name = $(".name_display_td").text();
+    original_name = _name;
+    var _html = `
+    <input type="text" class="detail_input" id="event_name_input" placeholder="name" value=${_name} style='margin-top:-5px;width:270px;'>
+    `;
+    $(".name_display_td").html(_html);
+    var _edit_commit = `
+    <table>
+      <tr>
+        <td><button class='update_event_name'>update</button></td>
+        <td><button class='cancel_event_update_name'><u>cancel</u></button></td>
+      </tr>
+    </table>
+
+    `
+    $(".name_edit_td").html(_edit_commit);
+  });
+  $('.user_settings_examine_pannel').on('input', '#event_name_input', function(){
+    if ($(this).val().length === 0){
+      $(".update_event_name").css('opacity', '0.7');
+      $(".update_event_name").attr('disabled', true);
+    }
+    else{
+      $(".update_event_name").css('opacity', '1');
+      $(".update_event_name").attr('disabled', false);
+    }
+  });
+  $('.user_settings_examine_pannel').on('click', '.update_event_name', function(){
+    var new_name = $("#event_name_input").val();
+    var _html = `
+    <td class='name_display_td'><p style='font-size:18px;' id='event_settings_name'><strong>${new_name}</strong></p></td>
+    <td class='name_edit_td'>
+      <i class="fas fa-edit edit_event_name" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i></td>
+    `;
+    $(".event_name_tr").html(_html);
+    $("#main_event_name").text(new_name);
+    $.ajax({
+      url: '/update_event_name',
+      type: "get",
+      data: {payload: JSON.stringify({'id':parseInt($('#event_header_info').data('eventid')), 'name':new_name})},
+      success: function(response) {
+        //pass
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+  });
+  $('.user_settings_examine_pannel').on('click', '.cancel_event_update_name', function(){
+    //event_name_tr
+    var _html = `
+    <td class='name_display_td'><p style='font-size:18px;' id='event_settings_name'><strong>${original_name}</strong></p></td>
+    <td class='name_edit_td'><i class="fas fa-edit edit_event_name" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i></td>
+    `
+    $('.event_name_tr').html(_html);
+  });
+  var original_description;
+  $('.user_settings_examine_pannel').on('click', '.edit_event_description', function(){
+    var count = 0;
+    $('.group_description').each(function(){
+      count++;
+    });
+    var description;
+    if (!count){
+      description = '';
+    }
+    else{
+      description = $('.group_description').text();
+    }
+    original_description = description;
+    var _html;
+    if (description.length){
+      _html = `
+        <input type="text" class="detail_input" id="event_description_input" placeholder="description" value='${description}' style='margin-top:-5px;width:250px;'>
+        <table>
+          <tr>
+            <td><button class='update_description_name'>update</button></td>
+            <td><button class='cancel_event_update_description'><u>cancel</u></button></td>
+          </tr>
+        </table>
+      `;
+    }
+    else{
+      _html = `
+        <input type="text" class="detail_input" id="event_description_input" placeholder="description" style='margin-top:-5px;width:250px;'>
+        <table>
+          <tr>
+            <td><button class='update_description_name'>update</button></td>
+            <td><button class='cancel_event_update_description'><u>cancel</u></button></td>
+          </tr>
+        </table>
+      `;
+    }
+
+    $(".event_description_tr").html(_html);
+    if (!description.length){
+      $('.update_description_name').css('opacity', '0.7');
+      $('.update_description_name').attr('disabled', 'true');
+    }
+  });
+  $('.user_settings_examine_pannel').on('input', '#event_description_input', function(){
+
+
+    if ($(this).val().length){
+      $('.update_description_name').css('opacity', '1');
+      $('.update_description_name').attr('disabled', false);
+    }
+    else{
+      $('.update_description_name').css('opacity', '0.7');
+      $('.update_description_name').attr('disabled', true);
+    }
+
+  });
+  $('.user_settings_examine_pannel').on('click', '.cancel_event_update_description', function(){
+    if (!original_description.length){
+      var _html = `
+      <td class='event_description_td'>
+          <p><i>No description yet</i></p>
+      </td>
+      <td>
+        <i class="fas fa-edit edit_event_description" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i>
+      </td>
+      `;
+
+      $('.event_description_tr').html(_html);
+    }
+    else{
+      var _html = `
+      <td class='event_description_td'>
+
+        <div class="group_description">${original_description}</div>
+
+        </td>
+      <td><i class="fas fa-edit edit_event_description" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i></td>
+      `;
+      $('.event_description_tr').html(_html);
+    }
+  });
+  $(".user_settings_examine_pannel").on('click', '.update_description_name', function(){
+    var new_description = $("#event_description_input").val();
+    var _html = `
+    <td class='event_description_td'>
+
+      <div class="group_description">${new_description}</div>
+
+      </td>
+    <td><i class="fas fa-edit edit_event_description" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i></td>
+    `;
+    $('.event_description_tr').html(_html);
+    $.ajax({
+      url: '/update_event_description',
+      type: "get",
+      data: {payload: JSON.stringify({'id':parseInt($('#event_header_info').data('eventid')), 'description':new_description})},
+      success: function(response) {
+        //pass
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+  });
+  var original_location;
+  $('.user_settings_examine_pannel').on('click', '.edit_event_location', function(){
+    var count = 0;
+    $('#event_settings_location').each(function(){
+      count++;
+    });
+    var _location;
+    if (!count){
+      _location = '';
+    }
+    else{
+      _location = $("#event_settings_location").text();
+    }
+    original_location = _location;
+    var _html;
+    if (_location.length){
+      _html = `
+        <input type="text" class="detail_input" id="event_location_input" placeholder="description" value='${_location}' style='margin-top:-5px;width:250px;'>
+        <table>
+          <tr>
+            <td><button class='update_location_name'>update</button></td>
+            <td><button class='cancel_event_update_location'><u>cancel</u></button></td>
+          </tr>
+        </table>
+      `;
+    }
+    else{
+      _html = `
+        <input type="text" class="detail_input" id="event_location_input" placeholder="location" style='margin-top:-5px;width:250px;'>
+        <table>
+          <tr>
+            <td><button class='update_location_name'>update</button></td>
+            <td><button class='cancel_event_update_location'><u>cancel</u></button></td>
+          </tr>
+        </table>
+      `;
+    }
+    $('.event_location_tr').html(_html);
+    if (!_location.length){
+      $('.update_location_name').css('opacity', '0.7');
+      $('.update_location_name').attr('disabled', true);
+    }
+    else{
+      $('.update_location_name').css('opacity', '1');
+      $('.update_location_name').attr('disabled', false);
+    }
+  });
+  $('.user_settings_examine_pannel').on('input', '#event_location_input', function(){
+
+    if (!$(this).val().length){
+      $('.update_location_name').css('opacity', '0.7');
+      $('.update_location_name').attr('disabled', true);
+    }
+    else{
+      $('.update_location_name').css('opacity', '1');
+      $('.update_location_name').attr('disabled', false);
+    }
+  });
+  $('.user_settings_examine_pannel').on('click', '.update_location_name', function(){
+    var new_location = $("#event_location_input").val();
+    var _html = `
+    <td>
+        <p style='font-size:18px;' id='event_settings_location'><strong>${new_location}</strong></p>
+    </td>
+    <td><i class="fas fa-edit edit_event_location" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i></td>
+    `;
+    $(".event_location_tr").html(_html);
+    $.ajax({
+      url: '/update_event_location',
+      type: "get",
+      data: {payload: JSON.stringify({'id':parseInt($('#event_header_info').data('eventid')), 'location':new_location})},
+      success: function(response) {
+        //pass
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+  });
+  $('.user_settings_examine_pannel').on('click', '.cancel_event_update_location', function(){
+    if (original_location.length){
+      var _html = `
+      <td>
+      <p style='font-size:18px;' id='event_settings_location'><strong>${original_location}</strong></p>
+      </td>
+      <td><i class="fas fa-edit edit_event_location" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i></td>
+      `;
+      $(".event_location_tr").html(_html);
+    }
+    else{
+      var _html = `
+      <td>
+          <p><i>No location yet</i></p>
+      </td>
+      <td><i class="fas fa-edit edit_event_location" style='font-size:1.3em;margin-left:15px;margin-top:-15px;color:#21DCAC;'></i></td>
+      `;
+      $(".event_location_tr").html(_html);
+    }
+  });
+  $('.user_settings_examine_pannel').on('click', '.find_users', function(){
+    $("#search_for_users").modal('toggle');
+  });
+  function contains_added_results(){
+    var _count = 0;
+    $('.added_user_result').each(function(){
+      _count++;
+    });
+    return _count > 0;
+  }
+  function remove_existing_additions(){
+    var _added = [];
+        $('.added_user_result').each(function(){
+          _added.push(parseInt($(this).prop('id').match('\\d+')));
+
+        });
+        $('.filtered_server_results').each(function(){
+
+          var _current_id = parseInt($(this).prop('id').match('\\d+'));
+          var ref = $(this);
+          var flag = true;
+          for (var i = 0; i < _added.length; i++){
+            if (_added[i] === _current_id){
+              flag = false;
+            }
+          }
+          if (!flag){
+            ref.remove();
+          }
+        });
+        if (!contains_filtered_results()){
+          $('.user_filter_result_listings').html("<div style='height:10px;'></div>")
+          $('.user_filter_result_listings').append("<p><i class='no_users_found' style='margin-left:15px;'>No users found</i></p>")
+        }
+  }
+  function remove_existing_listings(){
+    var _added = [];
+        $('.singleton_people').each(function(){
+          _added.push(parseInt($(this).prop('id').match('\\d+')));
+        });
+        $('.filtered_server_results').each(function(){
+
+          var _current_id = parseInt($(this).prop('id').match('\\d+'));
+          var ref = $(this);
+          var flag = true;
+          for (var i = 0; i < _added.length; i++){
+            if (_added[i] === _current_id){
+              flag = false;
+            }
+          }
+          if (!flag){
+            ref.remove();
+          }
+        });
+        if (!contains_filtered_results()){
+          $('.user_filter_result_listings').html("<div style='height:10px;'></div>")
+          $('.user_filter_result_listings').append("<p><i class='no_users_found' style='margin-left:15px;'>No users found</i></p>")
+        }
+  }
+  function contains_filtered_results(){
+    var _count = 0;
+    $('.filtered_server_results').each(function(){
+      _count++;
+    });
+    return _count > 0;
+  }
+  function contains_result_spacer(){
+
+    var _val = 0;
+    $('.spacer_bar').each(function(){
+      _val += 1;
+    })
+    return _val > 0;
+  }
+  $('#search_for_users').on('input', '#user_search_box', function(){
+
+    var query = $(this).val();
+    if (query != ''){
+      $.ajax({
+        url: "/add_users_for_groups",
+        type: "get",
+        data: {query: query},
+        success: function(response) {
+          if (!contains_added_results()){
+            $('.user_search_result_listings').html("<p class='modal_search_text' style='margin-top:10px;margin-left:15px;'><i>Add users from below...</i></p>")
+          }
+          $('.user_filter_result_listings').html('<div style="height:15px;"></div>');
+          $('.user_filter_result_listings').append(response.html);
+          remove_existing_additions();
+          remove_existing_listings();
+          if (!contains_result_spacer()){
+
+            $("<div class='spacer_bar'></div>").insertBefore('.user_filter_result_listings');
+          }
+        },
+        error: function(xhr) {
+          //Do Something to handle error
+        }
+      });
+    }
+
+  });
+  $('#search_for_users').on('click', '.remove_user_from_search_results', function(){
+    $("#add_user_result_"+$(this).prop('id').match('\\d+')).remove();
+    if (!contains_added_results()){
+      $('.all_added_users_here').remove();
+      $('.user_search_result_listings').append("<p class='modal_search_text' style='margin-top:10px;margin-left:15px;'><i>Filter users below...</i></p>");
+      $('.add_users_button').css('display', 'none');
+    }
+    else{
+      add_users_button_text();
+    }
+  });
+  function add_users_button_text(){
+    var _count = 0;
+    $('.added_user_result').each(function(){
+      _count++;
+    });
+    if (_count === 1){
+      $('.add_users_button').text('Add user');
+    }
+    else{
+      $('.add_users_button').text('Add users');
+    }
+  }
+  $("#search_for_users").on('click', '.add_user_from_search_results', function(){
+    var _id = this.id.match('\\d+');
+    var background_color  = $('#user_styling_'+_id).css('background-color');
+    //var border_color = $('#user_styling_'+_id).css('border_color');
+    var user_initials = $('#user_styling_'+_id).text();
+    var user_name = $('#user_'+_id).text();
+    $("#user_filter_row_"+_id).remove();
+    var row_html = `
+    <div class='row added_user_result' id='add_user_result_${_id}'>
+      <div class='col-md-auto'>
+        <div class="user_avatar">
+            <div class="avatar" id='add_user_avatar_${_id}' style='background-color:${background_color};'><p style='line-height:30px;'>${user_initials}</p></div>
+
+        </div>
+      </div>
+      <div class='col'><p class='dashboard_username filter_username' id='add_name_${_id}' style='color:black;margin-left:-20px;'>${user_name}</p></div>
+      <div class='col'></div>
+      <div class='col'>
+        <button class='remove_user_from_search_results' id='remove_user_${_id}'><i class="fas fa-times"></i></button>
+
+      </div>
+    </div>
+    `;
+    var new_html = `
+    <div class='container all_added_users_here'>
+
+    </div>
+    `;
+    if (!contains_added_results()){
+      $('.user_search_result_listings').html("<div style='height:10px'></div>");
+      $('.user_search_result_listings').append(new_html);
+      $('.all_added_users_here').append(row_html);
+    }
+    else{
+      $('.all_added_users_here').append(row_html);
+    }
+    add_users_button_text();
+    $('.add_users_button').css('display', 'block');
+  });
+  $('.user_settings_examine_pannel').on('click', '.find_groups', function(){
+    $.ajax({
+      url: "/select_filtered_group_listing",
+      type: "get",
+      data: {id: $('#event_header_info').data('eventid')},
+      success: function(response) {
+      //  $("#place_for_suggestions").html(response);
+        $(".full_group_listing_display").html(response.html);
+        $("#add_user_groups").modal('toggle');
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+
+  });
+  function update_add_group_button(){
+    var count = 0;
+    $('.group_category_checkbox').each(function(){
+      var _id = $(this).prop('id').match('\\d+');
+      if ($("#category_color_check_"+_id).css('display') === 'block'){
+        count++;
+      }
+    });
+    if (!count){
+      $('.add_groups_button').css('display', 'none');
+    }
+    else{
+      $('.add_groups_button').css('display', 'block');
+      if (count === 1){
+        $('.add_groups_button').text('Add group');
+      }
+      else{
+        $('.add_groups_button').text('Add groups');
+      }
+    }
+  }
+  $("#add_user_groups").on('click', '.group_category_checkbox', function(){
+    var _id = $(this).prop('id').match('\\d+');
+    if ($("#category_color_check_"+_id).css('display') === 'block'){
+      $("#category_color_check_"+_id).css('display', 'none');
+    }
+    else{
+      $("#category_color_check_"+_id).css('display', 'block');
+    }
+    update_add_group_button();
+  });
+  $('#search_for_users').on('click', '.add_users_button', function(){
+    var _ids = [];
+    $('.added_user_result').each(function(){
+      _ids.push(parseInt($(this).prop('id').match('\\d+')));
+    });
+    $.ajax({
+      url: "/update_all_users",
+      type: "get",
+      data: {payload: JSON.stringify({'id':parseInt($('#event_header_info').data('eventid')), 'people':_ids})},
+      success: function(response) {
+        $(".display_added_users").html(response.html);
+        $('#search_for_users').modal('toggle');
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+  });
+  $('.user_settings_examine_pannel').on('click', '.remove_singleton_user', function(){
+    $(this).popover('hide');
+    var _user_id = parseInt($(this).prop('id').match('\\d+'));
+    $.ajax({
+      url: "/remove_specific_user",
+      type: "get",
+      data: {payload: JSON.stringify({'id':parseInt($('#event_header_info').data('eventid')), 'user':parseInt(_user_id)})},
+      success: function(response) {
+        $(".display_added_users").html(response.html);
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+  });
+  $("#add_user_groups").on('click', '.add_groups_button', function(){
+    var _add_groups = [];
+    $('.group_category_checkbox').each(function(){
+      if ($("#category_color_check_"+$(this).prop('id').match('\\d+')).css('display') != 'none'){
+        _add_groups.push(parseInt($(this).prop('id').match('\\d+')[0]));
+      }
+    });
+    $.ajax({
+      url: "/update_event_groups",
+      type: "get",
+      data: {payload: JSON.stringify({'groups':_add_groups, 'id':parseInt($('#event_header_info').data('eventid'))})},
+      success: function(response) {
+        $(".all_added_groups_listing").html(response.html);
+        $('#add_user_groups').modal('toggle');
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+
+
+  });
+  $(".user_settings_examine_pannel").on('click', '.remove_user_from_search_results', function(){
+    var _id = parseInt($(this).prop('id').match('\\d+'));
+    $.ajax({
+      url: "/remove_event_groups",
+      type: "get",
+      data: {payload: JSON.stringify({'group':_id, 'id':parseInt($('#event_header_info').data('eventid'))})},
+      success: function(response) {
+        $(".all_added_groups_listing").html(response.html);
+        //$('#add_user_groups').modal('toggle');
+      },
+      error: function(xhr) {
+        //Do Something to handle error
+      }
+    });
+  });
+});
+</script>
+</html>
