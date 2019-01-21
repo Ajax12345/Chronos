@@ -1,11 +1,5 @@
 $(document).ready(function(){
-    function display_warning(count){
-      $('.event_upcomming_warning').fadeOut(500);
-         $('.event_upcomming_warning').fadeIn(500);
-       if (count < 10){
-         setTimeout(function(){display_warning(count+1)}, 1000);
-       }
-    }
+    
     //display_warning(0);
     function hours_min(_hours, _minutes){
       _meridian = 'AM';
@@ -80,6 +74,29 @@ $(document).ready(function(){
         }
       });
     });
+    $('.main_wrapper').on('click', '._month_nav1', function(){
+      //user_personal_event_listings
+      
+      var _page_num = $(this).data('page');
+      
+      
+      $.ajax({
+        url: "/user_group_belong_listings",
+        type: "get",
+        data: {page: _page_num},
+        success: function(response) {
+          
+         $(".main_wrapper").html(response.html);
+         //#FABC09
+         $("#personal_events_underline").css('background-color', '#21DCAC');
+         $("#groups_events_underline").css('background-color', '#FABC09');
+        },
+        error: function(xhr) {
+          //Do Something to handle error
+        }
+      });
+      
+    });
     $(document).on({
       mouseenter: function () {
         var timestamp = $(this).data('timestamp');
@@ -104,5 +121,84 @@ $(document).ready(function(){
           $(this).popover('hide');
       }
     }, ".personal_event_timestamp"); //pass the element as an argument to .on
-    
+    $(document).on({
+      mouseenter: function () {
+       
+        var ref = $(this);
+        
+        ref.popover();
+        ref.popover('show');
+         
+        
+      },
+      mouseleave: function () {
+          $(this).popover('hide');
+      }
+    }, ".group_event_visibility");
+    //
+    $(document).on({
+      mouseenter: function () {
+       
+        var ref = $(this);
+        
+        ref.popover();
+        ref.popover('show');
+         
+        
+      },
+      mouseleave: function () {
+          $(this).popover('hide');
+      }
+    }, ".extra_information");
+    //group_event_visibility
+    $('.main_wrapper').on('click', '.dashboard_tab', function(){
+      if (this.id === 'scheduled_events'){
+        //21DCAC
+        //#FABC09
+        
+        $.ajax({
+          url: "/user_personal_event_listings",
+          type: "get",
+          data: {page: 0},
+          success: function(response) {
+            $(".main_wrapper").html(response.html);
+            $("#personal_events_underline").css('background-color', '#FABC09');
+            $("#groups_events_underline").css('background-color', '#21DCAC');
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      }
+      else{
+      
+     
+        $.ajax({
+          url: "/user_group_belong_listings",
+          type: "get",
+          data: {page: 0},
+          success: function(response) {
+            $(".main_wrapper").html(response.html);
+            $("#personal_events_underline").css('background-color', '#21DCAC');
+            $("#groups_events_underline").css('background-color', '#FABC09');
+          },
+          error: function(xhr) {
+            //Do Something to handle error
+          }
+        });
+      }
+    });
+    $(".main_wrapper").on('click', '.more_group_event_details', function(){
+      //alert($(this).prop('id').match('\\d+'));
+      if ($(this).text() === 'details'){
+        $("#extra_info_"+$(this).prop('id').match('\\d+')).css('display', 'block');
+        $(this).html('<u>close</u>');
+      }
+      else{
+        $("#extra_info_"+$(this).prop('id').match('\\d+')).css('display', 'none');
+        $(this).html('<u>details</u>');
+      }
+      
+    });
+
   });
