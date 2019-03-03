@@ -1,1 +1,1 @@
-# event_scheduling_app
+# Chronos
