@@ -2,3 +2,5 @@
 # Chronos
 
 Chronos provides simple, powerful tools to streamline the event scheduling process and enable event creators and participants to increase their coordination and save time.
+
+https://www.chronosevents.com/
